@@ -9,17 +9,18 @@ public class TimeFilter extends Filter {
 		myEventList = eventList;	
 	}
 	
+	//if event1 comes before event2 return true; else false.
+	public boolean compareTime(Event event1, Event event2) {
+		DateTimeComparator comparator = DateTimeComparator.getInstance();
+		return !(comparator.compare(event1.getStartTime(), event2.getStartTime()) > 0);
+	}
+	
 	//sort all events by start time
 	public ArrayList<Event> sortByStartTime() {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
-		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		for (Event event : myEventList) {
 			for (int index = 0; index <= filteredEvents.size(); index++) {
-				if (index == filteredEvents.size()) {
-					filteredEvents.add(event);
-					break;
-				}
-				if (!(comparator.compare(event.getStartTime(),filteredEvents.get(index).getStartTime()) > 0)) {
+				if (index == filteredEvents.size() || compareTime(event, filteredEvents.get(index))) {
 					filteredEvents.add(index, event);
 					break;
 				}
