@@ -9,6 +9,7 @@ public class TimeFilter extends Filter {
 		myEventList = eventList;	
 	}
 	
+	//sort all events by start time
 	public ArrayList<Event> sortByStartTime() {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
 		DateTimeComparator comparator = DateTimeComparator.getInstance();
@@ -27,7 +28,8 @@ public class TimeFilter extends Filter {
 		return filteredEvents;
 	}   
 	
-	public ArrayList<Event> getEventsInStartTimeRange(DateTime lowerLimit, DateTime upperLimit, ArrayList<Event> eventList) {
+	//filter events that occur within a range of start times
+	public ArrayList<Event> filter(DateTime lowerLimit, DateTime upperLimit, ArrayList<Event> eventList) {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
 		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		for (Event event : myEventList) {

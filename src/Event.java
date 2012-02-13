@@ -19,6 +19,10 @@ public class Event {
 	public DateTime getStartTime() {
 		return myStartTime;
 	}
+	
+	public String getTitle() {
+		return myTitle;
+	}
 }
 
 
