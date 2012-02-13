@@ -15,8 +15,6 @@ public abstract class AbstractXMLParser {
 			e.printStackTrace();
 		}
 	}
-	
-	abstract public Element parseGetEventsRoot();
-	
+		
 	abstract public List<Event> processEvents();
 }

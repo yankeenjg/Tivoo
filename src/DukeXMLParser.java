@@ -5,13 +5,14 @@ import org.joda.time.*;
 
 public class DukeXMLParser extends AbstractXMLParser{
 	
-	protected String NAME = 		"summary"; 
-	protected String DESCRIPTION = 	"description";
-	protected String START_TIME = 	"start";
-	protected String END_TIME = 	"end";
-	protected String LOCATION = 	"location";
+	private String ROOT_NODE = "event";
+	private String NAME = 		"summary"; 
+	private String DESCRIPTION = 	"description";
+	private String START_TIME = 	"start";
+	private String END_TIME = 	"end";
+	private String LOCATION = 	"location";
 	
-	public Element parseGetEventsRoot(){
+	private Element parseGetEventsRoot(){
 		eventsRoot = doc.getRootElement();
 		return eventsRoot;
 	}
@@ -35,7 +36,9 @@ public class DukeXMLParser extends AbstractXMLParser{
 	}
 	
 	public List<Event> processEvents(){
-		List<Element> xmlEventsList = eventsRoot.getChildren("event");
+		parseGetEventsRoot();
+		
+		List<Element> xmlEventsList = eventsRoot.getChildren(ROOT_NODE);
 		List<Event> parsedEventsList = new ArrayList<Event>();
 		for(Element event : xmlEventsList){
 			String eventName = event.getChildText(NAME);
@@ -57,4 +60,13 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return parsedEventsList;
 	}
 	
+	public static void main (String[] args){
+		DukeXMLParser parser = new DukeXMLParser();
+		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
+		List<Event> listOfEvents = parser.processEvents();
+		
+		for(Event event : listOfEvents){
+			System.out.println(event.toString());
+		}
+	}
 }
