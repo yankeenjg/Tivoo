@@ -23,6 +23,14 @@ public class Event {
 	public String getTitle() {
 		return myTitle;
 	}
+	
+	public String toString(){
+		return myTitle + " " +
+				myStartTime + " " +
+				myEndTime + " " +
+				myDescription + " " +
+				myLocation;
+	}
 }
 
 
