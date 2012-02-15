@@ -69,6 +69,9 @@ public class WeekSummary implements HtmlOutput{
         
     }
     
+    /*
+     * perhaps this could be a class of its own
+     */
     public String writeDetails(Event e, String filepath, int evNum){
         Html head = new Html();
         Body body = new Body();
@@ -97,6 +100,9 @@ public class WeekSummary implements HtmlOutput{
         
     }
     
+    /*
+     * can move to super after a few changes
+     */
     public void createFiles(Node head, String dir){
         BufferedWriter out;
         try {
@@ -109,10 +115,18 @@ public class WeekSummary implements HtmlOutput{
         }
     }
     
+    /*
+     * perhaps there is an easier way to do this already in joda
+     * if not, could probably move to super
+     */
     public String getFormattedTime(DateTime dt){
         return dt.toString("HH:mm");
     }
     
+    /*
+     * perhaps there is an easier way to do this already in joda
+     * if not, could probably move to super
+     */
     public String getDayString(int i){
         if(i>7)
             i-=7;
