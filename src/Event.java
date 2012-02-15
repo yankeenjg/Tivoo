@@ -1,4 +1,3 @@
-
 import org.joda.time.*;
 
 public class Event {
@@ -16,12 +15,24 @@ public class Event {
 		myLocation = location;
 	}
 	
+	public String getTitle() {
+		return myTitle;
+	}
+
 	public DateTime getStartTime() {
 		return myStartTime;
 	}
 	
-	public String getTitle() {
-		return myTitle;
+	public DateTime getEndTime(){
+		return myEndTime;
+	}
+	
+	public String getDescription(){
+		return myDescription;
+	}
+	
+	public String getLocation(){
+		return myLocation;
 	}
 	
 	public String toString(){
