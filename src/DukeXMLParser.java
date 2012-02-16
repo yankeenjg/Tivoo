@@ -60,6 +60,10 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return parsedEventsList;
 	}
 	
+	public static XMLParserFactory getFactory() {
+		return new XMLParserFactory(new DukeXMLParser());
+	}
+	
 	public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");

@@ -15,6 +15,17 @@ public abstract class AbstractXMLParser {
 			e.printStackTrace();
 		}
 	}
+	
+	public static List<XMLParserFactory> makeXMLParserList() {
+		List<XMLParserFactory> XMLParserList = new ArrayList<XMLParserFactory>();
+		XMLParserList.add(DukeXMLParser.getFactory());
+		XMLParserList.add(GoogleXMLParser.getFactory());
+		return XMLParserList;
+	}
 		
-	abstract public List<Event> processEvents();
+	public abstract List<Event> processEvents();
+
+	//implement this is subclasses
+	//public abstract boolean isThisType(String URL);
+	
 }
