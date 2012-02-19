@@ -63,7 +63,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	public DateTime parseOneTimeEvent(String[] timeInfoArray) {
 
 		int year = parseOneTimeEventYear(timeInfoArray);
-				System.out.println(year);
+		System.out.println(year);
 
 		int day = parseOneTimeEventDay(timeInfoArray);
 		System.out.println(day);
