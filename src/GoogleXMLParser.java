@@ -156,11 +156,6 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 		return newXMLChildren;
 	}
-	
-	public static XMLParserFactory getFactory() {
-		return new XMLParserFactory(new GoogleXMLParser());
-	}
-	
 
 	public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();

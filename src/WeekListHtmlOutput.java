@@ -1,12 +1,9 @@
 import java.io.*;
 import java.util.*;
 import org.joda.time.*;
-import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
-//TODO: generally improve design; currently functional
-
-public class WeekSummary implements HtmlOutput{
+public class WeekListHtmlOutput extends AbstractHtmlOutput{
     
     /*
      * Takes a list of events
@@ -17,15 +14,17 @@ public class WeekSummary implements HtmlOutput{
      * Creates an html file and a folder with html files for individual
      * event details
      */
-    public void writeEvents(List<Event> events) {
+    public void writeEventList(List<Event> events) {
         if(events.isEmpty()) return;
         
         DateTime dt = events.get(0).getStartTime();
-        String filepath = "Week of " + dt.toString("MMM dd");
+        String filepath = "ListView_Week_of_" + dt.toString("MMMdd");
         int startOfWeek = dt.getDayOfWeek();
         System.out.println(startOfWeek);
         
         Html head = new Html();
+        
+        
         Body body = new Body();
         head.appendChild(body);
         
@@ -46,8 +45,8 @@ public class WeekSummary implements HtmlOutput{
                     DoW.appendChild(title);
                     
                     P st = new P();
-                    st.appendChild(new Text("  Start: "+getFormattedTime(e.getStartTime())));
-                    st.appendChild(new Text("<br/>  End: "+getFormattedTime(e.getEndTime())));
+                    st.appendChild(new Text("  Start: "+e.getStartTime().toString("HH:mm")));
+                    st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("HH:mm")));
                     
                     body.appendChild(st);
                     
@@ -66,61 +65,40 @@ public class WeekSummary implements HtmlOutput{
             e1.printStackTrace();
         }
         
-        
     }
     
     /*
      * perhaps this could be a class of its own
      */
     public String writeDetails(Event e, String filepath, int evNum){
-        Html head = new Html();
-        Body body = new Body();
-        head.appendChild(body);
+        Html html = new Html();
         
-        H3 title = new H3();
-        title.appendChild(new Text(e.getTitle()));
-        body.appendChild(title);
+        Head head = new Head();
+        Style style = new Style("text/css");
+        head.appendChild(style);
+        style.appendChild(new Text("p.font{font-family:Helvetica, sans-serif;"));
+        html.appendChild(head);
+        
+        Body body = new Body();
+        html.appendChild(body);
         
         P st = new P();
-        st.appendChild(new Text("  Start: "+getFormattedTime(e.getStartTime())));
-        st.appendChild(new Text("<br/>  End: "+getFormattedTime(e.getEndTime())));
+        st.appendChild(new Text("<b>"+e.getTitle()+"</b>"));
+        st.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("HH:mm")));
+        st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("HH:mm")));
         st.appendChild(new Text("<br/>  Location: "+e.getLocation()));
         st.appendChild(new Text("<br/>  Description: "+e.getDescription()));
+        
+        st.setCSSClass("font");
         
         body.appendChild(st);
         
         String eventpath = filepath+"/event"+evNum+".html";
-        File f = new File(eventpath);
-        if(!f.getParentFile().exists())
-            f.getParentFile().mkdir();
         
-        createFiles(head, eventpath);
+        writeHtmlFile(html, eventpath);
         
         return eventpath;
         
-    }
-    
-    /*
-     * can move to super after a few changes
-     */
-    public void createFiles(Node head, String dir){
-        BufferedWriter out;
-        try {
-            out = new BufferedWriter(new FileWriter(dir));
-        
-        out.write(head.write());
-        out.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
-    
-    /*
-     * perhaps there is an easier way to do this already in joda
-     * if not, could probably move to super
-     */
-    public String getFormattedTime(DateTime dt){
-        return dt.toString("HH:mm");
     }
     
     /*

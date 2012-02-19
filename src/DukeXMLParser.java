@@ -25,24 +25,6 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return parseTime(event.getChild(END_TIME));
 	}
 	
-	private DateTime parseTime(Element time){
-		int year = Integer.parseInt(time.getChildText("year"));	
-		int month = Integer.parseInt(time.getChildText("month"));	
-		int day = Integer.parseInt(time.getChildText("day"));	
-		
-		int hour24 = Integer.parseInt(time.getChildText("hour24"));	
-		int minute = Integer.parseInt(time.getChildText("minute"));	
-		
-		Element timeZone = time.getChild("timezone");
-		DateTimeZone parsedTimeZone;
-		if(timeZone.getChildText("islocal").equals("true"))
-			parsedTimeZone = DateTimeZone.getDefault();
-		else
-			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
-		
-		return new DateTime(year, month, day, hour24, minute, parsedTimeZone);
-	}
-	
 	@Override
 	protected String parseTitle(Element event) {
 		return event.getChildText(NAME);
@@ -59,9 +41,37 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return eventLocation.getChildText("address");
 	}
 	
+	protected int parseYear(Element time){
+		return Integer.parseInt(time.getChildText("year"));
+	}
+	protected int parseMonth(Element time){
+		return Integer.parseInt(time.getChildText("month"));
+	}
+	protected int parseDay(Element time){
+		return Integer.parseInt(time.getChildText("day"));
+	}
+	protected int parseHour24(Element time){
+		return Integer.parseInt(time.getChildText("hour24"));
+	}
+	protected int parseMinute(Element time){
+		return Integer.parseInt(time.getChildText("minute"));
+	}
+	protected DateTimeZone parseTimeZone(Element time){
+		Element timeZone = time.getChild("timezone");
+		DateTimeZone parsedTimeZone;
+		if(timeZone.getChildText("islocal").equals("true"))
+			parsedTimeZone = DateTimeZone.getDefault();
+		else
+			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
+		return parsedTimeZone;
+	}
+	
+	
 	public static XMLParserFactory getFactory() {
 		return new XMLParserFactory(new DukeXMLParser());
 	}
+	
+	
 	
 	public static boolean isThisType(String url){
 		

@@ -19,11 +19,8 @@ public abstract class AbstractXMLParser {
 		}
 	}
 	
-	public static List<XMLParserFactory> makeXMLParserList() {
-		List<XMLParserFactory> XMLParserList = new ArrayList<XMLParserFactory>();
-		XMLParserList.add(DukeXMLParser.getFactory());
-		XMLParserList.add(GoogleXMLParser.getFactory());
-		return XMLParserList;
+	public chooseParser() {
+		//TODO: Implement this method
 	}
 		
 	public List<Event> processEvents(){
