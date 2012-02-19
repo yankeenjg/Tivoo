@@ -7,9 +7,11 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
+
 public class GoogleXMLParser extends AbstractXMLParser {
 
-	private static final String split = "\\s+|:| |,|-|<";
+	private static final String split = "\\s+| |,|-|<";
 	private static final String TITLE = "title";
 	private static final String SUMMARY = "summary";
 	private static final String CONTENT = "content";
@@ -19,7 +21,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return eventsRoot;
 	}
 
-	public DateTime parseTime(Element element) {
+	public DateTime parseStartTime(Element element) {
 		String timeInfo = element.getChildText(CONTENT, null).toString();
 		String[] timeInfoArray = timeInfo.split("\n");
 
@@ -43,31 +45,51 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return new DateTime(year, month, day, hour, minute, dateTimeZone);
 
 	}
-
+	
 	public int parseOneTimeEventYear(String[] timeInfoArray) {
-		return Integer.parseInt(timeInfoArray[6].substring(0, 4));
+		return Integer.parseInt(timeInfoArray[5].substring(0, 4));
 	}
 
 	public int parseOneTimeEventDay(String[] timeInfoArray) {
-		return Integer.parseInt(timeInfoArray[4]);
+		return Integer.parseInt(timeInfoArray[3]);
 	}
 
 	public int parseOneTimeEventMonth(String[] timeInfoArray) {
 		DateTimeFormatter format = DateTimeFormat.forPattern("MMM");
-		DateTime tempMonth = format.parseDateTime(timeInfoArray[3]);
+		DateTime tempMonth = format.parseDateTime(timeInfoArray[2]);
 		return tempMonth.getMonthOfYear();
 	}
 
 	public DateTime parseOneTimeEvent(String[] timeInfoArray) {
 
 		int year = parseOneTimeEventYear(timeInfoArray);
-		int day = parseOneTimeEventDay(timeInfoArray);
-		int month = parseOneTimeEventMonth(timeInfoArray);
-		DateTimeZone dateTimeZone = DateTimeZone.forID("UTC"); // /fix this
+				System.out.println(year);
 
+		int day = parseOneTimeEventDay(timeInfoArray);
+		System.out.println(day);
+
+		int month = parseOneTimeEventMonth(timeInfoArray);
+		System.out.println(month);
+
+		DateTimeZone dateTimeZone = DateTimeZone.forID("UTC"); // /fix this
+		String startTime = timeInfoArray[6];
+		System.out.println(startTime);
+		String[] splitTime = startTime.split(":");
+		
 		int hour = 0;
 		int minute = 0;
-
+		
+		if (splitTime.length == 2) {
+			hour = Integer.parseInt(splitTime[0]);
+			minute = Integer.parseInt(splitTime[1].substring(0,1));
+		}
+		
+		else {
+			hour = Integer.parseInt(splitTime[0].substring(0, splitTime[0].length()-3));
+			minute = 00;
+		}
+		
+		/**
 		if (timeInfoArray.length < 10) {
 			String[] time = timeInfoArray[4].split(":");
 			hour = Integer.parseInt(time[0]);
@@ -78,22 +100,23 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			return new DateTime(year, month, day, hour, minute, dateTimeZone);
 		}
 
-		if (timeInfoArray[7].contains("am")) {
+		if (timeInfoArray[6].contains("am")) {
 			hour = Integer.parseInt(timeInfoArray[7].substring(0,
 					timeInfoArray[7].indexOf("a")));
 			minute = 00;
 		}
-		if (timeInfoArray[7].contains("pm")) {
+		if (timeInfoArray[6].contains("pm")) {
 			hour = Integer.parseInt(timeInfoArray[7].substring(0,
 					timeInfoArray[7].indexOf("pm")));
 			if (hour < 12)
 				hour += 12;
 			minute = 00;
-		} else if (!timeInfoArray[7].contains("am")
-				&& !timeInfoArray[7].contains("pm")) {
+		} else if (!timeInfoArray[6].contains("am")
+				&& !timeInfoArray[6].contains("pm")) {
 			hour = Integer.parseInt(timeInfoArray[7]);
 			minute = Integer.parseInt(timeInfoArray[8].substring(0, 2));
 		}
+		*/
 
 		return new DateTime(year, month, day, hour, minute, dateTimeZone);
 
@@ -145,8 +168,8 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			String title = parseTitle(event);
 			String description = parseDescription(event);
 			String location = parseLocation(event);
-			DateTime startTime = parseTime(event);
-			DateTime endTime = parseTime(event);
+			DateTime startTime = parseStartTime(event);
+			DateTime endTime = parseStartTime(event);
 
 			Event newEvent = new Event(title, startTime, endTime, description,
 					location);
