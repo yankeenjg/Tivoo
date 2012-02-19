@@ -6,22 +6,21 @@ import org.joda.time.*;
 public class DukeXMLParser extends AbstractXMLParser{
 	
 	private String ROOT_NODE = "event";
-	private String NAME = 		"summary"; 
-	private String DESCRIPTION = 	"description";
-	private String START_TIME = 	"start";
-	private String END_TIME = 	"end";
-	private String LOCATION = 	"location";
+	private String NAME = "summary"; 
+	private String DESCRIPTION = "description";
+	private String START_TIME = "start";
+	private String END_TIME = "end";
+	private String LOCATION = "location";
 	
-	private Element parseGetEventsRoot(){
+	private Element parseGetEventsRoot() {
 		eventsRoot = doc.getRootElement();
 		return eventsRoot;
 	}
 	
-	private DateTime parseTime(Element time){
+	private DateTime parseTime(Element time) {
 		int year = Integer.parseInt(time.getChildText("year"));	
 		int month = Integer.parseInt(time.getChildText("month"));	
 		int day = Integer.parseInt(time.getChildText("day"));	
-		
 		int hour24 = Integer.parseInt(time.getChildText("hour24"));	
 		int minute = Integer.parseInt(time.getChildText("minute"));	
 		
@@ -35,7 +34,7 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return new DateTime(year, month, day, hour24, minute, parsedTimeZone);
 	}
 	
-	public List<Event> processEvents(){
+	public List<Event> processEvents() {
 		parseGetEventsRoot();
 		
 		List<Element> xmlEventsList = eventsRoot.getChildren(ROOT_NODE);
@@ -58,10 +57,6 @@ public class DukeXMLParser extends AbstractXMLParser{
 		}
 		
 		return parsedEventsList;
-	}
-	
-	public static XMLParserFactory getFactory() {
-		return new XMLParserFactory(new DukeXMLParser());
 	}
 	
 	public static void main (String[] args){

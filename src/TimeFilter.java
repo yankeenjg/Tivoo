@@ -15,7 +15,6 @@ public class TimeFilter {
 		return !(comparator.compare(event1.getStartTime(), event2.getStartTime()) > 0);
 	}
 	
-	//sort all events by start time
 	public ArrayList<Event> sortByStartTime() {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
 		for (Event event : myEventList) {
