@@ -11,7 +11,8 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
 
 public class GoogleXMLParser extends AbstractXMLParser {
 
-	private static final String split = "\\s+| |,|-|<";
+	private static final String split_one = "\\s+| |,|-|<";
+	private static final String split_recur = "\\s+| |,|-|<|:";
 	private static final String TITLE = "title";
 	private static final String SUMMARY = "summary";
 	private static final String CONTENT = "content";
@@ -22,30 +23,38 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	public DateTime parseStartTime(Element element) {
+		
 		String timeInfo = element.getChildText(CONTENT, null).toString();
 		String[] timeInfoArray = timeInfo.split("\n");
 
-		if (timeInfo.startsWith("When")) {
-			return parseOneTimeEvent(timeInfoArray[0].split(split));
+		if (timeInfo.startsWith("Recurring")) {
+			return parseRecurringEventStart(timeInfoArray[1].split(split_recur));
 		}
+		return parseOneTimeEvent(timeInfoArray[0].split(split_one));
+	}
 
-		return parseRecurringEventStart(timeInfoArray[1].split(split));
+	public DateTime parseEndTime(Element element) {
+
+	}
+
+	public DateTime parseRecurringEventEnd(String[] timeInfoArray) {
 
 	}
 
 	public DateTime parseRecurringEventStart(String[] timeInfoArray) {
+		int[] DateTimeArray = new int[6];
 
-		int year = Integer.parseInt(timeInfoArray[3]);
-		int month = Integer.parseInt(timeInfoArray[4]);
-		int day = Integer.parseInt(timeInfoArray[5]);
-		int hour = Integer.parseInt(timeInfoArray[6]);
-		int minute = Integer.parseInt(timeInfoArray[7]);
+		for (int j = 0; j < 5; j++) {
+			DateTimeArray[j] = Integer.parseInt(timeInfoArray[j + 2]);
+		}
 		DateTimeZone dateTimeZone = DateTimeZone.forID("UTC");
 
-		return new DateTime(year, month, day, hour, minute, dateTimeZone);
+		return new DateTime(DateTimeArray[0], DateTimeArray[1],
+		        DateTimeArray[2], DateTimeArray[3], DateTimeArray[4],
+		        dateTimeZone);
 
 	}
-	
+
 	public int parseOneTimeEventYear(String[] timeInfoArray) {
 		return Integer.parseInt(timeInfoArray[5].substring(0, 4));
 	}
@@ -63,60 +72,33 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	public DateTime parseOneTimeEvent(String[] timeInfoArray) {
 
 		int year = parseOneTimeEventYear(timeInfoArray);
-		System.out.println(year);
-
 		int day = parseOneTimeEventDay(timeInfoArray);
-		System.out.println(day);
-
 		int month = parseOneTimeEventMonth(timeInfoArray);
-		System.out.println(month);
 
 		DateTimeZone dateTimeZone = DateTimeZone.forID("UTC"); // /fix this
 		String startTime = timeInfoArray[6];
-		System.out.println(startTime);
 		String[] splitTime = startTime.split(":");
-		
+
 		int hour = 0;
 		int minute = 0;
-		
-		if (splitTime.length == 2) {
-			hour = Integer.parseInt(splitTime[0]);
-			minute = Integer.parseInt(splitTime[1].substring(0,1));
-		}
-		
-		else {
-			hour = Integer.parseInt(splitTime[0].substring(0, splitTime[0].length()-3));
+
+		if (timeInfoArray.length < 9) {
+			hour = 12;
 			minute = 00;
-		}
-		
-		/**
-		if (timeInfoArray.length < 10) {
-			String[] time = timeInfoArray[4].split(":");
-			hour = Integer.parseInt(time[0]);
-			minute = 00;
-			if (time.length == 2) {
-				minute = Integer.parseInt(time[1]);
-			}
 			return new DateTime(year, month, day, hour, minute, dateTimeZone);
 		}
 
-		if (timeInfoArray[6].contains("am")) {
-			hour = Integer.parseInt(timeInfoArray[7].substring(0,
-					timeInfoArray[7].indexOf("a")));
+		if (splitTime.length == 2) {
+			hour = Integer.parseInt(splitTime[0]);
+			minute = Integer.parseInt(splitTime[1].substring(0,
+			        splitTime[1].length() - 2));
+		}
+
+		else {
+			hour = Integer.parseInt(splitTime[0].substring(0,
+			        splitTime[0].length() - 2));
 			minute = 00;
 		}
-		if (timeInfoArray[6].contains("pm")) {
-			hour = Integer.parseInt(timeInfoArray[7].substring(0,
-					timeInfoArray[7].indexOf("pm")));
-			if (hour < 12)
-				hour += 12;
-			minute = 00;
-		} else if (!timeInfoArray[6].contains("am")
-				&& !timeInfoArray[6].contains("pm")) {
-			hour = Integer.parseInt(timeInfoArray[7]);
-			minute = Integer.parseInt(timeInfoArray[8].substring(0, 2));
-		}
-		*/
 
 		return new DateTime(year, month, day, hour, minute, dateTimeZone);
 
@@ -126,23 +108,28 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return event.getChildText(TITLE, null).toString();
 	}
 
-	public String parseDescription(Element event) {
-
+	public String[] parseContent(Element event) {
 		String[] summary = event.getChildText(CONTENT, null).toString()
 				.split("<br />");
+	
+		
+}
+	public String parseDescription(Element event) {
+
+	//	String[] summary = event.getChildText(CONTENT, null).toString()
+	//	        .split("<br />");
 		String description = null;
 
 		for (String line : summary) {
 			if (line.contains("Event Description:"))
 				description = line.substring(line.indexOf(": ") + 1);
 		}
-
 		return description;
 	}
 
 	public String parseLocation(Element event) {
 		String[] summary = event.getChildText(SUMMARY, null).toString()
-				.split("\n");
+		        .split("\n");
 		String location = null;
 
 		for (String line : summary) {
@@ -159,7 +146,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 		@SuppressWarnings("unchecked")
 		List<Element> XMLChildren = (List<Element>) eventsRoot.getChildren(
-				"entry", null);
+		        "entry", null);
 
 		List<Event> newXMLChildren = new ArrayList<Event>();
 
@@ -172,18 +159,17 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			DateTime endTime = parseStartTime(event);
 
 			Event newEvent = new Event(title, startTime, endTime, description,
-					location);
+			        location);
 
 			newXMLChildren.add(newEvent);
 		}
 
 		return newXMLChildren;
 	}
-	
+
 	public static XMLParserFactory getFactory() {
 		return new XMLParserFactory(new GoogleXMLParser());
 	}
-	
 
 	public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();
