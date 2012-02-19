@@ -5,16 +5,24 @@ import org.joda.time.*;
 
 public class DukeXMLParser extends AbstractXMLParser{
 	
-	private String ROOT_NODE = "event";
+	private String ROOT_NODE = 	"event";
 	private String NAME = 		"summary"; 
-	private String DESCRIPTION = 	"description";
-	private String START_TIME = 	"start";
+	private String DESCRIPTION ="description";
+	private String START_TIME = "start";
 	private String END_TIME = 	"end";
 	private String LOCATION = 	"location";
 	
-	private Element parseGetEventsRoot(){
-		eventsRoot = doc.getRootElement();
-		return eventsRoot;
+	protected List<Element> parseGetEventsList(){
+		Element eventsRoot = doc.getRootElement();
+		return eventsRoot.getChildren(ROOT_NODE);
+	}
+	
+	protected DateTime parseStartTime(Element event){
+		return parseTime(event.getChild(START_TIME));
+	}
+	
+	protected DateTime parseEndTime(Element event){
+		return parseTime(event.getChild(END_TIME));
 	}
 	
 	private DateTime parseTime(Element time){
@@ -35,33 +43,28 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return new DateTime(year, month, day, hour24, minute, parsedTimeZone);
 	}
 	
-	public List<Event> processEvents(){
-		parseGetEventsRoot();
-		
-		List<Element> xmlEventsList = eventsRoot.getChildren(ROOT_NODE);
-		List<Event> parsedEventsList = new ArrayList<Event>();
-		for(Element event : xmlEventsList){
-			String eventName = event.getChildText(NAME);
-			String eventDescription = event.getChildText(DESCRIPTION);
-			
-			Element startTime = event.getChild(START_TIME);
-			Element endTime = event.getChild(END_TIME);
-			DateTime parsedStartTime = parseTime(startTime);
-			DateTime parsedEndTime = parseTime(endTime);
-			
-			Element eventLocation = event.getChild(LOCATION);
-			String location = eventLocation.getChildText("address");
-			
-			Event newEvent = new Event(eventName, parsedStartTime, parsedEndTime,
-										eventDescription, location);
-			parsedEventsList.add(newEvent);
-		}
-		
-		return parsedEventsList;
+	@Override
+	protected String parseTitle(Element event) {
+		return event.getChildText(NAME);
+	}
+
+	@Override
+	protected String parseDescription(Element event) {
+		return event.getChildText(DESCRIPTION);
+	}
+
+	@Override
+	protected String parseLocation(Element event) {
+		Element eventLocation = event.getChild(LOCATION);
+		return eventLocation.getChildText("address");
 	}
 	
 	public static XMLParserFactory getFactory() {
 		return new XMLParserFactory(new DukeXMLParser());
+	}
+	
+	public static boolean isThisType(String url){
+		
 	}
 	
 	public static void main (String[] args){
@@ -73,4 +76,5 @@ public class DukeXMLParser extends AbstractXMLParser{
 			System.out.println(event.toString());
 		}
 	}
+
 }
