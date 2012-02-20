@@ -7,7 +7,7 @@ import org.joda.time.*;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		List<XMLParserFactory> XMLParserList = AbstractXMLParser.makeXMLParserList();
+		
 
 		}
 	}

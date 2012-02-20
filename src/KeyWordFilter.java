@@ -8,7 +8,6 @@ public class KeyWordFilter {
 		myEventList = eventList;
 	}
 	
-	//filter events with keyword in title
 	public ArrayList<Event> filterByKeyword(String keyword) {
 		ArrayList<Event> filteredList = new ArrayList<Event>();
 		for (Event event : myEventList) {
