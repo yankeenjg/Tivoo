@@ -19,47 +19,44 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         
         DateTime dt = events.get(0).getStartTime();
         String filepath = "ListView_Week_of_" + dt.toString("MMMdd");
-        int startOfWeek = dt.getDayOfWeek();
-        System.out.println(startOfWeek);
         
-        Html head = new Html();
-        
-        
+        Html html = new Html();
         Body body = new Body();
-        head.appendChild(body);
+        html.appendChild(body);
         
         for(int i=0;i<7; i++){
-            H2 DoW = new H2();
-            DoW.appendChild(new Text(getDayString(i+startOfWeek)));
-            body.appendChild(DoW);
+            P dayHeader = new P();
+            B b = new B();
+            
+            b.appendChild(new Text(dt.toString("MMM dd")+" ("+dt.dayOfWeek().getAsText()+")"));
+            dayHeader.appendChild(b);
+            body.appendChild(dayHeader);
             for(int j=0; j<events.size(); j++){
                 Event e = events.get(j);
-                if(e.getStartTime().getDayOfWeek()==i+startOfWeek){
-                    H3 title = new H3();
+                if(e.getStartTime().getDayOfWeek()==dt.getDayOfWeek()){
                     String detailPath = writeDetails(e, filepath, j);
                     A detailLink = new A();
                     detailLink.setHref(detailPath);
                     detailLink.appendChild(new Text(e.getTitle()));
                     
-                    title.appendChild(detailLink);
-                    DoW.appendChild(title);
-                    
                     P st = new P();
-                    st.appendChild(new Text("  Start: "+e.getStartTime().toString("HH:mm")));
-                    st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("HH:mm")));
+                    st.appendChild(detailLink);
+                    st.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd HH:mm")));
+                    st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd HH:mm")));
                     
                     body.appendChild(st);
                     
                     
                 }
             }
+            dt = dt.plusDays(1);
         }
         
         BufferedWriter out;
         try {
             out = new BufferedWriter(new FileWriter(filepath+".html"));
         
-        out.write(head.write());
+        out.write(html.write());
         out.close();
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -69,6 +66,8 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     
     /*
      * perhaps this could be a class of its own
+     * but it doesn't want to extend abstracthtmloutput
+     * and nothing else so far wants to use it
      */
     public String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
@@ -83,7 +82,9 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         html.appendChild(body);
         
         P st = new P();
-        st.appendChild(new Text("<b>"+e.getTitle()+"</b>"));
+        B b = new B();
+        b.appendChild(new Text(e.getTitle()));
+        st.appendChild(b);
         st.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("HH:mm")));
         st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("HH:mm")));
         st.appendChild(new Text("<br/>  Location: "+e.getLocation()));
@@ -101,23 +102,24 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         
     }
     
+    
+    
     /*
-     * perhaps there is an easier way to do this already in joda
-     * if not, could probably move to super
+     * tester hurp durp
      */
-    public String getDayString(int i){
-        if(i>7)
-            i-=7;
-        switch (i) {
-        case 1: return "Monday";
-        case 2: return "Tuesday";
-        case 3: return "Wednesday";
-        case 4: return "Thursday";
-        case 5: return "Friday";
-        case 6: return "Saturday";
-        case 7: return "Sunday";
-        default: return "";
-        }
+    public static void main (String[] args){
+    	AbstractHtmlOutput ho = new WeekListHtmlOutput();
+    	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
+    	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
+    	DateTime dt3 = new DateTime(2012, 2, 28, 11, 45);
+    	DateTime dt4 = new DateTime(2012, 2, 28, 12, 00);
+    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location");
+    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location");
+    	List<Event> l = new ArrayList<Event>();
+    	l.add(e1);
+    	l.add(e2);
+    	ho.writeEventList(l);
     }
+    
 
 }
