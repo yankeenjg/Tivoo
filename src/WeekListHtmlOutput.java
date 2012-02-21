@@ -18,13 +18,13 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         if(events.isEmpty()) return;
         
         DateTime dt = events.get(0).getStartTime();
-        String filepath = "ListView_Week_of_" + dt.toString("MMMdd");
+        String filepath = "WeekList_of_" + dt.toString("MMMdd");
         
         Html html = new Html();
         Body body = new Body();
         html.appendChild(body);
         
-        for(int i=0;i<7; i++){
+        for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK; i++){
             P dayHeader = new P();
             B b = new B();
             
@@ -52,16 +52,7 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
             dt = dt.plusDays(1);
         }
         
-        BufferedWriter out;
-        try {
-            out = new BufferedWriter(new FileWriter(filepath+".html"));
-        
-        out.write(html.write());
-        out.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        
+        writeHtmlFile(html, filepath+".html");
     }
     
     /*
@@ -72,11 +63,11 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     public String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
         
-        Head head = new Head();
+        /*Head head = new Head();
         Style style = new Style("text/css");
         head.appendChild(style);
         style.appendChild(new Text("p.font{font-family:Helvetica, sans-serif;"));
-        html.appendChild(head);
+        html.appendChild(head);*/
         
         Body body = new Body();
         html.appendChild(body);
@@ -104,9 +95,7 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     
     
     
-    /*
-     * tester hurp durp
-     */
+    
     public static void main (String[] args){
     	AbstractHtmlOutput ho = new WeekListHtmlOutput();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);

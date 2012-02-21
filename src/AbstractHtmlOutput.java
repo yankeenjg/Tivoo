@@ -9,7 +9,7 @@ public abstract class AbstractHtmlOutput {
 
     public void writeHtmlFile(Node head, String dir){
         File f = new File(dir);
-        if(!f.getParentFile().exists())
+        if(dir.contains("/") && !f.getParentFile().exists())
             f.getParentFile().mkdir();
         
         BufferedWriter out;
