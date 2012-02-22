@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 import org.joda.time.*;
 import com.hp.gagawa.java.elements.*;
@@ -23,8 +22,47 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         Html html = new Html();
         Body body = new Body();
         html.appendChild(body);
+        Table table = new Table();
+        body.appendChild(table);
         
-        for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK; i++){
+        Tr row1 = new Tr();
+        Tr row2 = new Tr();
+        //table view
+        for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
+        	Td dayHeader = new Td();
+        	B b = new B();
+        	Div div = new Div();
+        	div.setAlign("center");
+        	div.appendChild(b);
+        	dayHeader.appendChild(div);
+        	row1.appendChild(dayHeader);
+        	
+        	b.appendChild(new Text(dt.toString("MMM dd")+" ("+dt.dayOfWeek().getAsText()+")"));
+
+        	Td evs = new Td();
+        	P p = new P();
+        	evs.appendChild(p);
+        	for(int j=0; j<events.size(); j++){
+        		Event e = events.get(j);
+        		if(e.getStartTime().getDayOfWeek()==dt.getDayOfWeek()){
+        			String detailPath = writeDetails(e, filepath, j);
+        			A detailLink = new A();
+        			detailLink.setHref(detailPath);
+                    detailLink.appendChild(new Text(e.getTitle()));
+                    
+                    p.appendChild(detailLink);
+                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd HH:mm")));
+                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd HH:mm")+"<br/><br/>"));
+        		}
+        	}
+        	row2.appendChild(evs);
+        	
+        	dt = dt.plusDays(1);
+        }
+        table.appendChild(row1, row2);
+        
+        //list view
+        /*for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK; i++){
             P dayHeader = new P();
             B b = new B();
             
@@ -50,9 +88,9 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
                 }
             }
             dt = dt.plusDays(1);
-        }
+        }*/
         
-        writeHtmlFile(html, filepath+".html");
+        writeHtmlFile(html, filepath + FILE_EXT);
     }
     
     /*
@@ -85,7 +123,7 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         
         body.appendChild(st);
         
-        String eventpath = filepath+"/event"+evNum+".html";
+        String eventpath = filepath + "/event" + evNum + FILE_EXT;
         
         writeHtmlFile(html, eventpath);
         
@@ -100,8 +138,8 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     	AbstractHtmlOutput ho = new WeekListHtmlOutput();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
-    	DateTime dt3 = new DateTime(2012, 2, 28, 11, 45);
-    	DateTime dt4 = new DateTime(2012, 2, 28, 12, 00);
+    	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
+    	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
     	Event e1 = new Event("Title", dt1, dt2, "Description", "Location");
     	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location");
     	List<Event> l = new ArrayList<Event>();

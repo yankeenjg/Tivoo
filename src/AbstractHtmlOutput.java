@@ -1,13 +1,14 @@
 import com.hp.gagawa.java.Node;
-import com.hp.gagawa.java.elements.*;
 import java.io.*;
 import java.util.*;
 
 public abstract class AbstractHtmlOutput {
+	
+	protected static final String FILE_EXT = ".html";
     
     public abstract void writeEventList(List<Event> events);
 
-    public void writeHtmlFile(Node head, String dir){
+    protected void writeHtmlFile(Node head, String dir){
         File f = new File(dir);
         if(dir.contains("/") && !f.getParentFile().exists())
             f.getParentFile().mkdir();
