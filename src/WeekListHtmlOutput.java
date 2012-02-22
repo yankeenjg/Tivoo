@@ -27,12 +27,13 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         
         Tr row1 = new Tr();
         Tr row2 = new Tr();
+        row2.setValign("top");
         //table view
         for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
         	Td dayHeader = new Td();
         	B b = new B();
         	Div div = new Div();
-        	div.setAlign("center");
+        	div.setStyle("text-align:center");
         	div.appendChild(b);
         	dayHeader.appendChild(div);
         	row1.appendChild(dayHeader);
@@ -140,11 +141,19 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
     	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
+    	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
+    	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
+    	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
+    	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	Event e1 = new Event("Title", dt1, dt2, "Description", "Location");
     	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location");
+    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333");
+    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4");
     	List<Event> l = new ArrayList<Event>();
     	l.add(e1);
     	l.add(e2);
+    	l.add(e3);
+    	l.add(e4);
     	ho.writeEventList(l);
     }
     
