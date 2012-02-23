@@ -1,8 +1,7 @@
 
 import java.util.ArrayList;
 
-public class KeyWordFilter {
-	ArrayList<Event> myEventList;
+public class KeyWordFilter extends AbstractFilter {
 	
 	public KeyWordFilter(ArrayList<Event> eventList) {
 		myEventList = eventList;

@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 import org.joda.time.*;
 import com.hp.gagawa.java.elements.*;
@@ -18,13 +17,53 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         if(events.isEmpty()) return;
         
         DateTime dt = events.get(0).getStartTime();
-        String filepath = "ListView_Week_of_" + dt.toString("MMMdd");
+        String filepath = "WeekList_of_" + dt.toString("MMMdd");
         
         Html html = new Html();
         Body body = new Body();
         html.appendChild(body);
+        Table table = new Table();
+        body.appendChild(table);
         
-        for(int i=0;i<7; i++){
+        Tr row1 = new Tr();
+        Tr row2 = new Tr();
+        row2.setValign("top");
+        //table view
+        for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
+        	Td dayHeader = new Td();
+        	B b = new B();
+        	Div div = new Div();
+        	div.setStyle("text-align:center");
+        	div.appendChild(b);
+        	dayHeader.appendChild(div);
+        	row1.appendChild(dayHeader);
+        	
+        	b.appendChild(new Text(dt.toString("MMM dd")+" ("+dt.dayOfWeek().getAsText()+")"));
+
+        	Td evs = new Td();
+        	P p = new P();
+        	evs.appendChild(p);
+        	for(int j=0; j<events.size(); j++){
+        		Event e = events.get(j);
+        		if(e.getStartTime().getDayOfWeek()==dt.getDayOfWeek()){
+        			String detailPath = writeDetails(e, filepath, j);
+        			A detailLink = new A();
+        			detailLink.setHref(detailPath);
+                    detailLink.appendChild(new Text(e.getTitle()));
+                    
+                    p.appendChild(detailLink);
+                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd HH:mm")));
+                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd HH:mm")+"<br/><br/>"));
+        		}
+        	}
+        	row2.appendChild(evs);
+        	
+        	dt = dt.plusDays(1);
+        }
+        table.appendChild(row1, row2);
+        
+        //list view
+        /*for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK; i++){
             P dayHeader = new P();
             B b = new B();
             
@@ -50,18 +89,9 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
                 }
             }
             dt = dt.plusDays(1);
-        }
+        }*/
         
-        BufferedWriter out;
-        try {
-            out = new BufferedWriter(new FileWriter(filepath+".html"));
-        
-        out.write(html.write());
-        out.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        
+        writeHtmlFile(html, filepath + FILE_EXT);
     }
     
     /*
@@ -72,11 +102,11 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     public String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
         
-        Head head = new Head();
+        /*Head head = new Head();
         Style style = new Style("text/css");
         head.appendChild(style);
         style.appendChild(new Text("p.font{font-family:Helvetica, sans-serif;"));
-        html.appendChild(head);
+        html.appendChild(head);*/
         
         Body body = new Body();
         html.appendChild(body);
@@ -94,7 +124,7 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
         
         body.appendChild(st);
         
-        String eventpath = filepath+"/event"+evNum+".html";
+        String eventpath = filepath + "/event" + evNum + FILE_EXT;
         
         writeHtmlFile(html, eventpath);
         
@@ -104,20 +134,26 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
     
     
     
-    /*
-     * tester hurp durp
-     */
+    
     public static void main (String[] args){
     	AbstractHtmlOutput ho = new WeekListHtmlOutput();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
-    	DateTime dt3 = new DateTime(2012, 2, 28, 11, 45);
-    	DateTime dt4 = new DateTime(2012, 2, 28, 12, 00);
+    	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
+    	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
+    	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
+    	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
+    	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
+    	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	Event e1 = new Event("Title", dt1, dt2, "Description", "Location");
     	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location");
+    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333");
+    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4");
     	List<Event> l = new ArrayList<Event>();
     	l.add(e1);
     	l.add(e2);
+    	l.add(e3);
+    	l.add(e4);
     	ho.writeEventList(l);
     }
     
