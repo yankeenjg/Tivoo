@@ -16,9 +16,9 @@ public abstract class AbstractXMLParser {
 		}
 	}
 	
-	public chooseParser() {
+/*	public chooseParser() {
 		//TODO: Implement this method
-	}
+	}*/
 		
 	public abstract List<Event> processEvents();
 

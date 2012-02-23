@@ -2,9 +2,8 @@ import org.joda.time.*;
 import org.joda.time.DateTimeComparator;
 import java.util.ArrayList;
 
-public class TimeFilter {
-	ArrayList<Event> myEventList;
-	
+public class TimeFilter extends AbstractFilter {
+
 	public TimeFilter(ArrayList<Event> eventList) {
 		myEventList = eventList;	
 	}
@@ -15,9 +14,9 @@ public class TimeFilter {
 		return !(comparator.compare(event1.getStartTime(), event2.getStartTime()) > 0);
 	}
 	
-	public ArrayList<Event> sortByStartTime() {
+	public ArrayList<Event> sortByStartTime(ArrayList<Event> eventList) {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
-		for (Event event : myEventList) {
+		for (Event event : eventList) {
 			for (int index = 0; index <= filteredEvents.size(); index++) {
 				if (index == filteredEvents.size() || compareTime(event, filteredEvents.get(index))) {
 					filteredEvents.add(index, event);
@@ -29,7 +28,7 @@ public class TimeFilter {
 	}   
 	
 	//filter events that occur within a range of start times
-	public ArrayList<Event> filterByTimeRange(DateTime lowerLimit, DateTime upperLimit, ArrayList<Event> eventList) {
+	public ArrayList<Event> filterByTimeRange(DateTime lowerLimit, DateTime upperLimit) {
 		ArrayList<Event> filteredEvents = new ArrayList<Event>();
 		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		for (Event event : myEventList) {
@@ -37,6 +36,6 @@ public class TimeFilter {
 					filteredEvents.add(event);
 				}
 		}
-		return filteredEvents;
+		return sortByStartTime(filteredEvents);
 	}
 }
