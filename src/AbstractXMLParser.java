@@ -57,7 +57,7 @@ public abstract class AbstractXMLParser {
 	
 	public DateTime parseEndTime(Element time) {
 		int year = parseEndYear(time);
-		int month = parseEndYear(time);
+		int month = parseEndMonth(time);
 		int day = parseEndDay(time);
 		
 		int hour24 = parseEndHour24(time);
