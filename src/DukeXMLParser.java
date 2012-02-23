@@ -5,58 +5,76 @@ import org.joda.time.*;
 
 public class DukeXMLParser extends AbstractXMLParser{
 	
-	private String ROOT_NODE = "event";
-	private String NAME = "summary"; 
-	private String DESCRIPTION = "description";
+	private String ROOT_NODE = 	"event";
+	private String NAME = 		"summary"; 
+	private String DESCRIPTION ="description";
 	private String START_TIME = "start";
-	private String END_TIME = "end";
-	private String LOCATION = "location";
+	private String END_TIME = 	"end";
+	private String LOCATION = 	"location";
 	
-	private Element parseGetEventsRoot() {
-		eventsRoot = doc.getRootElement();
-		return eventsRoot;
+	protected List<Element> parseGetEventsList(){
+		Element eventsRoot = doc.getRootElement();
+		return eventsRoot.getChildren(ROOT_NODE);
 	}
 	
-	private DateTime parseTime(Element time) {
-		int year = Integer.parseInt(time.getChildText("year"));	
-		int month = Integer.parseInt(time.getChildText("month"));	
-		int day = Integer.parseInt(time.getChildText("day"));	
-		int hour24 = Integer.parseInt(time.getChildText("hour24"));	
-		int minute = Integer.parseInt(time.getChildText("minute"));	
-		
+	protected DateTime parseStartTime(Element event){
+		return parseTime(event.getChild(START_TIME));
+	}
+	
+	protected DateTime parseEndTime(Element event){
+		return parseTime(event.getChild(END_TIME));
+	}
+	
+	@Override
+	protected String parseTitle(Element event) {
+		return event.getChildText(NAME);
+	}
+
+	@Override
+	protected String parseDescription(Element event) {
+		return event.getChildText(DESCRIPTION);
+	}
+
+	@Override
+	protected String parseLocation(Element event) {
+		Element eventLocation = event.getChild(LOCATION);
+		return eventLocation.getChildText("address");
+	}
+	
+	protected int parseYear(Element time){
+		return Integer.parseInt(time.getChildText("year"));
+	}
+	protected int parseMonth(Element time){
+		return Integer.parseInt(time.getChildText("month"));
+	}
+	protected int parseDay(Element time){
+		return Integer.parseInt(time.getChildText("day"));
+	}
+	protected int parseHour24(Element time){
+		return Integer.parseInt(time.getChildText("hour24"));
+	}
+	protected int parseMinute(Element time){
+		return Integer.parseInt(time.getChildText("minute"));
+	}
+	protected DateTimeZone parseTimeZone(Element time){
 		Element timeZone = time.getChild("timezone");
 		DateTimeZone parsedTimeZone;
 		if(timeZone.getChildText("islocal").equals("true"))
 			parsedTimeZone = DateTimeZone.getDefault();
 		else
 			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
-		
-		return new DateTime(year, month, day, hour24, minute, parsedTimeZone);
+		return parsedTimeZone;
 	}
 	
-	public List<Event> processEvents() {
-		parseGetEventsRoot();
+	
+	public static XMLParserFactory getFactory() {
+		return new XMLParserFactory(new DukeXMLParser());
+	}
+	
+	
+	
+	public static boolean isThisType(String url){
 		
-		List<Element> xmlEventsList = eventsRoot.getChildren(ROOT_NODE);
-		List<Event> parsedEventsList = new ArrayList<Event>();
-		for(Element event : xmlEventsList){
-			String eventName = event.getChildText(NAME);
-			String eventDescription = event.getChildText(DESCRIPTION);
-			
-			Element startTime = event.getChild(START_TIME);
-			Element endTime = event.getChild(END_TIME);
-			DateTime parsedStartTime = parseTime(startTime);
-			DateTime parsedEndTime = parseTime(endTime);
-			
-			Element eventLocation = event.getChild(LOCATION);
-			String location = eventLocation.getChildText("address");
-			
-			Event newEvent = new Event(eventName, parsedStartTime, parsedEndTime,
-										eventDescription, location);
-			parsedEventsList.add(newEvent);
-		}
-		
-		return parsedEventsList;
 	}
 	
 	public static void main (String[] args){
@@ -68,4 +86,5 @@ public class DukeXMLParser extends AbstractXMLParser{
 			System.out.println(event.toString());
 		}
 	}
+
 }
