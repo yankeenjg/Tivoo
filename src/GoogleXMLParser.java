@@ -209,8 +209,13 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	@Override
-	protected DateTimeZone parseTimeZone(Element time) {
-		// TODO Auto-generated method stub
-		return null;
+	protected DateTimeZone parseStartTimeZone(Element event) {
+		return DateTimeZone.getDefault();
 	}
+
+	@Override
+	protected DateTimeZone parseEndTimeZone(Element event) {
+		return DateTimeZone.getDefault();
+	}
+
 }

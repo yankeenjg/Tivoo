@@ -17,14 +17,6 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return eventsRoot.getChildren(ROOT_NODE);
 	}
 	
-	protected DateTime parseStartTime(Element event){
-		return parseTime(event.getChild(START_TIME));
-	}
-	
-	protected DateTime parseEndTime(Element event){
-		return parseTime(event.getChild(END_TIME));
-	}
-	
 	@Override
 	protected String parseTitle(Element event) {
 		return event.getChildText(NAME);
@@ -41,21 +33,38 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return eventLocation.getChildText("address");
 	}
 	
-	protected int parseYear(Element time){
-		return Integer.parseInt(time.getChildText("year"));
+	protected int parseStartYear(Element event){
+		return Integer.parseInt(event.getChild(START_TIME).getChildText("year"));
 	}
-	protected int parseMonth(Element time){
-		return Integer.parseInt(time.getChildText("month"));
+	protected int parseStartMonth(Element event){
+		return Integer.parseInt(event.getChild(START_TIME).getChildText("month"));
 	}
-	protected int parseDay(Element time){
-		return Integer.parseInt(time.getChildText("day"));
+	protected int parseStartDay(Element event){
+		return Integer.parseInt(event.getChild(START_TIME).getChildText("day"));
 	}
-	protected int parseHour24(Element time){
-		return Integer.parseInt(time.getChildText("hour24"));
+	protected int parseStartHour24(Element event){
+		return Integer.parseInt(event.getChild(START_TIME).getChildText("hour24"));
 	}
-	protected int parseMinute(Element time){
-		return Integer.parseInt(time.getChildText("minute"));
+	protected int parseStartMinute(Element event){
+		return Integer.parseInt(event.getChild(START_TIME).getChildText("minute"));
 	}
+	
+	protected int parseEndYear(Element event){
+		return Integer.parseInt(event.getChild(END_TIME).getChildText("year"));
+	}
+	protected int parseEndMonth(Element event){
+		return Integer.parseInt(event.getChild(END_TIME).getChildText("month"));
+	}
+	protected int parseEndDay(Element event){
+		return Integer.parseInt(event.getChild(END_TIME).getChildText("day"));
+	}
+	protected int parseEndHour24(Element event){
+		return Integer.parseInt(event.getChild(END_TIME).getChildText("hour24"));
+	}
+	protected int parseEndMinute(Element event){
+		return Integer.parseInt(event.getChild(END_TIME).getChildText("minute"));
+	}
+	
 	protected DateTimeZone parseTimeZone(Element time){
 		Element timeZone = time.getChild("timezone");
 		DateTimeZone parsedTimeZone;
@@ -66,16 +75,14 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return parsedTimeZone;
 	}
 	
-	
-	public static XMLParserFactory getFactory() {
-		return new XMLParserFactory(new DukeXMLParser());
+	protected DateTimeZone parseStartTimeZone(Element event){
+		return parseTimeZone(event.getChild(START_TIME));
 	}
 	
-	
-	
-	public static boolean isThisType(String url){
-		
+	protected DateTimeZone parseEndTimeZone(Element event){
+		return parseTimeZone(event.getChild(END_TIME));
 	}
+	
 	
 	public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();

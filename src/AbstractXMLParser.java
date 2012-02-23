@@ -42,28 +42,28 @@ public abstract class AbstractXMLParser {
 		return parsedEventsList;
 	}
 	
-	public DateTime parseStartTime(Element time){
-		int year = parseStartYear(time);	
-		int month = parseStartMonth(time);	
-		int day = parseStartDay(time);	
+	public DateTime parseStartTime(Element event){
+		int year = parseStartYear(event);	
+		int month = parseStartMonth(event);	
+		int day = parseStartDay(event);	
 		
-		int hour24 = parseStartHour24(time);	
-		int minute = parseStartMinute(time);	
+		int hour24 = parseStartHour24(event);	
+		int minute = parseStartMinute(event);	
 		
-		DateTimeZone timeZone = parseTimeZone(time);
+		DateTimeZone timeZone = parseStartTimeZone(event);
 		
 		return new DateTime(year, month, day, hour24, minute, timeZone);
 	}
 	
-	public DateTime parseEndTime(Element time) {
-		int year = parseEndYear(time);
-		int month = parseEndMonth(time);
-		int day = parseEndDay(time);
+	public DateTime parseEndTime(Element event) {
+		int year = parseEndYear(event);
+		int month = parseEndMonth(event);
+		int day = parseEndDay(event);
 		
-		int hour24 = parseEndHour24(time);
-		int minute = parseEndMinute(time);
+		int hour24 = parseEndHour24(event);
+		int minute = parseEndMinute(event);
 		
-		DateTimeZone timeZone = parseTimeZone(time);
+		DateTimeZone timeZone = parseEndTimeZone(event);
 		
 		return new DateTime(year, month, day, hour24, minute, timeZone);
 	}
@@ -74,18 +74,20 @@ public abstract class AbstractXMLParser {
 	protected abstract String parseDescription(Element event);
 	protected abstract String parseLocation(Element event);
 
-	protected abstract int parseStartYear(Element time);
-	protected abstract int parseStartMonth(Element time);
-	protected abstract int parseStartDay(Element time);
-	protected abstract int parseStartHour24(Element time);
-	protected abstract int parseStartMinute(Element time);
-	protected abstract DateTimeZone parseTimeZone(Element time);
+	protected abstract int parseStartYear(Element event);
+	protected abstract int parseStartMonth(Element event);
+	protected abstract int parseStartDay(Element event);
+	protected abstract int parseStartHour24(Element event);
+	protected abstract int parseStartMinute(Element event);
+	protected abstract DateTimeZone parseStartTimeZone(Element event);
 	
-	protected abstract int parseEndYear(Element time);
-	protected abstract int parseEndMonth(Element time);
-	protected abstract int parseEndDay(Element time);
-	protected abstract int parseEndHour24(Element time);
-	protected abstract int parseEndMinute(Element time);
+	protected abstract int parseEndYear(Element event);
+	protected abstract int parseEndMonth(Element event);
+	protected abstract int parseEndDay(Element event);
+	protected abstract int parseEndHour24(Element event);
+	protected abstract int parseEndMinute(Element event);
+	protected abstract DateTimeZone parseEndTimeZone(Element event);
+
 	
 	//implement this is subclasses
 	//public abstract boolean isThisType(String URL);

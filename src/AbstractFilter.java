@@ -1,9 +1,9 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public abstract class AbstractFilter {
-	ArrayList<Event> myEventList;
+	List<Event> myEventList;
 	
-	public ArrayList<Event> getAllEvents() {
+	public List<Event> getAllEvents() {
 		return myEventList;
 	}
 }

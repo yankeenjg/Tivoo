@@ -52,8 +52,14 @@ public class WeekListHtmlOutput extends AbstractHtmlOutput{
                     detailLink.appendChild(new Text(e.getTitle()));
                     
                     p.appendChild(detailLink);
-                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd HH:mm")));
-                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd HH:mm")+"<br/><br/>"));
+                    if(! (e.getStartTime().getHourOfDay() == 0 && e.getStartTime().getMinuteOfHour() == 0) ){
+                    	p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd HH:mm")));
+                    	p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd HH:mm")+"<br/><br/>"));
+                    }
+                    else{ //if all day
+                    	p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MMM dd")));
+                    	p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MMM dd")+"<br/><br/>"));
+                    }
         		}
         	}
         	row2.appendChild(evs);

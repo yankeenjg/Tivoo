@@ -1,16 +1,15 @@
-
-import java.util.ArrayList;
+import java.util.*;
 
 public class KeyWordFilter extends AbstractFilter {
 	
-	public KeyWordFilter(ArrayList<Event> eventList) {
-		myEventList = eventList;
+	public KeyWordFilter(List<Event> listOfEvents) {
+		myEventList = listOfEvents;
 	}
 	
-	public ArrayList<Event> filterByKeyword(String keyword) {
-		ArrayList<Event> filteredList = new ArrayList<Event>();
+	public List<Event> filterByKeyword(String keyword) {
+		List<Event> filteredList = new ArrayList<Event>();
 		for (Event event : myEventList) {
-			if (event.getTitle().contains(keyword)) {
+			if (event.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
 				filteredList.add(event);
 			}
 		}
