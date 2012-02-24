@@ -1,18 +1,20 @@
 import org.joda.time.*;
 
 public class Event {
-	String myTitle;
-	DateTime myStartTime;
-	DateTime myEndTime;
-	String myDescription;
-	String myLocation;
+	private String myTitle;
+	private DateTime myStartTime;
+	private DateTime myEndTime;
+	private String myDescription;
+	private String myLocation;
+	private boolean allDay;
 	
-	public Event(String title, DateTime startTime, DateTime endTime, String description, String location) {
+	public Event(String title, DateTime startTime, DateTime endTime, String location, String description, boolean allday) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;
-		myDescription = description;
 		myLocation = location;
+		myDescription = description;
+		allDay = allday;
 	}
 	
 	public String getTitle() {
@@ -27,12 +29,16 @@ public class Event {
 		return myEndTime;
 	}
 	
+	public String getLocation(){
+		return myLocation;
+	}
+
 	public String getDescription(){
 		return myDescription;
 	}
 	
-	public String getLocation(){
-		return myLocation;
+	public boolean isAllDay(){
+		return allDay;
 	}
 	
 	public String toString(){
