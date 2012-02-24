@@ -45,8 +45,9 @@ public class Event {
 		return myTitle + " " +
 				myStartTime + " " +
 				myEndTime + " " +
+				myLocation + " " +
 				myDescription + " " +
-				myLocation;
+				allDay;
 	}
 }
 
