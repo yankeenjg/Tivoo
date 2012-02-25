@@ -3,7 +3,7 @@ import java.util.List;
 import org.joda.time.DateTimeComparator;
 import java.util.ArrayList;
 
-public class TimeFilter extends AbstractFilter {
+public class TimeFilter implements IFilter {
 	
 	//if event1 comes before event2 return true; else false.
 	public boolean compareTime(Event event1, Event event2) {
