@@ -13,7 +13,7 @@ public class DukeXMLParser extends AbstractXMLParser{
 	private String NAME = 		"summary"; 
 	private String DESCRIPTION ="description";
 	private String START_TIME = "start";
-	private String END_TIME = 	"end";
+	private String END_TIME = 	"end"; 
 	private String LOCATION = 	"location";
 	
 	/**

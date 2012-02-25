@@ -9,8 +9,9 @@ public class Main {
 		AbstractXMLParser parser = new DukeXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 		List<Event> listOfEvents = parser.processEvents();
-		KeyWordFilter filter = new KeyWordFilter();
-		List<Event> newList = filter.filterByKeyword(listOfEvents, "Catholic");
+		AbstractKeywordsFilter filter = new AbstractKeywordsFilter();
+		String[] keywordList = {"Catholic"};
+		List<Event> newList = filter.filterByKeywords(listOfEvents, keywordList);
 		
     	AbstractHtmlOutput ho = new WeekListHtmlOutput();
     	ho.writeEventList(newList);
