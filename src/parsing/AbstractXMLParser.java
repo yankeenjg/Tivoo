@@ -1,8 +1,6 @@
 package parsing;
-import Event;
-
+import model.Event;
 import java.util.*;
-
 import org.jdom.*;
 import org.jdom.input.*;
 import org.joda.time.DateTime;
@@ -37,8 +35,7 @@ public abstract class AbstractXMLParser {
 			DateTime startTime 		= parseStartTime(event);
 			DateTime endTime 		= parseEndTime(event);
 						
-			Event newEvent = new Event(eventTitle, startTime, endTime,
-										eventDescription, eventLocation);
+			Event newEvent = new Event(eventTitle, startTime, endTime, eventLocation, eventDescription, null);
 			parsedEventsList.add(newEvent);
 		}
 		
