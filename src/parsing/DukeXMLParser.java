@@ -3,12 +3,15 @@ import model.Event;
 
 import java.util.*;
 import org.jdom.*;
-import org.jdom.input.*;
 import org.joda.time.*;
 
 
 public class DukeXMLParser extends AbstractXMLParser{
 	
+	
+	/**
+	 * Labels for specific nodes in the event tree
+	 */
 	private String ROOT_NODE = 	"event";
 	private String NAME = 		"summary"; 
 	private String DESCRIPTION ="description";
@@ -104,6 +107,16 @@ public class DukeXMLParser extends AbstractXMLParser{
 		for(Event event : listOfEvents){
 			System.out.println(event.toString());
 		}
+	}
+
+	@Override
+	protected DateTime parseStartTime(Element event) {
+		return parseTime(event.getChild(START_TIME));
+	}
+
+	@Override
+	protected DateTime parseEndTime(Element event) {
+		return parseTime(event.getChild(END_TIME));
 	}
 
 }
