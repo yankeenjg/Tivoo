@@ -1,7 +1,11 @@
+package parsing;
+import Event;
+
 import java.util.*;
 import org.jdom.*;
 import org.jdom.input.*;
 import org.joda.time.*;
+
 
 public class DukeXMLParser extends AbstractXMLParser{
 	

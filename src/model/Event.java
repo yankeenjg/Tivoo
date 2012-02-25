@@ -1,3 +1,4 @@
+package model;
 import org.joda.time.*;
 
 public class Event {

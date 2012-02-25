@@ -1,3 +1,6 @@
+package parsing;
+import Event;
+
 import java.util.List;
 
 import org.jdom.Element;
@@ -5,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 
 public class GoogleXMLParser extends AbstractXMLParser {
 

@@ -1,6 +1,11 @@
+package processing;
+import Event;
+
 import org.joda.time.*;
 import java.util.List;
 import org.joda.time.DateTimeComparator;
+
+
 import java.util.ArrayList;
 
 public class TimeFilter implements IFilter {
