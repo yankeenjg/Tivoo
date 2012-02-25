@@ -1,8 +1,5 @@
 import model.Event;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.*;
 import output.*;
 import processing.*;
 import parsing.*;
