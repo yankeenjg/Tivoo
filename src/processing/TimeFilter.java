@@ -1,6 +1,5 @@
 package processing;
-import Event;
-
+import model.Event;
 import org.joda.time.*;
 import java.util.List;
 import org.joda.time.DateTimeComparator;

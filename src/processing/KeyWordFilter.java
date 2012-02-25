@@ -1,6 +1,5 @@
 package processing;
-import Event;
-
+import model.Event;
 import java.util.*;
 import java.util.ArrayList;
 

@@ -1,5 +1,5 @@
 package parsing;
-import Event;
+import model.Event;
 
 import java.util.*;
 import org.jdom.*;
