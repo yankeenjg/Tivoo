@@ -1,16 +1,8 @@
-
-import java.io.IOException;
-import java.util.ArrayList;
+import model.Event;
 import java.util.List;
-
-import org.joda.time.*;
-
-import output.AbstractHtmlOutput;
-import output.WeekListHtmlOutput;
-
-import parsing.AbstractXMLParser;
-import parsing.DukeXMLParser;
-import processing.KeyWordFilter;
+import output.*;
+import processing.*;
+import parsing.*;
 
 public class Main {
 	public static void main(String[] args){

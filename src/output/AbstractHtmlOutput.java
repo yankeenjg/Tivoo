@@ -1,6 +1,5 @@
 package output;
-import Event;
-
+import model.Event;
 import com.hp.gagawa.java.Node;
 import java.io.*;
 import java.util.*;
