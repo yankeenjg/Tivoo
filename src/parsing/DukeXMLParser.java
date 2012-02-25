@@ -1,5 +1,5 @@
 package parsing;
-import Event;
+import model.Event;
 
 import java.util.*;
 import org.jdom.*;
@@ -16,59 +16,76 @@ public class DukeXMLParser extends AbstractXMLParser{
 	private String END_TIME = 	"end";
 	private String LOCATION = 	"location";
 	
+	/**
+	 * Gets the root node that contains all event nodes
+	 */
 	protected List<Element> parseGetEventsList(){
 		Element eventsRoot = doc.getRootElement();
 		return eventsRoot.getChildren(ROOT_NODE);
 	}
 	
+	/**
+	 * Gets the title of the event, given an event node
+	 */
 	@Override
 	protected String parseTitle(Element event) {
 		return event.getChildText(NAME);
 	}
 
+	/**
+	 * Gets the description of the event, given an event node
+	 */
 	@Override
 	protected String parseDescription(Element event) {
 		return event.getChildText(DESCRIPTION);
 	}
 
+	/**
+	 * Gets the location of the event, given an event node
+	 */
 	@Override
 	protected String parseLocation(Element event) {
 		Element eventLocation = event.getChild(LOCATION);
 		return eventLocation.getChildText("address");
 	}
 	
-	protected int parseStartYear(Element event){
-		return Integer.parseInt(event.getChild(START_TIME).getChildText("year"));
-	}
-	protected int parseStartMonth(Element event){
-		return Integer.parseInt(event.getChild(START_TIME).getChildText("month"));
-	}
-	protected int parseStartDay(Element event){
-		return Integer.parseInt(event.getChild(START_TIME).getChildText("day"));
-	}
-	protected int parseStartHour24(Element event){
-		return Integer.parseInt(event.getChild(START_TIME).getChildText("hour24"));
-	}
-	protected int parseStartMinute(Element event){
-		return Integer.parseInt(event.getChild(START_TIME).getChildText("minute"));
+	/**
+	 * Gets the year of the time sub-node of an event
+	 */
+	protected int parseYear(Element time){
+		return Integer.parseInt(time.getChildText("year"));
 	}
 	
-	protected int parseEndYear(Element event){
-		return Integer.parseInt(event.getChild(END_TIME).getChildText("year"));
+	/**
+	 * Gets the month of the time sub-node of an event
+	 */
+	protected int parseMonth(Element time){
+		return Integer.parseInt(time.getChildText("month"));
 	}
-	protected int parseEndMonth(Element event){
-		return Integer.parseInt(event.getChild(END_TIME).getChildText("month"));
-	}
-	protected int parseEndDay(Element event){
-		return Integer.parseInt(event.getChild(END_TIME).getChildText("day"));
-	}
-	protected int parseEndHour24(Element event){
-		return Integer.parseInt(event.getChild(END_TIME).getChildText("hour24"));
-	}
-	protected int parseEndMinute(Element event){
-		return Integer.parseInt(event.getChild(END_TIME).getChildText("minute"));
+
+	/**
+	 * Gets the day of the time sub-node of an event
+	 */
+	protected int parseDay(Element time){
+		return Integer.parseInt(time.getChildText("day"));
 	}
 	
+	/**
+	 * Gets the hour in 24h format of the time sub-node of an event
+	 */
+	protected int parseHour24(Element time){
+		return Integer.parseInt(time.getChildText("hour24"));
+	}
+	/**
+	 * Gets the minute of the time sub-node of an event
+	 */
+	protected int parseMinute(Element time){
+		return Integer.parseInt(time.getChildText("minute"));
+	}
+	
+	/**
+	 * Gets the time zone of the time sub-node of an event
+	 */
 	protected DateTimeZone parseTimeZone(Element time){
 		Element timeZone = time.getChild("timezone");
 		DateTimeZone parsedTimeZone;
@@ -78,15 +95,6 @@ public class DukeXMLParser extends AbstractXMLParser{
 			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
 		return parsedTimeZone;
 	}
-	
-	protected DateTimeZone parseStartTimeZone(Element event){
-		return parseTimeZone(event.getChild(START_TIME));
-	}
-	
-	protected DateTimeZone parseEndTimeZone(Element event){
-		return parseTimeZone(event.getChild(END_TIME));
-	}
-	
 	
 	public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();
