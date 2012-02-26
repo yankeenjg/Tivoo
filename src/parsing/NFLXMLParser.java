@@ -3,6 +3,8 @@ package parsing;
 import java.util.List;
 
 
+import model.Event;
+
 import org.jdom.Element;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -24,7 +26,7 @@ public class NFLXMLParser extends AbstractXMLParser {
     @Override
 	protected List<Element> parseGetEventsList() {
 		Element eventsRoot = doc.getRootElement();
-		return eventsRoot.getChildren(ROOT_NODE);
+		return eventsRoot.getChildren("row");
 	}
 
 	/**
@@ -78,4 +80,15 @@ public class NFLXMLParser extends AbstractXMLParser {
 		return parseTime(event, END_TIME);
 	}
 
+	
+	public static void main(String[] args) {
+		NFLXMLParser parser = new NFLXMLParser();
+		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/NFL.xml");
+
+		List<Event> listOfEvents = parser.processEvents();
+
+		for (Event event : listOfEvents) {
+			System.out.println(event.toString());
+		}
+	}
 }

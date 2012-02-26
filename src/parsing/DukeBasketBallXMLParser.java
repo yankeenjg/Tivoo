@@ -2,9 +2,13 @@ package parsing;
 
 import java.util.List;
 
+import model.Event;
+
 import org.jdom.Element;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class DukeBasketBallXMLParser extends AbstractXMLParser{
 
@@ -52,59 +56,22 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		return event.getChildText(LOCATION);
 	}
 	
-	/**
-	 * Gets the year of the time sub-node of an event
-	 */
-	protected int parseYear(Element time){
-		return Integer.parseInt(time.getChildText("year"));
-	}
-	
-	/**
-	 * Gets the month of the time sub-node of an event
-	 */
-	protected int parseMonth(Element time){
-		return Integer.parseInt(time.getChildText("month"));
-	}
-
-	/**
-	 * Gets the day of the time sub-node of an event
-	 */
-	protected int parseDay(Element time){
-		return Integer.parseInt(time.getChildText("day"));
-	}
-	
-	/**
-	 * Gets the hour in 24h format of the time sub-node of an event
-	 */
-	protected int parseHour24(Element time){
-		return Integer.parseInt(time.getChildText("hour24"));
-	}
-	/**
-	 * Gets the minute of the time sub-node of an event
-	 */
-	protected int parseMinute(Element time){
-		return Integer.parseInt(time.getChildText("minute"));
-	}
-	
-	/**
-	 * Gets the start time node and calls parseTime()
-	 * to parse it
-	 */
 	@Override
 	protected DateTime parseStartTime(Element event) {
-		Date date = parseDate(event.getChild(START_DATE));
-		Time time = parseTime(event.getChild(START_TIME));
-		
-		return
+		String startTime = event.getChildText(START_TIME);
+		String startDate = event.getChildText(START_DATE);
+		DateTimeFormatter formatter = DateTimeFormat
+		        .forPattern("MM/dd/yyyyHH:mm:ss");
+		return formatter.parseDateTime(startDate + startTime.split(" ")[0]);	
 	}
-
-	/**
-	 * Gets the end time node and calls parseTime()
-	 * to parse it
-	 */
+	
 	@Override
 	protected DateTime parseEndTime(Element event) {
-		return parseTime(event.getChild(END_TIME));
+		String endTime = event.getChildText(END_TIME);
+		String endDate = event.getChildText(END_DATE);
+		DateTimeFormatter formatter = DateTimeFormat
+		        .forPattern("MM/dd/yyyyHH:mm:ss");
+		return formatter.parseDateTime(endDate + endTime.split(" ")[0]);	
 	}
 	
 	/**
@@ -118,5 +85,16 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		else
 			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
 		return parsedTimeZone;
+	}
+	
+	public static void main(String[] args) {
+		DukeBasketBallXMLParser parser = new DukeBasketBallXMLParser();
+		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/DukeBasketBall.xml");
+
+		List<Event> listOfEvents = parser.processEvents();
+
+		for (Event event : listOfEvents) {
+			System.out.println(event.toString());
+		}
 	}
 }
