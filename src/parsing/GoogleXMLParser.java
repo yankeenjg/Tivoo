@@ -59,7 +59,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			return GoogleRecurringEventXMLParser.parseTime(eventInfoArray);
 		}
 		eventInfoArray = parseTimeSplitUp(time)[0].split(split_one);
-		return super.parseTime(time); 
+		return parseTime(time); 
 	}
 	
 	@Override
@@ -147,6 +147,14 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return parseTimeOfEvent(DAY, END_DAY);
 	}
 
+	protected int parseEndHour24(Element time) {
+		return parseEndHourMinute(HOUR);
+	}
+
+	protected int parseEndMinute(Element time) {
+		return parseEndHourMinute(MINUTES);
+	}
+
 	private int parseEndHourMinute(int hourMinute) {
 		if (eventInfoArray.length < 9)
 			return parseHourMinute(eventInfoArray[TIME].split(":"),
@@ -157,15 +165,6 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			        eventInfoArray)[hourMinute];
 		return parseHourMinute(eventInfoArray[END_TIME].split(":"),
 		        eventInfoArray)[hourMinute];
-	}
-	@Override
-	protected int parseEndHour24(Element time) {
-		return parseEndHourMinute(HOUR);
-	}
-
-	@Override
-	protected int parseEndMinute(Element time) {
-		return parseEndHourMinute(MINUTES);
 	}
 
 	private int parseTimeOfEvent(int start, int end) {
@@ -210,7 +209,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 	/**
 	 * @param
-	 * 		event:  the event being parsed
+	 * 		event:   the event being parsed
 	 * 		finder:  the information you are looking for (ie. "Where" for location)
 	 * @return
 	 * 		the information of the "content" node pertaining to the 
@@ -252,41 +251,4 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			System.out.println(event.toString());
 		}
 	}
-
-	@Override
-    protected int parseYear(Element time) {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    protected int parseMonth(Element time) {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    protected int parseDay(Element time) {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    protected int parseHour24(Element time) {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    protected int parseMinute(Element time) {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    protected DateTimeZone parseTimeZone(Element time) {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
-
 }

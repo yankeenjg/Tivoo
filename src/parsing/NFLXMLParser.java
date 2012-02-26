@@ -2,9 +2,9 @@ package parsing;
 
 import java.util.List;
 
+
 import org.jdom.Element;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -76,42 +76,6 @@ public class NFLXMLParser extends AbstractXMLParser {
 	@Override
 	protected DateTime parseEndTime(Element event) {
 		return parseTime(event, END_TIME);
-	}
-
-	@Override
-	protected int parseYear(Element time) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected int parseMonth(Element time) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected int parseDay(Element time) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected int parseHour24(Element time) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected int parseMinute(Element time) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected DateTimeZone parseTimeZone(Element time) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
