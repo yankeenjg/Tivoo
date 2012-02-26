@@ -7,15 +7,16 @@ import model.Event;
 public class TimeSorter {
 	
 	//if event1 comes before event2 return true; else false.
-	public boolean compareTime(Event event1, Event event2) {
+	public boolean compareStartTime(Event event1, Event event2) {
 		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		return !(comparator.compare(event1.getStartTime(), event2.getStartTime()) > 0);
 	}
-	public ArrayList<Event> sortByStartTime(List<Event> eventList) {
-		ArrayList<Event> filteredEvents = new ArrayList<Event>();
+	
+	public List<Event> sortByStartTime(List<Event> eventList) {
+		List<Event> filteredEvents = new ArrayList<Event>();
 		for (Event event : eventList) {
 			for (int index = 0; index <= filteredEvents.size(); index++) {
-				if (index == filteredEvents.size() || compareTime(event, filteredEvents.get(index))) {
+				if (index == filteredEvents.size() || compareStartTime(event, filteredEvents.get(index))) {
 					filteredEvents.add(index, event);
 					break;
 				}
@@ -23,5 +24,49 @@ public class TimeSorter {
 		}
 		return filteredEvents;
 	}   
+	
+	public List<Event> reverseSortByStartTime(List<Event> eventList) {
+		List<Event> filteredEvents = new ArrayList<Event>();
+		for (Event event : eventList) {
+			for (int index = 0; index <= filteredEvents.size(); index++) {
+				if (index == filteredEvents.size() || !compareStartTime(event, filteredEvents.get(index))) {
+					filteredEvents.add(index, event);
+					break;
+				}
+			}
+		}
+		return filteredEvents;
+	}   
+	
+	public boolean compareEndTime(Event event1, Event event2) {
+		DateTimeComparator comparator = DateTimeComparator.getInstance();
+		return !(comparator.compare(event1.getEndTime(), event2.getEndTime()) > 0);
+	}
+	
+	public List<Event> sortByEndTime(List<Event> eventList) {
+		List<Event> filteredEvents = new ArrayList<Event>();
+		for (Event event : eventList) {
+			for (int index = 0; index <= filteredEvents.size(); index++) {
+				if (index == filteredEvents.size() || compareEndTime(event, filteredEvents.get(index))) {
+					filteredEvents.add(index, event);
+					break;
+				}
+			}
+		}
+		return filteredEvents;
+	}   
+	
+	public List<Event> reverseSortByEndTime(List<Event> eventList) {
+		List<Event> filteredEvents = new ArrayList<Event>();
+		for (Event event : eventList) {
+			for (int index = 0; index <= filteredEvents.size(); index++) {
+				if (index == filteredEvents.size() || !compareEndTime(event, filteredEvents.get(index))) {
+					filteredEvents.add(index, event);
+					break;
+				}
+			}
+		}
+		return filteredEvents;
+	}
 	
 }

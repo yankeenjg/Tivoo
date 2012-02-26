@@ -18,7 +18,6 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	private static final String TITLE = "title";
 	private static final String CONTENT = "content";
 	private static DateTimeZone TIMEZONE = DateTimeZone.forID("UTC");
-
 	private static final int YEAR = 5;
 	private static final int END_YEAR = 12;
 	private static final int DAY = 3;
