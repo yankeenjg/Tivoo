@@ -1,5 +1,6 @@
 package model;
 import org.joda.time.*;
+import java.util.*;
 
 public class Event {
 	
@@ -9,14 +10,17 @@ public class Event {
 	private String myDescription;
 	private String myLocation;
 	private boolean allDay;
+	private HashMap<String, ArrayList<String>> properties;
 
-	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, boolean allDay) {
+	public Event(String title, DateTime startTime, DateTime endTime, String description, 
+				 String location, boolean allDay, HashMap<String, ArrayList<String>> properties) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;
 		myDescription = description;
 		myLocation = location;
 		this.allDay = allDay;
+		this.properties = properties;
 	}
 	
 	public String getTitle() {
@@ -43,6 +47,9 @@ public class Event {
 		return allDay;
 	}
 
+	public List<String> getProperty(String prop){
+		return properties.get(prop);
+	}
 	
 	public String toString(){
 		return myTitle + " " +
