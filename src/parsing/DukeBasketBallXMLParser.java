@@ -1,23 +1,24 @@
 package parsing;
-import model.Event;
 
-import java.util.*;
-import org.jdom.*;
-import org.joda.time.*;
+import java.util.List;
 
+import org.jdom.Element;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
-public class DukeXMLParser extends AbstractXMLParser{
-	
-	
+public class DukeBasketBallXMLParser extends AbstractXMLParser{
+
 	/**
 	 * Labels for specific nodes in the event tree
 	 */
-	private String EVENT_NODE = "event";
-	private String NAME = 		"summary"; 
-	private String DESCRIPTION ="description";
-	private String START_TIME = "start";
-	private String END_TIME = 	"end";
-	private String LOCATION = 	"location";
+	private String EVENT_NODE = "Calendar";
+	private String NAME = 		"Subject"; 
+	private String DESCRIPTION ="Description";
+	private String START_DATE = "StartDate";
+	private String START_TIME = "StartTime";
+	private String END_DATE = 	"EndDate";
+	private String END_TIME = 	"EndTime";
+	private String LOCATION = 	"Location";
 	
 	/**
 	 * Gets the root node that contains all event nodes
@@ -48,15 +49,14 @@ public class DukeXMLParser extends AbstractXMLParser{
 	 */
 	@Override
 	protected String parseLocation(Element event) {
-		Element eventLocation = event.getChild(LOCATION);
-		return eventLocation.getChildText("address");
+		return event.getChildText(LOCATION);
 	}
 	
 	/**
 	 * Gets the year of the time sub-node of an event
 	 */
-	protected int parseYear(Element time){
-		return Integer.parseInt(time.getChildText("year"));
+	protected int parseYear(Element date){
+		
 	}
 	
 	/**
@@ -116,15 +116,4 @@ public class DukeXMLParser extends AbstractXMLParser{
 			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
 		return parsedTimeZone;
 	}
-	
-	public static void main (String[] args){
-		DukeXMLParser parser = new DukeXMLParser();
-		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
-		List<Event> listOfEvents = parser.processEvents();
-		
-		for(Event event : listOfEvents){
-			System.out.println(event.toString());
-		}
-	}
-
 }
