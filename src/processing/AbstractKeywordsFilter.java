@@ -1,23 +1,17 @@
 package processing;
 import model.Event;
 import java.util.*;
-import java.util.ArrayList;
 
 public abstract class AbstractKeywordsFilter implements IFilter {
 	
-	public abstract List<Event> filterByKeywords(List<Event> eventList, String[] keywordArray);
+	public abstract List<Event> filterByKeywords(List<Event> eventList, String keyword);
 	
 	public List<Event> filter(List<Event> eventList, Object ...args) {
-		return filterByKeywords(eventList, (String[]) args[0]);
+		return filterByKeywords(eventList, (String) args[0]);
 	}
 	
-	public boolean containsKeywords(Event event, String[] keywordArray) {
-		for (String keyword : keywordArray) {
-			if (isInTitle(event, keyword) || isInLocation(event, keyword) || isInDescription(event, keyword)) {
-				return true;
-			}
-		}
-		return false;
+	public boolean containsKeywords(Event event, String keyword) {
+		return isInTitle(event, keyword) || isInLocation(event, keyword) || isInDescription(event, keyword);
 	}
 	
 	public boolean isInTitle(Event event, String keyword) {

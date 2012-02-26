@@ -5,10 +5,11 @@ import model.Event;
 
 public class ContainsKeywordsFilter extends AbstractKeywordsFilter implements IFilter {
 	
-	public List<Event> filterByKeywords(List<Event> eventList, String[] keywordArray) {
+	@Override
+	public List<Event> filterByKeywords(List<Event> eventList, String keyword) {
 		List<Event> filteredList = new ArrayList<Event>();
 		for (Event event : eventList) {
-			if (containsKeywords(event, keywordArray)) {
+			if (containsKeywords(event, keyword)) {
 				filteredList.add(event);
 			}
 		}
