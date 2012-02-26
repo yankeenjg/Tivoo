@@ -55,8 +55,8 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 	/**
 	 * Gets the year of the time sub-node of an event
 	 */
-	protected int parseYear(Element date){
-		
+	protected int parseYear(Element time){
+		return Integer.parseInt(time.getChildText("year"));
 	}
 	
 	/**
@@ -92,7 +92,10 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 	 */
 	@Override
 	protected DateTime parseStartTime(Element event) {
-		return parseTime(event.getChild(START_TIME));
+		Date date = parseDate(event.getChild(START_DATE));
+		Time time = parseTime(event.getChild(START_TIME));
+		
+		return
 	}
 
 	/**
