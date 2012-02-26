@@ -8,13 +8,15 @@ public class Event {
 	private DateTime myEndTime;
 	private String myDescription;
 	private String myLocation;
-	
-	public Event(String title, DateTime startTime, DateTime endTime, String description, String location) {
+	private boolean allDay;
+
+	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, boolean allDay) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;
 		myDescription = description;
 		myLocation = location;
+		this.allDay = allDay;
 	}
 	
 	public String getTitle() {
@@ -36,12 +38,20 @@ public class Event {
 	public String getLocation(){
 		return myLocation;
 	}
+
+	public boolean isAllDay(){
+		return allDay;
+	}
+
 	
 	public String toString(){
 		return myTitle + " " +
 				myStartTime + " " +
 				myEndTime + " " +
-				myDescription;
+				myDescription + " " +
+				myLocation + " " +
+				myDescription + " is " +
+				(allDay ? "all day" : "not all day");
 	}
 }
 

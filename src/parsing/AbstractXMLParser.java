@@ -35,7 +35,7 @@ public abstract class AbstractXMLParser {
 			DateTime startTime 		= parseStartTime(event);
 			DateTime endTime 		= parseEndTime(event);
 						
-			Event newEvent = new Event(eventTitle, startTime, endTime, eventDescription, eventLocation);
+			Event newEvent = new Event(eventTitle, startTime, endTime, eventDescription, eventLocation, false);
 			parsedEventsList.add(newEvent);
 		}
 		
