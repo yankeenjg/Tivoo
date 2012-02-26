@@ -1,24 +1,22 @@
 package model;
 import org.joda.time.*;
-import java.util.List;
 
 public class Event {
+	
 	private String myTitle;
 	private DateTime myStartTime;
 	private DateTime myEndTime;
 	private String myDescription;
 	private String myLocation;
-	private List<String> myActors;
 	private boolean allDay;
-	
-	public Event(String title, DateTime startTime, DateTime endTime, String location, String description, List<String> actorList, boolean allday) {
+
+	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, boolean allDay) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;
-		myLocation = location;
 		myDescription = description;
-		myActors = actorList;
-		allDay = allday;
+		myLocation = location;
+		this.allDay = allDay;
 	}
 	
 	public String getTitle() {
@@ -32,19 +30,15 @@ public class Event {
 	public DateTime getEndTime(){
 		return myEndTime;
 	}
-	
-	public String getLocation(){
-		return myLocation;
-	}
 
 	public String getDescription(){
 		return myDescription;
 	}
 	
-	public List<String> getActors() {
-		return myActors;
+	public String getLocation(){
+		return myLocation;
 	}
-	
+
 	public boolean isAllDay(){
 		return allDay;
 	}
@@ -54,10 +48,10 @@ public class Event {
 		return myTitle + " " +
 				myStartTime + " " +
 				myEndTime + " " +
-				myLocation + " " +
 				myDescription + " " +
-				myActors + 
-				allDay;
+				myLocation + " " +
+				myDescription + " is " +
+				(allDay ? "all day" : "not all day");
 	}
 }
 

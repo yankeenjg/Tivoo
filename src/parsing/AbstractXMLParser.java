@@ -35,24 +35,11 @@ public abstract class AbstractXMLParser {
 			DateTime startTime 		= parseStartTime(event);
 			DateTime endTime 		= parseEndTime(event);
 						
-			Event newEvent = new Event(eventTitle, startTime, endTime, eventLocation, eventDescription, null, null);
+			Event newEvent = new Event(eventTitle, startTime, endTime, eventDescription, eventLocation, false);
 			parsedEventsList.add(newEvent);
 		}
 		
 		return parsedEventsList;
-	}
-	
-	public DateTime parseTime(Element time){
-		int year = parseYear(time);	
-		int month = parseMonth(time);	
-		int day = parseDay(time);	
-		
-		int hour24 = parseHour24(time);	
-		int minute = parseMinute(time);	
-		
-		DateTimeZone timeZone = parseTimeZone(time);
-		
-		return new DateTime(year, month, day, hour24, minute, timeZone);
 	}
 	
 	protected abstract List<Element> parseGetEventsList();
@@ -64,12 +51,6 @@ public abstract class AbstractXMLParser {
 	protected abstract DateTime parseStartTime(Element event);
 	protected abstract DateTime parseEndTime(Element event);
 	
-	protected abstract int parseYear(Element time);
-	protected abstract int parseMonth(Element time);
-	protected abstract int parseDay(Element time);
-	protected abstract int parseHour24(Element time);
-	protected abstract int parseMinute(Element time);
-	protected abstract DateTimeZone parseTimeZone(Element time);
 	
 	//implement this is subclasses
 	//public abstract boolean isThisType(String URL);

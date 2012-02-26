@@ -1,6 +1,6 @@
 package parsing;
-import model.Event;
-
+import model.PhysicalEvent;
+import model.AbstractEvent;
 import java.util.*;
 import org.jdom.*;
 import org.joda.time.*;
@@ -120,9 +120,9 @@ public class DukeXMLParser extends AbstractXMLParser{
 	public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
-		List<Event> listOfEvents = parser.processEvents();
+		List<AbstractEvent> listOfEvents = parser.processEvents();
 		
-		for(Event event : listOfEvents){
+		for(AbstractEvent event : listOfEvents){
 			System.out.println(event.toString());
 		}
 	}
