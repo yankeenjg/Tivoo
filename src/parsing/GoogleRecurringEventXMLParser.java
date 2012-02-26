@@ -3,12 +3,25 @@ package parsing;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-public class GoogleRecurringEventXMLParser extends AbstractXMLParser {
+import com.sun.java.util.jar.pack.Attribute.Layout.Element;
+
+public class GoogleRecurringEventXMLParser {
+
+	private static String[] startTime;
+	private static String[] endTime;
+	private static final String split_recur = "\\s+| |,|-|<|:";
 
 	private static DateTimeZone TIMEZONE = DateTimeZone.forID("UTC");
 
+	protected static DateTime parseTime(Element time) {
+		String[] startEnd = parseTimeSplitUp(time)[1].split("to");
+		startTime = startEnd[0].split(split_recur);
+		endTime = startEnd[1].split(split_recur);
+		return parseEventStart(time);
+	}
+	
 	// gets the year, month, day, hour, minute of a recurring event
-	protected int[] parseEvent(String[] timeInfoArray) {
+	protected static int[] parseRecurringEvent(String[] timeInfoArray) {
 
 		int[] DateTimeArray = new int[6];
 
@@ -18,8 +31,8 @@ public class GoogleRecurringEventXMLParser extends AbstractXMLParser {
 		return DateTimeArray;
 	}
 	
-	protected DateTime parseEventStart(String[] timeInfoArray) {
-		int[] DateTimeArray = parseEvent(timeInfoArray);
+	protected static DateTime parseEventStart(String[] timeInfoArray) {
+		int[] DateTimeArray = parseRecurringEvent(timeInfoArray);
 
 		DateTimeZone dateTimeZone = TIMEZONE;
 
@@ -28,7 +41,7 @@ public class GoogleRecurringEventXMLParser extends AbstractXMLParser {
 		        dateTimeZone);
 
 	}
-	protected DateTime parseEventEnd(String[] timeInfoArray,
+	protected static DateTime parseEventEnd(String[] timeInfoArray,
 	        String duration) {
 		String[] durationArray = duration.split(" ");
 		return parseEventStart(timeInfoArray).plusMinutes(

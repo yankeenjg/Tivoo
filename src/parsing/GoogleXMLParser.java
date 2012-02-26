@@ -34,8 +34,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	@SuppressWarnings("unchecked")
 	@Override
 	/**
-	 * @return
-	 * 		the list of child nodes of the root node
+	 * @return  the list of child nodes of the root node
 	 */
 	protected List<Element> parseGetEventsList() {
 		eventsRoot = doc.getRootElement();
@@ -43,10 +42,8 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * 		an array of the different elements of the "content" node,
-	 * 		split on whitespace
+	 * @return  an array of the different elements of the "content" node,
+	 * 			split on whitespace
 	 */
 	protected String[] parseTimeSplitUp(Element element) {
 		String timeInfo = element.getChildText(CONTENT, null).toString();
@@ -55,34 +52,52 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 	/**
 	 * determines whether the event is recurring or one-time
-	 * parses appropriately
-	 * 	
+	 * parses appropriately	
 	 */
-	public DateTime parseStartTime(Element time) {
+	public DateTime parseTypeOfEvent(Element time) {
 		if (parseTimeSplitUp(time)[0].startsWith("Recurring")) {
 			eventInfoArray = parseTimeSplitUp(time)[1].split(split_recur);
-			return GoogleRecurringEventXMLParser.parseEventStart(eventInfoArray);
+			return GoogleRecurringEventXMLParser.parseTime(eventInfoArray);
 		}
 		eventInfoArray = parseTimeSplitUp(time)[0].split(split_one);
-		return super.parseStartTime(time);
+		return super.parseTime(time); 
 	}
-
-	/**
-	 * 
-	 */
+	
 	@Override
+	protected DateTime parseStartTime(Element time) {
+		int year = parseStartYear(time);
+		int month = parseStartMonth(time);
+		int day = parseStartDay(time);
+		int hour24 = parseStartHour24(time);
+		int minute = parseStartMinute(time);
+		DateTimeZone timeZone = parseTimeZone(time);
+		return new DateTime(year, month, day, hour24, minute, timeZone);
+	}
+	
+	
+	@Override
+	protected DateTime parseEndTime(Element time) {
+		int year = parseEndYear(time);
+		int month = parseEndMonth(time);
+		int day = parseEndDay(time);
+		int hour24 = parseEndHour24(time);
+		int minute = parseEndMinute(time);
+		DateTimeZone timeZone = parseTimeZone(time);
+		return new DateTime(year, month, day, hour24, minute, timeZone);
+	}
+	
 	protected int parseStartYear(Element time) {
 		return parseTimeOfEvent(YEAR, YEAR);
 	}
 
-	@Override
+	
 	protected int parseStartMonth(Element time) {
 		DateTimeFormatter format = DateTimeFormat.forPattern("MMM");
 		DateTime tempMonth = format.parseDateTime(eventInfoArray[2]);
 		return tempMonth.getMonthOfYear();
 	}
 
-	@Override
+	
 	protected int parseStartDay(Element time) {
 		return parseTimeOfEvent(DAY, DAY);
 	}
@@ -121,22 +136,14 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return hourMinute;
 	}
 
-	public DateTime parseEndTime(Element time) {
-		if (parseTimeSplitUp(time)[0].startsWith("Recurring"))
-			return GoogleRecurringEventXMLParser.parseEventEnd(eventInfoArray,
-			        parseTimeSplitUp(time)[3]);
-		return super.parseEndTime(time);
-	}
-	@Override
 	protected int parseEndYear(Element time) {
 		return parseTimeOfEvent(YEAR, END_YEAR);
 	}
-	@Override
+
 	protected int parseEndMonth(Element time) {
 		return parseStartMonth(time);
 	}
 
-	@Override
 	protected int parseEndDay(Element time) {
 		return parseTimeOfEvent(DAY, END_DAY);
 	}
@@ -248,13 +255,39 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	@Override
-	protected DateTimeZone parseStartTimeZone(Element event) {
-		return DateTimeZone.getDefault();
-	}
+    protected int parseYear(Element time) {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
 
 	@Override
-	protected DateTimeZone parseEndTimeZone(Element event) {
-		return DateTimeZone.getDefault();
-	}
+    protected int parseMonth(Element time) {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    protected int parseDay(Element time) {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    protected int parseHour24(Element time) {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    protected int parseMinute(Element time) {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    protected DateTimeZone parseTimeZone(Element time) {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 
 }
