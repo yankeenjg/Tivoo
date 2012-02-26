@@ -5,7 +5,7 @@ import java.util.*;
 import org.joda.time.*;
 import com.hp.gagawa.java.elements.*;
 
-public class WeekListHtmlOutputter extends AbstractHtmlOutputter{
+public class WeekListOutputter extends AbstractHtmlOutputter{
     
     /*
      * Takes a list of events
@@ -21,7 +21,7 @@ public class WeekListHtmlOutputter extends AbstractHtmlOutputter{
         if(events.isEmpty())
             dt = new DateTime();
         else
-            dt = events.get(0).getStartTime();
+            dt = new DateTime(events.get(0).getStartTime());
         
         String filepath = "WeekList_of_" + dt.toString("MMMdd");
         
@@ -64,6 +64,8 @@ public class WeekListHtmlOutputter extends AbstractHtmlOutputter{
     
     /*
      * Appends all relevant event info into a cell of the week table
+     * Takes the p to write to, list of events to check, datetime of the
+     * cell, and the filepath to write to
      */
     private void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
         for(int j=0; j<events.size(); j++){
@@ -117,8 +119,8 @@ public class WeekListHtmlOutputter extends AbstractHtmlOutputter{
     }
     
     
-    public static void main (String[] args){
-    	AbstractHtmlOutputter ho = new WeekListHtmlOutputter();
+    /*public static void main (String[] args){
+    	AbstractHtmlOutputter ho = new WeekListOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
@@ -139,7 +141,6 @@ public class WeekListHtmlOutputter extends AbstractHtmlOutputter{
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);
-    }
+    }*/
     
-
 }
