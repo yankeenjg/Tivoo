@@ -1,7 +1,6 @@
 package processing;
 import model.Event;
 import java.util.*;
-import java.util.ArrayList;
 
 public abstract class AbstractKeywordsFilter implements IFilter {
 	

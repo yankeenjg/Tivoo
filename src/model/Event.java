@@ -12,8 +12,7 @@ public class Event {
 	private boolean allDay;
 	private HashMap<String, ArrayList<String>> properties;
 
-	public Event(String title, DateTime startTime, DateTime endTime, String description, 
-				 String location, boolean allDay, HashMap<String, ArrayList<String>> properties) {
+	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, boolean allDay, HashMap<String, ArrayList<String>> properties) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;

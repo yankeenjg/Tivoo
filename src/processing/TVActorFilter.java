@@ -13,7 +13,7 @@ public class TVActorFilter implements IFilter {
 	public List<Event> filterByActors(List<Event> eventList, String actor) {
 		List<Event> filteredList = new ArrayList<Event>();
 		for (Event event : eventList) {
-				if (event.getActors().contains(actor) && event.getActors() != null) {
+				if (event.getProperty("actors").contains(actor) && event.getProperty("actors") != null) {
 					filteredList.add(event);
 				}
 			}
