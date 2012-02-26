@@ -6,7 +6,7 @@ import model.Event;
 
 public class StartTimeSorter implements ISorter {
 	
-	//if event1 comes before event2 return true; else false.
+	//if event1 start time occurs before event2 start time return true; else false.
 	public boolean compareStartTime(Event event1, Event event2) {
 		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		return !(comparator.compare(event1.getStartTime(), event2.getStartTime()) > 0);

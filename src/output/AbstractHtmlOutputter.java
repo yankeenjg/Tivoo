@@ -15,12 +15,16 @@ public abstract class AbstractHtmlOutputter {
 	
 	protected static final String FILE_EXT = ".html";
     
+	/*
+	 * at some point this should also take a file path to output to
+	 * for the UI
+	 */
     public abstract void writeEvents(List<Event> events);
 
     /*
      * creates an html page based on the given head node
      */
-    public static void writeHtmlFile(Node head, String dir){
+    protected void writeHtmlFile(Node head, String dir){
         File f = new File(dir);
         if(dir.contains("/") && !f.getParentFile().exists())
             f.getParentFile().mkdir();
