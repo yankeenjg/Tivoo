@@ -31,6 +31,7 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
         Body body = new Body();
         html.appendChild(body);
         Table table = new Table();
+        table.setBorder("");
         body.appendChild(table);
         
         Tr row0 = new Tr();

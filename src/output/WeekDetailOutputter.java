@@ -43,6 +43,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         row2.setValign("top");
         for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
         	Td dayHeader = new Td();
+        	dayHeader.setWidth("1%");
         	B b = new B();
         	Div div = new Div();
         	div.setStyle("text-align:center");
