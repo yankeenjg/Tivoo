@@ -2,8 +2,7 @@ package parsing;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-
-import com.sun.java.util.jar.pack.Attribute.Layout.Element;
+import org.jdom.Element;
 
 public class GoogleRecurringEventXMLParser {
 
