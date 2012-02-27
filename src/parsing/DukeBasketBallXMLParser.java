@@ -56,6 +56,9 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		return event.getChildText(LOCATION);
 	}
 	
+	/**
+	 * Gets the start time of the even, given an event node
+	 */
 	@Override
 	protected DateTime parseStartTime(Element event) {
 		String startTime = event.getChildText(START_TIME);
@@ -65,6 +68,9 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		return formatter.parseDateTime(startDate + startTime.split(" ")[0]);	
 	}
 	
+	/**
+	 * Gets the end time of the even, given an event node
+	 */
 	@Override
 	protected DateTime parseEndTime(Element event) {
 		String endTime = event.getChildText(END_TIME);
