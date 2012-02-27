@@ -47,11 +47,15 @@ public class Event {
 	}
 
 	public List<String> getProperty(String prop){
-		return properties.get(prop);
+		if(properties!=null)
+			return properties.get(prop);
+		return null;
 	}
 	
 	public Set<String> getPropertyNames(){
-		return properties.keySet();
+		if(properties!=null)
+			return properties.keySet();
+		return null;
 	}
 	
 	public String toString(){
