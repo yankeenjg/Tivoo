@@ -1,9 +1,11 @@
 package parsing;
-import model.PhysicalEvent;
-import model.AbstractEvent;
 import java.util.*;
+
+import model.Event;
+
 import org.jdom.*;
 import org.joda.time.*;
+import org.joda.time.format.*;
 
 
 public class DukeXMLParser extends AbstractXMLParser{
@@ -51,41 +53,7 @@ public class DukeXMLParser extends AbstractXMLParser{
 		Element eventLocation = event.getChild(LOCATION);
 		return eventLocation.getChildText("address");
 	}
-	
-	/**
-	 * Gets the year of the time sub-node of an event
-	 */
-	protected int parseYear(Element time){
-		return Integer.parseInt(time.getChildText("year"));
-	}
-	
-	/**
-	 * Gets the month of the time sub-node of an event
-	 */
-	protected int parseMonth(Element time){
-		return Integer.parseInt(time.getChildText("month"));
-	}
 
-	/**
-	 * Gets the day of the time sub-node of an event
-	 */
-	protected int parseDay(Element time){
-		return Integer.parseInt(time.getChildText("day"));
-	}
-	
-	/**
-	 * Gets the hour in 24h format of the time sub-node of an event
-	 */
-	protected int parseHour24(Element time){
-		return Integer.parseInt(time.getChildText("hour24"));
-	}
-	/**
-	 * Gets the minute of the time sub-node of an event
-	 */
-	protected int parseMinute(Element time){
-		return Integer.parseInt(time.getChildText("minute"));
-	}
-	
 	/**
 	 * Gets the start time node and calls parseTime()
 	 * to parse it
@@ -104,27 +72,31 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return parseTime(event.getChild(END_TIME));
 	}
 	
-	/**
-	 * Gets the time zone of the time sub-node of an event
-	 */
-	protected DateTimeZone parseTimeZone(Element time){
-		Element timeZone = time.getChild("timezone");
-		DateTimeZone parsedTimeZone;
-		if(timeZone.getChildText("islocal").equals("true"))
-			parsedTimeZone = DateTimeZone.getDefault();
-		else
-			parsedTimeZone = DateTimeZone.forID(timeZone.getChildText("id"));
-		return parsedTimeZone;
+	protected DateTime parseTime(Element time){
+		DateTimeFormatter dtparser = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss'Z'");
+		String utcdate = time.getChildText("utcdate");
+		return dtparser.parseDateTime(utcdate);
+	}
+	
+	protected boolean isAllDay(Element event) {
+		String allDayField = event.getChild(START_TIME).getChildText("allday");
+		return Boolean.parseBoolean(allDayField);
+	}
+
+	@Override
+	protected HashMap<String, ArrayList<String>> getExtraProperties(
+			Element event) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
-		List<AbstractEvent> listOfEvents = parser.processEvents();
+		List<Event> listOfEvents = parser.processEvents();
 		
-		for(AbstractEvent event : listOfEvents){
+		for(Event event : listOfEvents){
 			System.out.println(event.toString());
 		}
 	}
-
 }
