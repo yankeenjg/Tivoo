@@ -2,6 +2,8 @@ package parsing;
 
 import model.Event;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdom.Element;
@@ -225,5 +227,18 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());
 		}
+	}
+
+	@Override
+	protected boolean isAllDay(Element event) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected HashMap<String, ArrayList<String>> getExtraProperties(
+			Element event) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -25,7 +25,6 @@ public abstract class AbstractXMLParser {
 	}*/
 		
 	public List<Event> processEvents(){
-		
 		List<Element> xmlEventsList = parseGetEventsList();
 		List<Event> parsedEventsList = new ArrayList<Event>();
 		for(Element event : xmlEventsList){
@@ -34,8 +33,11 @@ public abstract class AbstractXMLParser {
 			String eventLocation 	= parseLocation(event);
 			DateTime startTime 		= parseStartTime(event);
 			DateTime endTime 		= parseEndTime(event);
-						
-			Event newEvent = new Event(eventTitle, startTime, endTime, eventDescription, eventLocation, false);
+			boolean allDay			= isAllDay(event);
+			HashMap<String,ArrayList<String>> properties = getExtraProperties(event);
+			
+			Event newEvent = new Event(eventTitle, startTime, endTime, 
+					eventDescription, eventLocation, allDay, properties);
 			parsedEventsList.add(newEvent);
 		}
 		
@@ -51,6 +53,8 @@ public abstract class AbstractXMLParser {
 	protected abstract DateTime parseStartTime(Element event);
 	protected abstract DateTime parseEndTime(Element event);
 	
+	protected abstract boolean isAllDay(Element event);
+	protected abstract HashMap<String,ArrayList<String>> getExtraProperties(Element event);
 	
 	//implement this is subclasses
 	//public abstract boolean isThisType(String URL);

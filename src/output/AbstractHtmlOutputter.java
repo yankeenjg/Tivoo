@@ -4,6 +4,7 @@ import model.Event;
 import com.hp.gagawa.java.Node;
 import java.io.*;
 import java.util.*;
+import org.joda.time.DateTime;
 
 /*
  * still an abstract class because it makes more sense to have
@@ -37,6 +38,26 @@ public abstract class AbstractHtmlOutputter {
         }catch(IOException e1){
             e1.printStackTrace();
         }
+    }
+    
+    /*
+     * checks if two datetimes are in the same year
+     * (same YYYY)
+     */
+    protected boolean isSameYear(DateTime dt1, DateTime dt2){
+    	if(dt1.getYear()==dt2.getYear())
+    		return true;
+    	return false;
+    }
+    
+    /*
+     * checks of two datetimes are on the same date
+     * (same MM/dd/YYY)
+     */
+    protected boolean isSameDate(DateTime dt1, DateTime dt2){
+    	if(dt1.getDayOfYear()==dt2.getDayOfYear() && isSameYear(dt1, dt2))
+    		return true;
+    	return false;
     }
 
 }
