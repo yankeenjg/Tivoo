@@ -22,13 +22,13 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	private static final String split_recur = "\\s+| |,|-|<|:";
 	private static final String TITLE = "title";
 	private static final String CONTENT = "content";
-	private static DateTimeZone TIMEZONE = DateTimeZone.forID("UTC");
 	private static final int YEAR = 4;
 	private static final int DAY = 2;
 	private static final int TIME = 5;
 	private static final int HOUR = 0;
 	private static final int MINUTES = 1;
 
+	private static DateTimeZone TIMEZONE = DateTimeZone.forID("UTC");
 	private String[] eventInfoArray;
 	private String[] startTimeArray;
 
@@ -210,13 +210,6 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return parseContent(event, "Where:");
 	}
 
-	protected Boolean parseAllDayEvent(Element event) {
-		if (eventInfoArray.length < 9) {
-			return true;
-		}
-		return false;
-	}
-
 	public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();
 		parser.loadFile("https://www.google.com/calendar/feeds/kathleen.oshima%40gmail.com/private-cf4e2a2cf06315dece847f9aaf867f3e/basic");
@@ -231,7 +224,9 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 	@Override
 	protected boolean isAllDay(Element event) {
-		// TODO Auto-generated method stub
+		if (eventInfoArray.length < 9) {
+			return true;
+		}		
 		return false;
 	}
 
