@@ -2,21 +2,25 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
+import processing.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
 public class SortedListOutputter extends AbstractHtmlOutputter{
 
 	/*
-	 * takes a list of events sorted by start time and writes a
+	 * takes a list of events, sorts them, and writes a
 	 * very simple list giving each event's title and start
 	 */
 	public void writeEvents(List<Event> events) {
 		DateTime dt;
         if(events.isEmpty())
             dt = new DateTime();
-        else
+        else{
+        	StartTimeSorter sts = new StartTimeSorter();
+        	events = sts.sort(events);
             dt = new DateTime(events.get(0).getStartTime());
-        
+        }
+            
         String filepath = "Event_List_from_" + dt.toString("MMMdd");
         
         Html html = new Html();
@@ -46,11 +50,12 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
 	
 	/*
 	 * create date headers for the list when the start date of
-	 * the event changes
+	 * the event changes so there is continuity between spaced
+	 * events
 	 */
 	private void checkNewDay(P p, DateTime first, DateTime second){
 		if(second.getYear()>=first.getYear() && second.getDayOfYear()>first.getDayOfYear()){
-			while(first.getYear()!=second.getYear() || first.getDayOfYear()!=second.getDayOfYear()){
+			while(!isSameDate(first, second)){
 				first = first.plusDays(1);
 				B b = new B();
 				b.appendChild(new Text(first.toString("MM/dd")+"<br/>"));
@@ -69,13 +74,13 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
     	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
     	DateTime dt7 = new DateTime(2012, 4, 28, 12, 45);
     	DateTime dt8 = new DateTime(2012, 4, 28, 13, 00);
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true);
-    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false);
+    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
+    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false, null);
+    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
+    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);
     	List<Event> l = new ArrayList<Event>();
-    	l.add(e1);
     	l.add(e2);
+    	l.add(e1);
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);

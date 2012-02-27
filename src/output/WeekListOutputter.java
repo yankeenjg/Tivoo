@@ -4,6 +4,7 @@ import model.Event;
 import java.util.*;
 import org.joda.time.*;
 import com.hp.gagawa.java.elements.*;
+import processing.StartTimeSorter;
 
 public class WeekListOutputter extends AbstractHtmlOutputter{
     
@@ -20,9 +21,12 @@ public class WeekListOutputter extends AbstractHtmlOutputter{
         DateTime dt;
         if(events.isEmpty())
             dt = new DateTime();
-        else
+        else{
+        	StartTimeSorter sts = new StartTimeSorter();
+        	events = sts.sort(events);
             dt = new DateTime(events.get(0).getStartTime());
-        
+        }
+            
         String filepath = "WeekList_of_" + dt.toString("MMMdd");
         
         Html html = new Html();
@@ -77,19 +81,19 @@ public class WeekListOutputter extends AbstractHtmlOutputter{
                 detailLink.appendChild(new Text(e.getTitle()));
                 
                 p.appendChild(detailLink);
-                if(! e.isAllDay() ){
+                if(e.isAllDay()){
+                	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
+                }
+                else{
                     p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
                     p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/><br/>"));
-                }
-                else{ //if all day
-                    p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
                 }
             }
         }
     }
     
     /*
-     * creates the detailed pages for the given event
+     * creates the detail pages for the given event
      */
     private String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
@@ -109,6 +113,15 @@ public class WeekListOutputter extends AbstractHtmlOutputter{
             
         st.appendChild(new Text("<br/>  Location: "+e.getLocation()));
         st.appendChild(new Text("<br/>  Description: "+e.getDescription()));
+        
+        for(String prop:e.getPropertyNames()){
+        	st.appendChild(new Text("<br/>"+prop+": "));
+        	for(int i=0;i<e.getProperty(prop).length(); i++){
+        		if(i!=0)
+        			st.appendChild(new Text(", "));
+        		st.appendChild(new Text(e.getProperty(prop).get(i)));
+        	}
+        }
         
         body.appendChild(st);
         
@@ -131,13 +144,13 @@ public class WeekListOutputter extends AbstractHtmlOutputter{
     	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	List<String> actor = new ArrayList<String>();
     	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", actor, true);
-    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", actor, false);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", actor, false);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", actor, false);
+    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
+    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false, null);
+    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
+    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);
     	List<Event> l = new ArrayList<Event>();
-    	l.add(e1);
     	l.add(e2);
+    	l.add(e1);
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);
