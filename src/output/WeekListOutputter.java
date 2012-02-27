@@ -116,7 +116,7 @@ public class WeekListOutputter extends AbstractHtmlOutputter{
         
         for(String prop:e.getPropertyNames()){
         	st.appendChild(new Text("<br/>"+prop+": "));
-        	for(int i=0;i<e.getProperty(prop).length(); i++){
+        	for(int i=0;i<e.getProperty(prop).size(); i++){
         		if(i!=0)
         			st.appendChild(new Text(", "));
         		st.appendChild(new Text(e.getProperty(prop).get(i)));
