@@ -50,6 +50,10 @@ public class Event {
 		return properties.get(prop);
 	}
 	
+	public Set<String> getPropertyNames(){
+		return properties.keySet();
+	}
+	
 	public String toString(){
 		return myTitle + " " +
 				myStartTime + " " +
