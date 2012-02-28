@@ -1,19 +1,9 @@
 package filtering;
-import java.util.ArrayList;
-import java.util.List;
-
 import model.Event;
 
-public class ContainsKeywordsFilter extends AbstractKeywordsFilter implements IFilter {
+public class ContainsKeywordsFilter extends AbstractKeywordsFilter {
 	
-	@Override
-	public List<Event> filterByKeywords(List<Event> eventList, String keyword) {
-		List<Event> filteredList = new ArrayList<Event>();
-		for (Event event : eventList) {
-			if (containsKeywords(event, keyword)) {
-				filteredList.add(event);
-			}
-		}
-		return filteredList;
+	public boolean checkFilterCondition(Event event, Object ... args) {
+		return containsKeywords(event, (String) args[0]);
 	}
 }

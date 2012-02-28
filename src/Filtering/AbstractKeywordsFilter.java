@@ -1,15 +1,9 @@
 package filtering;
 import model.Event;
-import java.util.*;
 
-
-public abstract class AbstractKeywordsFilter implements IFilter {
+public abstract class AbstractKeywordsFilter extends AbstractFilter {
 	
-	public abstract List<Event> filterByKeywords(List<Event> eventList, String keyword);
-	
-	public List<Event> filter(List<Event> eventList, Object ...args) {
-		return filterByKeywords(eventList, (String) args[0]);
-	}
+	public abstract boolean checkFilterCondition(Event event, Object ... args);
 	
 	public boolean containsKeywords(Event event, String keyword) {
 		return isInTitle(event, keyword) || isInLocation(event, keyword) || isInDescription(event, keyword);
