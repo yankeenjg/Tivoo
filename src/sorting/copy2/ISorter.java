@@ -1,4 +1,4 @@
-package sorting;
+package sorting.copy2;
 
 import java.util.List;
 import model.Event;

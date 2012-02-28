@@ -1,4 +1,4 @@
-package sorting;
+package sorting.copy2;
 import java.util.ArrayList;
 import java.util.List;
 import model.Event;

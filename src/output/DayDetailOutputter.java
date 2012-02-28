@@ -3,7 +3,8 @@ import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
 
-import Sorting.StartTimeSorter;
+import sorting.StartTimeSorter;
+
 
 import com.hp.gagawa.java.elements.*;
 

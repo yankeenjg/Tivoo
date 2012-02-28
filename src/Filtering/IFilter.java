@@ -1,4 +1,4 @@
-package Filtering;
+package filtering;
 import java.util.*;
 import model.Event;
 

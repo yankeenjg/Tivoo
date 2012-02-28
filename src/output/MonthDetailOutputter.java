@@ -4,7 +4,8 @@ import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 
-import Sorting.StartTimeSorter;
+import sorting.StartTimeSorter;
+
 
 import com.hp.gagawa.java.elements.*;
 

@@ -1,4 +1,4 @@
-package Filtering;
+package filtering;
 import model.Event;
 import org.joda.time.*;
 import java.util.List;
