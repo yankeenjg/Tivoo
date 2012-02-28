@@ -3,7 +3,9 @@ import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import processing.StartTimeSorter;
+
+import Sorting.StartTimeSorter;
+
 import com.hp.gagawa.java.elements.*;
 
 public class MonthDetailOutputter extends DetailOutputter{

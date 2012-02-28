@@ -2,7 +2,9 @@ package output;
 import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
-import processing.StartTimeSorter;
+
+import Sorting.StartTimeSorter;
+
 import com.hp.gagawa.java.elements.*;
 
 public class DayDetailOutputter extends DetailOutputter{
