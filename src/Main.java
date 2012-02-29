@@ -11,7 +11,7 @@ public class Main {
 		//parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 		
 		AbstractXMLParser parser = new TVXMLParser();
-		parser.loadFile("http://duke.edu/~jjh38/tv.xml");
+		//parser.loadFile("http://duke.edu/~jjh38/tv.xml");
 		
 		List<Event> listOfEvents = parser.processEvents();
 		AbstractFilter filter = new KeywordFilter();

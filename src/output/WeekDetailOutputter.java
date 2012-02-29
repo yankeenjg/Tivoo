@@ -1,6 +1,8 @@
 package output;
 
 import model.Event;
+
+import java.io.File;
 import java.util.*;
 import org.joda.time.*;
 import com.hp.gagawa.java.elements.*;
@@ -14,7 +16,7 @@ import com.hp.gagawa.java.elements.*;
  */
 public class WeekDetailOutputter extends DetailOutputter{
     
-    public void writeEvents(List<Event> events) {
+    public File writeEvents(List<Event> events) {
     	DateTime dt = new DateTime();
         initDtEvents(dt, events);
             
@@ -55,7 +57,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         }
         table.appendChild(row0, row1, row2);
         
-        writeHtmlFile(html, filepath + FILE_EXT);
+        return writeHtmlFile(html, filepath + FILE_EXT);
     }
     
     /*public static void main (String[] args){

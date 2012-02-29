@@ -128,7 +128,7 @@ public class TVXMLParser extends AbstractXMLParser {
 		return false;
 	}
 	
-	public static void main (String[] args){
+	/*public static void main (String[] args){
 		TVXMLParser parser = new TVXMLParser();
 		parser.loadFile("http://dl.dropbox.com/u/5156866/tv.xml");
 		System.err.println("done loading!");
@@ -137,5 +137,5 @@ public class TVXMLParser extends AbstractXMLParser {
 		for(Event event : listOfEvents){
 			System.out.println(event.toString());
 		}
-	}
+	}*/
 }

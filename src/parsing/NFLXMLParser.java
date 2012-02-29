@@ -83,7 +83,7 @@ public class NFLXMLParser extends AbstractXMLParser {
 	}
 
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		NFLXMLParser parser = new NFLXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/NFL.xml");
 
@@ -92,7 +92,7 @@ public class NFLXMLParser extends AbstractXMLParser {
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());
 		}
-	}
+	}*/
 
 	@Override
 	protected boolean isAllDay(Element event) {

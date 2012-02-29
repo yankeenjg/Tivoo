@@ -210,7 +210,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return parseContent(event, "Where:");
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();
 		parser.loadFile("https://www.google.com/calendar/feeds/kathleen.oshima%40gmail.com/private-cf4e2a2cf06315dece847f9aaf867f3e/basic");
 		//parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/googlecal.xml");
@@ -220,7 +220,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());
 		}
-	}
+	}*/
 
 	@Override
 	protected boolean isAllDay(Element event) {

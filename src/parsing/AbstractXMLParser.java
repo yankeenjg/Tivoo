@@ -1,6 +1,7 @@
 package parsing;
 import model.Event;
 
+import java.io.File;
 import java.util.*;
 import org.jdom.*;
 import org.jdom.input.*;
@@ -12,7 +13,7 @@ public abstract class AbstractXMLParser {
 	protected Document doc;
 	protected Element eventsRoot;
 	
-	public final void loadFile(String filename){
+	public final void loadFile(File filename){
 		try{
 			SAXBuilder builder = new SAXBuilder();
 			doc = builder.build(filename);
@@ -21,9 +22,9 @@ public abstract class AbstractXMLParser {
 		}
 	}
 	
-/*	public chooseParser() {
-		//TODO: Implement this method
-	}*/
+	public static AbstractXMLParser chooseParser(File file) {
+		return new DukeXMLParser();
+	}
 		
 	public List<Event> processEvents(){
 		List<Element> xmlEventsList = parseGetEventsList();

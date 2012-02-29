@@ -90,7 +90,7 @@ public class DukeXMLParser extends AbstractXMLParser{
 		return null;
 	}
 	
-	public static void main (String[] args){
+	/*public static void main (String[] args){
 		DukeXMLParser parser = new DukeXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 		List<Event> listOfEvents = parser.processEvents();
@@ -98,5 +98,5 @@ public class DukeXMLParser extends AbstractXMLParser{
 		for(Event event : listOfEvents){
 			System.out.println(event.toString());
 		}
-	}
+	}*/
 }

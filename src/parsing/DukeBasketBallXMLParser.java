@@ -95,7 +95,7 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		return parsedTimeZone;
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		DukeBasketBallXMLParser parser = new DukeBasketBallXMLParser();
 		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/DukeBasketBall.xml");
 
@@ -105,7 +105,7 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 			System.out.println(event.toString());
 		}
 	}
-
+*/
 	@Override
 	protected boolean isAllDay(Element event) {
 		// TODO Auto-generated method stub

@@ -1,4 +1,5 @@
 package output;
+import java.io.File;
 import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
@@ -13,7 +14,7 @@ import com.hp.gagawa.java.elements.*;
  */
 public class DayDetailOutputter extends DetailOutputter{
 
-	public void writeEvents(List<Event> events) {
+	public File writeEvents(List<Event> events) {
         DateTime dt = new DateTime();
         initDtEvents(dt, events);
             
@@ -30,7 +31,7 @@ public class DayDetailOutputter extends DetailOutputter{
         body.appendChild(p);
         writeEventP(p, events, dt, filepath);
         
-        writeHtmlFile(html, filepath + FILE_EXT);
+        return writeHtmlFile(html, filepath + FILE_EXT);
     }
     
     

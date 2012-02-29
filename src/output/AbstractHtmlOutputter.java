@@ -37,7 +37,7 @@ public abstract class AbstractHtmlOutputter {
 	 * element nodes to write the html pages
 	 * @param events List of events to be output
 	 */
-    public abstract void writeEvents(List<Event> events);
+    public abstract File writeEvents(List<Event> events);
     
     /**
      * Initalizes the reference DateTime object and sorts
@@ -59,7 +59,7 @@ public abstract class AbstractHtmlOutputter {
      * @param head Head of the html node tree
      * @param dir File path and file name to write to
      */
-    protected void writeHtmlFile(Node head, String dir){
+    protected File writeHtmlFile(Node head, String dir){
         File f = new File(dir);
         if(dir.contains("/") && !f.getParentFile().exists())
             f.getParentFile().mkdir();
@@ -72,6 +72,7 @@ public abstract class AbstractHtmlOutputter {
         }catch(IOException e1){
             e1.printStackTrace();
         }
+        return f;
     }
     
     /**

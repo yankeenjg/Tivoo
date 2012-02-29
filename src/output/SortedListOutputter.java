@@ -1,7 +1,13 @@
 package output;
 import model.Event;
+
+import java.io.File;
 import java.util.*;
+
 import org.joda.time.*;
+
+import parsing.DukeXMLParser;
+
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -12,7 +18,7 @@ import com.hp.gagawa.java.elements.*;
  */
 public class SortedListOutputter extends AbstractHtmlOutputter{
 
-	public void writeEvents(List<Event> events) {
+	public File writeEvents(List<Event> events) {
 		DateTime dt = new DateTime();
         initDtEvents(dt, events);
             
@@ -36,10 +42,10 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
         	U u = new U();
         	u.appendChild(new Text(e.getTitle()));
         	p.appendChild(u);
-        	p.appendChild(new Text(" ("+e.getStartTime().toString("HH:mm")+" start)<br/>"));
+        	p.appendChild(new Text(" ("+e.getStartTime().toString("HH:mm")+" start)" + " (" + e.getEndTime().toString("HH:mm") +" end) <br/>"));
         }
         
-        writeHtmlFile(html, filepath+FILE_EXT); 
+        return writeHtmlFile(html, filepath+FILE_EXT); 
 	}
 	
 	/**
@@ -60,6 +66,7 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
 			}
 		}
 	}
+	
 	
 	/*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new SortedListOutputter();
