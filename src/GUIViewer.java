@@ -3,9 +3,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.JEditorPane;
+
+import org.joda.time.DateTime;
+
 import java.io.*;
 
 @SuppressWarnings("serial")
@@ -22,7 +23,7 @@ public class GUIViewer extends JPanel {
 	private JButton myEndTimeSorterButton;
 	private JButton myStartTimeSorterButton;
 	private JButton myTitleSorterButton;
-	
+
 	public GUIViewer(GUIModel model) {
 		myModel = model;
 		setLayout(new BorderLayout());
@@ -31,7 +32,7 @@ public class GUIViewer extends JPanel {
 		add(makeSorterPanel(), BorderLayout.EAST);
 		enableButtons();
 	}
-	
+
 	private void enableButtons() {
 		myLoadFileButton.setEnabled(true);
 		myPreviewWebpageButton.setEnabled(true);
@@ -43,7 +44,7 @@ public class GUIViewer extends JPanel {
 		myStartTimeSorterButton.setEnabled(true);
 		myTitleSorterButton.setEnabled(true);
 	}
-	
+
 	private JComponent makeMiscPanel() {
         JPanel panel = new JPanel();
         myLoadFileButton = new JButton("Load File");
@@ -71,7 +72,7 @@ public class GUIViewer extends JPanel {
 		panel.add(myTVActorFilterButton);
 		return panel;
 	}
-	
+
 	private JComponent makeSorterPanel() {
 		JPanel panel = new JPanel();
 		myEndTimeSorterButton = new JButton("End Time Sorter");
@@ -85,11 +86,11 @@ public class GUIViewer extends JPanel {
 		panel.add(myTitleSorterButton);
 		return panel;
 	}
-	
+
 	private void loadFile() {
 		myModel.loadFile();
     }
-	
+
 	private void previewWebpage() throws IOException {
 		String url = myModel.previewWebpage().toURI().toString();
 		pane = new JEditorPane();
@@ -105,88 +106,94 @@ public class GUIViewer extends JPanel {
 	}
 
 
-	
+
 	private void keywordFilter() {
-		myModel.keywordFilter();
+		String keyword = JOptionPane.showInputDialog(null, "Enter keyword");
+		myModel.keywordFilter(keyword);
 	}
-	
+
 	private void locationFilter() {
-		myModel.locationFilter();
+		String location = JOptionPane.showInputDialog(null, "Enter location");
+		myModel.locationFilter(location);
 	}
-	
+
 	private void timeFilter() {
-		myModel.timeFilter();
+		String lower = JOptionPane.showInputDialog(null, "Enter bottom time limit");
+		DateTime lowerLimit = DateTime.parse(lower);
+		String upper = JOptionPane.showInputDialog(null, "Enter upper time limit");
+		DateTime upperLimit = DateTime.parse(upper);
+		myModel.timeFilter(lowerLimit, upperLimit);
 	}
-	
+
 	private void TVActorFilter() {
-		myModel.TVActorFilter();
+		String actor = JOptionPane.showInputDialog(null, "Enter actor");
+		myModel.TVActorFilter(actor);
 	}
-	
+
 	private void endTimeSort() {
 		myModel.endTimeSort();
 	}
-	
+
 	private void startTimeSort() {
 		myModel.startTimeSort();
 	}
-	
+
 	private void titleSort() {
 		myModel.titleSort();
 	}
-	
+
 	private class LoadFileAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		loadFile();
     	}
     }
-	
+
 	private class PreviewWebpageAction implements ActionListener {
 		public void actionPerformed (ActionEvent e) {
 			try {
 				previewWebpage();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 	}
-	
+
 	private class KeywordFilterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		keywordFilter();
     	}
     }
-	
+
 	private class LocationFilterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		locationFilter();
     	}
     }
-	
+
 	private class TimeFilterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		timeFilter();
     	}
     }
-	
+
 	private class TVActorFilterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		TVActorFilter();
     	}
     }
-	
+
 	private class StartTimeSorterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		startTimeSort();
     	}
     }
-	
+
 	private class EndTimeSorterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		endTimeSort();
     	}
     }
-	
+
 	private class TitleSorterAction implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		titleSort();
