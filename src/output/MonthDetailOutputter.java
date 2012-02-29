@@ -73,7 +73,7 @@ public class MonthDetailOutputter extends DetailOutputter{
         writeHtmlFile(html, filepath+FILE_EXT);
     }
     
-    public static void main (String[] args){
+    /*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new MonthDetailOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 2, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 2, 11, 30);
@@ -95,6 +95,6 @@ public class MonthDetailOutputter extends DetailOutputter{
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);
-    }
+    }*/
 
 }
