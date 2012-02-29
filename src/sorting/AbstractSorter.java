@@ -36,7 +36,4 @@ public abstract class AbstractSorter {
 		}
 		return filteredEvents;
 	}
-	
-	
-
 }

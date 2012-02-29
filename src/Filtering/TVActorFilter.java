@@ -8,6 +8,6 @@ public class TVActorFilter extends AbstractFilter {
 	}
 	
 	public boolean containsActor(Event event, String actor) {
-		return event.getProperty("actors").contains(actor) && event.getProperty("actors") != null;
+		return event.getProperty("actors") != null && event.getProperty("actors").contains(actor);
 	}
 }

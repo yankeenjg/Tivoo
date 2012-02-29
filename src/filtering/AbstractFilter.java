@@ -10,7 +10,17 @@ public abstract class AbstractFilter {
 	public List<Event> filter(List<Event> eventList, Object ... args) {
 		List<Event> filteredList = new ArrayList<Event>();
 		for (Event event : eventList) {
-			if (checkFilterCondition(event, args[0])) {
+			if (checkFilterCondition(event, args)) {
+				filteredList.add(event);
+			}
+		}
+		return filteredList;
+	}
+	
+	public List<Event> inverseFilter(List<Event> eventList, Object ... args) {
+		List<Event> filteredList = new ArrayList<Event>();
+		for (Event event : eventList) {
+			if (!checkFilterCondition(event, args)) {
 				filteredList.add(event);
 			}
 		}
