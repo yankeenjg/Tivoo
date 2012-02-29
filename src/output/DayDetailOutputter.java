@@ -2,7 +2,6 @@ package output;
 import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
-import sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -15,14 +14,8 @@ import com.hp.gagawa.java.elements.*;
 public class DayDetailOutputter extends DetailOutputter{
 
 	public void writeEvents(List<Event> events) {
-        DateTime dt;
-        if(events.isEmpty())
-            dt = new DateTime();
-        else{
-        	StartTimeSorter sts = new StartTimeSorter();
-        	events = sts.sort(events);
-            dt = new DateTime(events.get(0).getStartTime());
-        }
+        DateTime dt = new DateTime();
+        initDtEvents(dt, events);
             
         String filepath = "DayDetail_of_" + dt.toString("MMMdd");
         

@@ -2,7 +2,6 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
-import sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -14,14 +13,8 @@ import com.hp.gagawa.java.elements.*;
 public class SortedListOutputter extends AbstractHtmlOutputter{
 
 	public void writeEvents(List<Event> events) {
-		DateTime dt;
-        if(events.isEmpty())
-            dt = new DateTime();
-        else{
-        	StartTimeSorter sts = new StartTimeSorter();
-        	events = sts.sort(events);
-            dt = new DateTime(events.get(0).getStartTime());
-        }
+		DateTime dt = new DateTime();
+        initDtEvents(dt, events);
             
         String filepath = "Event_List_from_" + dt.toString("MMMdd");
         

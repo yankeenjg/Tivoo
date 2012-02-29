@@ -8,6 +8,7 @@ import com.hp.gagawa.java.elements.Text;
 import java.io.*;
 import java.util.*;
 import org.joda.time.DateTime;
+import sorting.StartTimeSorter;
 
 /**
  * Abstract class for outputting html files that provides a 
@@ -37,6 +38,14 @@ public abstract class AbstractHtmlOutputter {
 	 * @param events List of events to be output
 	 */
     public abstract void writeEvents(List<Event> events);
+    
+    protected void initDtEvents(DateTime dt, List<Event> events){
+    	if(!events.isEmpty()){
+        	StartTimeSorter sts = new StartTimeSorter();
+        	events = sts.sort(events);
+            dt = new DateTime(events.get(0).getStartTime());
+        }
+    }
 
     /**
      * Handles all the actual file writing and related

@@ -3,7 +3,6 @@ import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -16,14 +15,8 @@ import com.hp.gagawa.java.elements.*;
 public class MonthDetailOutputter extends DetailOutputter{
 	
     public void writeEvents(List<Event> events) {
-        DateTime dt;
-        if(events.isEmpty())
-            dt = new DateTime();
-        else{
-        	StartTimeSorter sts = new StartTimeSorter();
-        	events = sts.sort(events);
-            dt = new DateTime(events.get(0).getStartTime());
-        }
+    	DateTime dt = new DateTime();
+        initDtEvents(dt, events);
         
         String filepath = "MonthDetail_of_" + dt.toString("MMMYYYY");
         
@@ -80,7 +73,7 @@ public class MonthDetailOutputter extends DetailOutputter{
         writeHtmlFile(html, filepath+FILE_EXT);
     }
     
-    /*public static void main (String[] args){
+    public static void main (String[] args){
     	AbstractHtmlOutputter ho = new MonthDetailOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 2, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 2, 11, 30);
@@ -102,6 +95,6 @@ public class MonthDetailOutputter extends DetailOutputter{
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);
-    }*/
+    }
 
 }

@@ -15,6 +15,14 @@ import com.hp.gagawa.java.elements.*;
  */
 public abstract class DetailOutputter extends AbstractHtmlOutputter{
 	
+	/**
+	 * Creates a more detailed subpage for the given event that has
+	 * all the lesser information
+	 * @param e Event in question
+	 * @param filepath Location to write the file
+	 * @param evNum Event identifier
+	 * @return The path and name of the event's detailed page
+	 */
     protected String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
         Body body = new Body();
