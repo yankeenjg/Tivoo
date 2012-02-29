@@ -3,22 +3,18 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
-
-import sorting.StartTimeSorter;
-
-
+import Sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Condensed calendar output for a single week
+ * The week in question is the 7 day period starting from
+ * the earliest event in the given list
+ * @author herio
+ *
+ */
 public class WeekDetailOutputter extends DetailOutputter{
     
-    /*
-     * Takes a list of events
-     * The events are sorted, and all events within a week of the earliest
-     * event are outputted; other events are ignored
-     * 
-     * Creates an html file and a folder with html files for individual
-     * event details
-     */
     public void writeEvents(List<Event> events) {
         DateTime dt;
         if(events.isEmpty())
@@ -38,7 +34,6 @@ public class WeekDetailOutputter extends DetailOutputter{
         table.setBorder("");
         body.appendChild(table);
         
-        //table view
         Tr row0 = new Tr();
         row0.appendChild(new Text("Week of "+dt.toString("MMM dd, YYYY")));
         Tr row1 = new Tr();

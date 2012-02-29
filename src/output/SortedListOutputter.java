@@ -2,18 +2,17 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
-
-import sorting.StartTimeSorter;
-
-
+import Sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Very condensed output that simply displays the title and
+ * start time of a list of events sorted by start time
+ * @author herio
+ *
+ */
 public class SortedListOutputter extends AbstractHtmlOutputter{
 
-	/*
-	 * takes a list of events, sorts them, and writes a
-	 * very simple list giving each event's title and start
-	 */
 	public void writeEvents(List<Event> events) {
 		DateTime dt;
         if(events.isEmpty())
@@ -28,12 +27,12 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
         
         Html html = new Html();
         Body body = new Body();
-        H4 h4 = new H4();
         P p = new P();
         html.appendChild(body);
-        body.appendChild(h4, p);
+        B titleB = new B();
+        body.appendChild(titleB, p);
         
-        h4.appendChild(new Text("Event list from "+dt.toString("MM/dd")+" by starting time"));
+        titleB.appendChild(new Text("Event list from "+dt.toString("MM/dd")+" by starting time"));
         
         B b = new B();
         b.appendChild(new Text(dt.toString("MM/dd")+"<br/>"));
@@ -47,14 +46,16 @@ public class SortedListOutputter extends AbstractHtmlOutputter{
         	p.appendChild(new Text(" ("+e.getStartTime().toString("HH:mm")+" start)<br/>"));
         }
         
-        writeHtmlFile(html, filepath+FILE_EXT);
-        
+        writeHtmlFile(html, filepath+FILE_EXT); 
 	}
 	
-	/*
-	 * create date headers for the list when the start date of
-	 * the event changes so there is continuity between spaced
-	 * events
+	/**
+	 * Writes day headers for each day from the date of the first
+	 * event to the second (so one header will be written for events
+	 * one day apart, two headers for two days apart, etc.)
+	 * @param p P element to which to append
+	 * @param first First date
+	 * @param second Second date
 	 */
 	private void checkNewDay(P p, DateTime first, DateTime second){
 		if(second.getYear()>=first.getYear() && second.getDayOfYear()>first.getDayOfYear()){

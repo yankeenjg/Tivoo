@@ -1,21 +1,19 @@
 package output;
 import java.util.*;
-
 import model.Event;
 import org.joda.time.DateTime;
-
-import sorting.StartTimeSorter;
-
-
+import Sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Condensed calendar output for a single day
+ * The day in question is the day of the earliest event
+ * in the given list
+ * @author herio
+ *
+ */
 public class DayDetailOutputter extends DetailOutputter{
-	
-	/*
-	 * Take a list of events and sort it by start date
-	 * Writes all events on the same day as the first event
-	 * after sorting; all other events are ignored
-	 */
+
 	public void writeEvents(List<Event> events) {
         DateTime dt;
         if(events.isEmpty())

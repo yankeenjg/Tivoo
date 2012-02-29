@@ -6,26 +6,22 @@ import org.joda.time.DateTime;
 import model.Event;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Abstract class that provides a few common methods to calendar
+ * outputs that want to link the condensed information in the
+ * visual calendar to more detailed pages for each individual event
+ * @author herio
+ *
+ */
 public abstract class DetailOutputter extends AbstractHtmlOutputter{
 	
-	/*
-     * creates the detail pages for the given event
-     */
     protected String writeDetails(Event e, String filepath, int evNum){
         Html html = new Html();
         Body body = new Body();
         html.appendChild(body);
         
         P st = new P();
-        B b = new B();
-        b.appendChild(new Text(e.getTitle()));
-        st.appendChild(b);
-        if(e.isAllDay()){
-        	st.appendChild(new Text("<br/> All day "+e.getStartTime().toString("MM/dd, YYYY")));
-        }else{
-            st.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm, YYYY")));
-            st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm, YYYY")));
-        }
+        appendTitleTimes(e, st);
             
         st.appendChild(new Text("<br/>  Location: "+e.getLocation()));
         st.appendChild(new Text("<br/>  Description: "+e.getDescription()));
@@ -49,10 +45,13 @@ public abstract class DetailOutputter extends AbstractHtmlOutputter{
         return eventpath;
     }
     
-    /*
-     * Appends all relevant event info into a cell of the week table
-     * Takes the p to write to, list of events to check, datetime of the
-     * cell, and the filepath to write to
+    /**
+     * Appends all elements in a list that match the given DateTime to
+     * a table cell in the calendar
+     * @param p P element to which to append
+     * @param events List of events that can be appended
+     * @param dt DateTime to match
+     * @param filepath Location of the files
      */
     protected void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
     	for(int j=0; j<events.size(); j++){
@@ -64,13 +63,8 @@ public abstract class DetailOutputter extends AbstractHtmlOutputter{
                 detailLink.appendChild(new Text(e.getTitle()));
                 
                 p.appendChild(detailLink);
-                if(e.isAllDay()){
-                	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
-                }
-                else{
-                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
-                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/><br/>"));
-                }
+                appendTimes(e, p);
+                p.appendChild(new Text("<br/>"));
             }
         }
     }
