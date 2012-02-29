@@ -2,7 +2,7 @@ import model.Event;
 import java.util.List;
 import output.*;
 import filtering.*;
-import sorting.*;
+//import sorting.*;
 import parsing.*;
 
 public class Main {
@@ -14,9 +14,9 @@ public class Main {
 		parser.loadFile("http://duke.edu/~jjh38/tv.xml");
 		
 		List<Event> listOfEvents = parser.processEvents();
-		KeywordFilter keywordFilter = new KeywordFilter();
-		List<Event> newList = keywordFilter.filter(listOfEvents, "");               
-    	AbstractHtmlOutputter ho = new WeekListOutputter();
+		AbstractFilter filter = new KeywordFilter();
+		List<Event> newList = filter.filter(listOfEvents, "");               
+    	AbstractHtmlOutputter ho = new WeekDetailOutputter();
     	ho.writeEvents(newList);
     	
     	for (Event event : newList) {
