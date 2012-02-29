@@ -32,7 +32,6 @@ public class MonthDetailOutputter extends DetailOutputter{
         
         String filepath = "MonthDetail_of_" + dt.toString("MMMYYYY");
         
-        
         Html html = new Html();
         Body body = new Body();
         html.appendChild(body);
@@ -52,7 +51,6 @@ public class MonthDetailOutputter extends DetailOutputter{
         Tr row1 = new Tr();
         DateTime dummy = new DateTime(dt);
         for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK;i++){
-        	System.out.println(dummy.getDayOfWeek());
         	Td DoW = new Td();
         	DoW.setWidth("1%");
         	B b = new B();
@@ -73,7 +71,7 @@ public class MonthDetailOutputter extends DetailOutputter{
         		Td td = new Td();
         		P p = new P();
         		B b = new B();
-        		b.appendChild(new Text(dt.toString("MM/dd")));
+        		b.appendChild(new Text(dt.toString("MM/dd")+"<br/>"));
         		p.appendChild(b);
         		writeEventP(p, events, dt, filepath);
         		td.appendChild(p);
@@ -87,35 +85,14 @@ public class MonthDetailOutputter extends DetailOutputter{
         writeHtmlFile(html, filepath+FILE_EXT);
     }
     
-    private void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
-    	for(int i=0; i<events.size(); i++){
-    		Event e = events.get(i);
-    		if(isSameDate(e.getStartTime(), dt)){
-    			String detailPath = writeDetails(e, filepath, i);
-    			A detailLink = new A();
-    			detailLink.setHref(detailPath);
-    			detailLink.appendChild(new Text("<br/>"+e.getTitle()));
-    			
-    			p.appendChild(detailLink);
-    			if(e.isAllDay()){
-                	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/>"));
-                }
-                else{
-                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
-                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/>"));
-                }
-    		}
-    	}
-    }
-    
     /*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new MonthDetailOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 2, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 2, 11, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
     	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
-    	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
-    	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
+    	DateTime dt5 = new DateTime(2012, 2, 24, 12, 15);
+    	DateTime dt6 = new DateTime(2012, 2, 24, 12, 30);
     	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
     	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	List<String> actor = new ArrayList<String>();

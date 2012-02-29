@@ -1,5 +1,6 @@
 package output;
 import java.util.*;
+
 import model.Event;
 import org.joda.time.DateTime;
 import processing.StartTimeSorter;
@@ -33,36 +34,12 @@ public class DayDetailOutputter extends DetailOutputter{
         
         P p = new P();
         body.appendChild(p);
-        for(int i=0; i<events.size();i++){
-        	Event e = events.get(i);
-        	if(!isSameDate(dt, e.getStartTime()))
-        		break;
-        	writeEventP(p, e, filepath, i);
-        }
+        writeEventP(p, events, dt, filepath);
         
         writeHtmlFile(html, filepath + FILE_EXT);
     }
-	
-	/*
-     * Appends all relevant event info into the P object
-     * Takes the p to write to, the event to check, and 
-     * the filepath to write to
-     */
-    private void writeEventP(P p, Event e, String filepath, int evNum){
-    	String detailPath = writeDetails(e, filepath, evNum);
-    	A detailLink = new A();
-    	detailLink.setHref(detailPath);
-    	detailLink.appendChild(new Text(e.getTitle()));
-    	p.appendChild(detailLink);
-    	
-    	if(e.isAllDay()){
-        	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
-        }
-        else{
-            p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
-            p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/><br/>"));
-        }
-    }
+    
+    
     
     /*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new DayDetailOutputter();
@@ -70,10 +47,10 @@ public class DayDetailOutputter extends DetailOutputter{
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
     	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
-    	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
-    	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
-    	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
-    	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
+    	DateTime dt5 = new DateTime(2012, 2, 24, 12, 15);
+    	DateTime dt6 = new DateTime(2012, 2, 24, 12, 30);
+    	DateTime dt7 = new DateTime(2012, 2, 24, 12, 45);
+    	DateTime dt8 = new DateTime(2012, 2, 24, 13, 00);
     	List<String> actor = new ArrayList<String>();
     	actor.add("actor");
     	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);

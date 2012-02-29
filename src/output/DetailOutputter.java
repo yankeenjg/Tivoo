@@ -1,4 +1,8 @@
 package output;
+import java.util.List;
+
+import org.joda.time.DateTime;
+
 import model.Event;
 import com.hp.gagawa.java.elements.*;
 
@@ -16,11 +20,11 @@ public abstract class DetailOutputter extends AbstractHtmlOutputter{
         B b = new B();
         b.appendChild(new Text(e.getTitle()));
         st.appendChild(b);
-        if(!e.isAllDay()){
+        if(e.isAllDay()){
+        	st.appendChild(new Text("<br/> All day "+e.getStartTime().toString("MM/dd, YYYY")));
+        }else{
             st.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm, YYYY")));
             st.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm, YYYY")));
-        }else{
-            st.appendChild(new Text("<br/> All day "+e.getStartTime().toString("MM/dd, YYYY")));
         }
             
         st.appendChild(new Text("<br/>  Location: "+e.getLocation()));
@@ -43,6 +47,32 @@ public abstract class DetailOutputter extends AbstractHtmlOutputter{
         
         writeHtmlFile(html, eventpath);
         return eventpath;
+    }
+    
+    /*
+     * Appends all relevant event info into a cell of the week table
+     * Takes the p to write to, list of events to check, datetime of the
+     * cell, and the filepath to write to
+     */
+    protected void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
+    	for(int j=0; j<events.size(); j++){
+            Event e = events.get(j);
+            if(isSameDate(e.getStartTime(), dt)){
+                String detailPath = writeDetails(e, filepath, j);
+                A detailLink = new A();
+                detailLink.setHref(detailPath);
+                detailLink.appendChild(new Text(e.getTitle()));
+                
+                p.appendChild(detailLink);
+                if(e.isAllDay()){
+                	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
+                }
+                else{
+                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
+                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/><br/>"));
+                }
+            }
+        }
     }
 
 }

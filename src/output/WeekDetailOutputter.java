@@ -67,34 +67,8 @@ public class WeekDetailOutputter extends DetailOutputter{
         writeHtmlFile(html, filepath + FILE_EXT);
     }
     
-    /*
-     * Appends all relevant event info into a cell of the week table
-     * Takes the p to write to, list of events to check, datetime of the
-     * cell, and the filepath to write to
-     */
-    private void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
-        for(int j=0; j<events.size(); j++){
-            Event e = events.get(j);
-            if(isSameDate(e.getStartTime(), dt)){
-                String detailPath = writeDetails(e, filepath, j);
-                A detailLink = new A();
-                detailLink.setHref(detailPath);
-                detailLink.appendChild(new Text(e.getTitle()));
-                
-                p.appendChild(detailLink);
-                if(e.isAllDay()){
-                	p.appendChild(new Text("<br/>  All day "+e.getStartTime().toString("MM/dd")+"<br/><br/>"));
-                }
-                else{
-                    p.appendChild(new Text("<br/>  Start: "+e.getStartTime().toString("MM/dd HH:mm")));
-                    p.appendChild(new Text("<br/>  End: "+e.getEndTime().toString("MM/dd HH:mm")+"<br/><br/>"));
-                }
-            }
-        }
-    }
-    
     /*public static void main (String[] args){
-    	AbstractHtmlOutputter ho = new WeekListOutputter();
+    	AbstractHtmlOutputter ho = new WeekDetailOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
