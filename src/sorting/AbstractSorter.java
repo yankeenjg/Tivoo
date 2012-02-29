@@ -14,6 +14,7 @@ public abstract class AbstractSorter {
 			for (int index = 0; index <= sortedEvents.size(); index++ ) {
 				if (index == sortedEvents.size() || checkSortCondition(event, sortedEvents.get(index))) {
 					sortedEvents.add(index, event);
+					break;
 				}
 			}
 		}
@@ -27,6 +28,7 @@ public abstract class AbstractSorter {
 			for (int index = 0; index <= sortedEvents.size(); index++ ) {
 				if (index == sortedEvents.size() || !checkSortCondition(event, sortedEvents.get(index))) {
 					sortedEvents.add(event);
+					break;
 				}
 			}
 		}
