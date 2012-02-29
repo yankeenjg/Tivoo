@@ -1,5 +1,8 @@
 import model.Event;
 import java.util.List;
+
+import filtering.ContainsKeywordsFilter;
+
 import output.*;
 import processing.*;
 import parsing.*;

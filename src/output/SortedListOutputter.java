@@ -2,7 +2,10 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
-import processing.StartTimeSorter;
+
+import sorting.StartTimeSorter;
+
+
 import com.hp.gagawa.java.elements.*;
 
 public class SortedListOutputter extends AbstractHtmlOutputter{

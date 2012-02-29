@@ -3,8 +3,11 @@ package output;
 import model.Event;
 import java.util.*;
 import org.joda.time.*;
+
+import sorting.StartTimeSorter;
+
+
 import com.hp.gagawa.java.elements.*;
-import processing.StartTimeSorter;
 
 public class WeekDetailOutputter extends DetailOutputter{
     
