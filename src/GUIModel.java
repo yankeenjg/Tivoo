@@ -1,6 +1,9 @@
 import java.io.File;
 
 import javax.swing.JFileChooser;
+
+import org.joda.time.DateTime;
+
 import model.Event;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,11 +16,11 @@ import sorting.*;
 public class GUIModel {
   
 	private List<Event> eventList;
-	
+
 	public GUIModel() {
 		eventList = new ArrayList<Event>();
 	}
-	
+
 	public File loadFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		int returnVal = fileChooser.showOpenDialog(null);
@@ -29,46 +32,45 @@ public class GUIModel {
 		}
 		return null;
 	}
-	
+
 	public File previewWebpage() {
-		MonthDetailOutputter outputter = new MonthDetailOutputter();
+		SortedListOutputter outputter = new SortedListOutputter();
 		return outputter.writeEvents(eventList);
-		
 	}
-	
-	public void keywordFilter() {
+
+	public void keywordFilter(String keyword) {
 		KeywordFilter filter = new KeywordFilter();
-		filter.filter(eventList, "");
+		eventList = filter.filter(eventList, keyword);
 	}
-	
-	public void locationFilter() {
+
+	public void locationFilter(String location) {
 		LocationFilter filter = new LocationFilter();
-		filter.filter(eventList, "");
+		eventList = filter.filter(eventList, location);
 	}
-	
-	public void timeFilter() {
+
+	public void timeFilter(DateTime lowerLimit, DateTime upperLimit) {
 		TimeFilter filter = new TimeFilter();
-		filter.filter(eventList, 500, 1000);
+		eventList = filter.filter(eventList, lowerLimit, upperLimit);
 	}
-	
-	public void TVActorFilter() {
+
+	public void TVActorFilter(String actor) {
 		TVActorFilter filter = new TVActorFilter();
-		filter.filter(eventList, "");
+		eventList = filter.filter(eventList, actor);
 	}
-	
+
 	public void endTimeSort() {
 		EndTimeSorter sorter = new EndTimeSorter();
-		sorter.sort(eventList);
+		eventList = sorter.sort(eventList);
 	}
-	
+
 	public void startTimeSort() {
 		StartTimeSorter sorter = new StartTimeSorter();
-		sorter.sort(eventList);
+		eventList = sorter.sort(eventList);
 	}
-	
+
 	public void titleSort() {
 		TitleSorter sorter = new TitleSorter();
-		sorter.sort(eventList);
+		eventList = sorter.sort(eventList);
 	}
-	
+
 }
