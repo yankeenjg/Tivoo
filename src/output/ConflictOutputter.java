@@ -4,6 +4,7 @@ import java.util.*;
 import org.joda.time.*;
 import sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
+import filtering.ConflictFilter;
 
 /**
  * Provides a view of all events in a list and all other
@@ -56,7 +57,8 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
             td1.appendChild(p1);
             appendTitleTimes(e, p1);
             
-            for(Event e2: filterForConflicts(events, e)){
+            ConflictFilter cf = new ConflictFilter();
+            for(Event e2: cf.filter(events, e)){
             	P p2 = new P();
             	td2.appendChild(p2);
             	appendTitleTimes(e2, p2);
@@ -64,39 +66,6 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
         }
         
         writeHtmlFile(html, filepath+FILE_EXT);
-	}
-	
-	/**
-	 * Checks for events from a list that conflict with a given event
-	 * @param events List of events in which to look
-	 * @param e1 Event for which to find conflicts
-	 * @return A list of events conflicing with e1
-	 */
-	private List<Event> filterForConflicts(List<Event> events, Event e1){
-		ArrayList<Event> conflicting = new ArrayList<Event>();
-		DateTime e1s = e1.getStartTime();
-    	DateTime e1e = e1.getEndTime();
-	    for(Event e2: events){
-	        if(e1!=e2){
-	        	//there is probably a more efficient way to check for conflicts,
-	        	//but I do not know it
-	        	DateTime e2s = e2.getStartTime();
-	        	DateTime e2e = e2.getEndTime();
-	        	//e1 starts before e2 ends
-	        	if(e1s.isAfter(e2s) && e1s.isBefore(e2e))
-	        		conflicting.add(e2);
-	        	//e1 ends after e2 starts
-	        	else if(e1e.isAfter(e2s) && e1e.isBefore(e2e))
-	        		conflicting.add(e2);
-	        	//e1 starts before and ends after e2
-	        	else if(e1s.isBefore(e2s) && e1e.isAfter(e2e))
-	        		conflicting.add(e2);
-	        	//e1 starts and ends at same time as e2
-	        	else if(e1s.isEqual(e2s) && e1e.isEqual(e2e))
-	        		conflicting.add(e2);
-	        }
-	    }
-	    return conflicting;
 	}
 	
 	/*public static void main (String[] args){
