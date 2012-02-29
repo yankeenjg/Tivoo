@@ -16,8 +16,8 @@ public class Main {
 		parser.loadFile("http://duke.edu/~jjh38/tv.xml");
 		
 		List<Event> listOfEvents = parser.processEvents();
-		ContainsKeywordsFilter filter = new ContainsKeywordsFilter();
-		List<Event> newList = filter.filterByKeywords(listOfEvents, "");               
+		ContainsKeywordsFilter containsKeywordsFilter = new ContainsKeywordsFilter();
+		List<Event> newList = containsKeywordsFilter.filter(listOfEvents, "");               
     	AbstractHtmlOutputter ho = new WeekListOutputter();
     	ho.writeEvents(newList);
     	
