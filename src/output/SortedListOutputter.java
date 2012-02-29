@@ -13,8 +13,7 @@ import com.hp.gagawa.java.elements.*;
 public class SortedListOutputter extends AbstractHtmlOutputter{
 
 	public void writeEvents(List<Event> events) {
-		DateTime dt = new DateTime();
-        initDtEvents(dt, events);
+		DateTime dt = initDtEvents(events);
             
         String filepath = "Event_List_from_" + dt.toString("MMMdd");
         

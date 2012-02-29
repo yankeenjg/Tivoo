@@ -15,8 +15,7 @@ import com.hp.gagawa.java.elements.*;
 public class WeekDetailOutputter extends DetailOutputter{
     
     public void writeEvents(List<Event> events) {
-    	DateTime dt = new DateTime();
-        initDtEvents(dt, events);
+    	DateTime dt = initDtEvents(events);
             
         String filepath = "WeekDetail_of_" + dt.toString("MMMdd");
         
