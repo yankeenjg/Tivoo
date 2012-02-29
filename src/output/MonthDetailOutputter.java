@@ -3,26 +3,18 @@ import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-
-import sorting.StartTimeSorter;
-
-
+import Sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Condensed calendar output for a single month
+ * The month in question is the month of the earliest
+ * element in the given list
+ * @author herio
+ *
+ */
 public class MonthDetailOutputter extends DetailOutputter{
 	
-	/*
-     * Takes a list of events
-     * The events are sorted, and all events within 4 weeks of the
-     * earliest event are outputted
-     * 
-     * Will need some revision so the week always starts on Sunday,
-     * or perhaps this method should assume the events have been filtered
-     * so they are all in the same month, and it should output for
-     * that month as opposed to one month from the earliest event
-     * 
-     * Actually yeah let's do that instead
-     */
     public void writeEvents(List<Event> events) {
         DateTime dt;
         if(events.isEmpty())

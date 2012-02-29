@@ -1,22 +1,18 @@
 package output;
 import model.Event;
 import java.util.*;
-
 import org.joda.time.*;
-
-import sorting.StartTimeSorter;
-
-
-
+import Sorting.StartTimeSorter;
 import com.hp.gagawa.java.elements.*;
 
+/**
+ * Provides a view of all events in a list and all other
+ * events in that list that conflict in time
+ * @author herio
+ *
+ */
 public class ConflictOutputter extends AbstractHtmlOutputter{
 
-    /*
-     * takes a list of events and loops through to check
-     * which events have time overlaps with other events
-     * and lists them in a table
-     */
 	public void writeEvents(List<Event> events) {
 	    DateTime dt;
         if(events.isEmpty())
@@ -56,40 +52,25 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
             row1.appendChild(td1, td2);
             table.appendChild(row1);
             
-            appendEventInfo(e, td1);
+            P p1 = new P();
+            td1.appendChild(p1);
+            appendTitleTimes(e, p1);
             
             for(Event e2: filterForConflicts(events, e)){
-            	appendEventInfo(e2, td2);
+            	P p2 = new P();
+            	td2.appendChild(p2);
+            	appendTitleTimes(e2, p2);
             }
         }
         
         writeHtmlFile(html, filepath+FILE_EXT);
 	}
 	
-	/*
-	 * helper function to write some basic event info to a Td element
-	 * can probably be pulled into super if other subclasses are
-	 * modified slightly
-	 */
-	private void appendEventInfo(Event e, Td td){
-		B b = new B();
-		b.appendChild(new Text(e.getTitle()+"<br/>"));
-		td.appendChild(b);
-        if(e.isAllDay()){
-            td.appendChild(new Text("All day "+e.getStartTime().toString("MM/dd")));
-        }else{
-            td.appendChild(new Text("Start: "+e.getStartTime().toString("HH:mm MM/dd")+"<br/>"));
-            td.appendChild(new Text("End: "+e.getEndTime().toString("HH:mm MM/dd")+"<br/>"));
-        }
-	}
-	
-	/*
-	 * take a list of events and an event; create a list of events that is a
-	 * subset of the original list that all conflict with the original event
-	 * modifications will be necessary if all day events only have a starttime
-	 * and the endtime is null
-	 * 
-	 * should probably be put in a filter subclass
+	/**
+	 * Checks for events from a list that conflict with a given event
+	 * @param events List of events in which to look
+	 * @param e1 Event for which to find conflicts
+	 * @return A list of events conflicing with e1
 	 */
 	private List<Event> filterForConflicts(List<Event> events, Event e1){
 		ArrayList<Event> conflicting = new ArrayList<Event>();
