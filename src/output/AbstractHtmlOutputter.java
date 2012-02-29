@@ -39,6 +39,12 @@ public abstract class AbstractHtmlOutputter {
 	 */
     public abstract void writeEvents(List<Event> events);
     
+    /**
+     * Initalizes the reference DateTime object and sorts
+     * the list of events for future use
+     * @param dt Reference DateTime
+     * @param events Given list to the sorted by start time
+     */
     protected void initDtEvents(DateTime dt, List<Event> events){
     	if(!events.isEmpty()){
         	StartTimeSorter sts = new StartTimeSorter();
