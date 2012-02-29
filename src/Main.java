@@ -1,10 +1,8 @@
 import model.Event;
 import java.util.List;
-
-import filtering.ContainsKeywordsFilter;
-
 import output.*;
-import processing.*;
+import filtering.*;
+import sorting.*;
 import parsing.*;
 
 public class Main {
@@ -16,8 +14,8 @@ public class Main {
 		parser.loadFile("http://duke.edu/~jjh38/tv.xml");
 		
 		List<Event> listOfEvents = parser.processEvents();
-		ContainsKeywordsFilter containsKeywordsFilter = new ContainsKeywordsFilter();
-		List<Event> newList = containsKeywordsFilter.filter(listOfEvents, "");               
+		KeywordFilter keywordFilter = new KeywordFilter();
+		List<Event> newList = keywordFilter.filter(listOfEvents, "");               
     	AbstractHtmlOutputter ho = new WeekListOutputter();
     	ho.writeEvents(newList);
     	

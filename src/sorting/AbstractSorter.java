@@ -11,7 +11,7 @@ public abstract class AbstractSorter {
 		List<Event> sortedEvents = new ArrayList<Event>();
 		sortedEvents.add(eventList.get(0));
 		for (Event event : eventList) {
-			for (int index = 1; index <= sortedEvents.size(); index++ ) {
+			for (int index = 0; index <= sortedEvents.size(); index++ ) {
 				if (index == sortedEvents.size() || checkSortCondition(event, sortedEvents.get(index))) {
 					sortedEvents.add(index, event);
 				}
@@ -24,7 +24,7 @@ public abstract class AbstractSorter {
 		List<Event> sortedEvents = new ArrayList<Event>();
 		sortedEvents.add(eventList.get(0));
 		for (Event event : eventList) {
-			for (int index = 1; index <= sortedEvents.size(); index++ ) {
+			for (int index = 0; index <= sortedEvents.size(); index++ ) {
 				if (index == sortedEvents.size() || !checkSortCondition(event, sortedEvents.get(index))) {
 					sortedEvents.add(event);
 				}
