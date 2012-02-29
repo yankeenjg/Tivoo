@@ -12,47 +12,14 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class NFLXMLParser extends AbstractXMLParser {
+public class NFLXMLParser extends AbstractIntermediateXMLParser {
 
-	private String ROOT_NODE = "document";
-	private String NAME = "Col1";
-	private String DESCRIPTION = "Col3";
 	private String START_TIME = "Col8";
 	private String END_TIME = "Col9";
-	private String LOCATION = "Col15";
-
-	/**
-	 * Gets the root node that contains all event nodes
-	 */
-	@SuppressWarnings("unchecked")
-    @Override
-	protected List<Element> parseGetEventsList() {
-		Element eventsRoot = doc.getRootElement();
-		return eventsRoot.getChildren("row");
-	}
-
-	/**
-	 * Gets the title of the event, given an event node
-	 */
-	@Override
-	protected String parseTitle(Element event) {
-		return event.getChildText(NAME);
-	}
 	
-	/**
-	 * Gets the description of the event, given an event node
-	 */
-	@Override
-	protected String parseDescription(Element event) {
-		return event.getChildText(DESCRIPTION);
-	}
-	
-	/**
-	 * Gets the location of the event, given an event node
-	 */
-	@Override
-	protected String parseLocation(Element event) {
-		return event.getChildText(LOCATION);
+	public NFLXMLParser(){
+		// Assigns names of tags for EVENT_NODE, TITLE, DESCRIPTION, LOCATION
+		super("document", "row","Col1","Col3","Col15");
 	}
 
 	/**
@@ -92,12 +59,6 @@ public class NFLXMLParser extends AbstractXMLParser {
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());
 		}
-	}
-
-	@Override
-	protected boolean isAllDay(Element event) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

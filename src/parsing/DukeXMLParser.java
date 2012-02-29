@@ -8,43 +8,20 @@ import org.joda.time.*;
 import org.joda.time.format.*;
 
 
-public class DukeXMLParser extends AbstractXMLParser{
-	
+public class DukeXMLParser extends AbstractIntermediateXMLParser{
 	
 	/**
 	 * Labels for specific nodes in the event tree
 	 */
-	private String EVENT_NODE = "event";
-	private String NAME = 		"summary"; 
-	private String DESCRIPTION ="description";
+	private String LOCATION = "location";
 	private String START_TIME = "start";
 	private String END_TIME = 	"end"; 
-	private String LOCATION = 	"location";
 	
-	/**
-	 * Gets the root node that contains all event nodes
-	 */
-	protected List<Element> parseGetEventsList(){
-		Element eventsRoot = doc.getRootElement();
-		return eventsRoot.getChildren(EVENT_NODE);
+	public DukeXMLParser(){
+		// Assigns names of tags for ROOT_NODE, EVENT_NODE, TITLE, DESCRIPTION, but LOCATION is overridden
+		super("events", "event", "summary", "description", null);
 	}
 	
-	/**
-	 * Gets the title of the event, given an event node
-	 */
-	@Override
-	protected String parseTitle(Element event) {
-		return event.getChildText(NAME);
-	}
-
-	/**
-	 * Gets the description of the event, given an event node
-	 */
-	@Override
-	protected String parseDescription(Element event) {
-		return event.getChildText(DESCRIPTION);
-	}
-
 	/**
 	 * Gets the location of the event, given an event node
 	 */
@@ -76,11 +53,6 @@ public class DukeXMLParser extends AbstractXMLParser{
 		DateTimeFormatter dtparser = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss'Z'");
 		String utcdate = time.getChildText("utcdate");
 		return dtparser.parseDateTime(utcdate);
-	}
-	
-	protected boolean isAllDay(Element event) {
-		String allDayField = event.getChild(START_TIME).getChildText("allday");
-		return Boolean.parseBoolean(allDayField);
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import org.joda.time.DateTimeZone;
 public abstract class AbstractXMLParser {
 	
 	protected Document doc;
-	protected Element eventsRoot;
+	protected Element eventsRoot;	
 	
 	public final void loadFile(String filename){
 		try{
@@ -26,20 +26,26 @@ public abstract class AbstractXMLParser {
 	}*/
 		
 	public List<Event> processEvents(){
+		
 		List<Element> xmlEventsList = parseGetEventsList();
 		List<Event> parsedEventsList = new ArrayList<Event>();
-		for(Element event : xmlEventsList){
-			String eventTitle 		= parseTitle(event);
-			String eventDescription = parseDescription(event);
-			String eventLocation 	= parseLocation(event);
-			DateTime startTime 		= parseStartTime(event);
-			DateTime endTime 		= parseEndTime(event);
-			boolean allDay			= isAllDay(event);
-			HashMap<String,ArrayList<String>> properties = getExtraProperties(event);
-			
-			Event newEvent = new Event(eventTitle, startTime, endTime, 
-					eventDescription, eventLocation, allDay, properties);
-			parsedEventsList.add(newEvent);
+		try{
+			for(Element event : xmlEventsList){
+				String eventTitle 		= parseTitle(event);
+				String eventDescription = parseDescription(event);
+				String eventLocation 	= parseLocation(event);
+				DateTime startTime 		= parseStartTime(event);
+				DateTime endTime 		= parseEndTime(event);
+				HashMap<String,ArrayList<String>> properties = getExtraProperties(event);
+
+				Event newEvent = new Event(eventTitle, startTime, endTime, 
+						eventDescription, eventLocation, properties);
+				parsedEventsList.add(newEvent);
+			}
+		} catch(NullPointerException e){
+			String errorMessage = "Wrong parser: " + this.getClass().getName() +
+					"for file: " + doc.getBaseURI();
+			throw new ParserException(e.getMessage(), ParserException.Type.WRONG_TYPE);
 		}
 		
 		return parsedEventsList;
@@ -54,7 +60,6 @@ public abstract class AbstractXMLParser {
 	protected abstract DateTime parseStartTime(Element event);
 	protected abstract DateTime parseEndTime(Element event);
 	
-	protected abstract boolean isAllDay(Element event);
 	protected abstract HashMap<String,ArrayList<String>> getExtraProperties(Element event);
 	
 	//implement this is subclasses
