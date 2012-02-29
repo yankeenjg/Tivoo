@@ -58,7 +58,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         writeHtmlFile(html, filepath + FILE_EXT);
     }
     
-    public static void main (String[] args){
+    /*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new WeekDetailOutputter();
     	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
     	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
@@ -80,6 +80,6 @@ public class WeekDetailOutputter extends DetailOutputter{
     	l.add(e3);
     	l.add(e4);
     	ho.writeEvents(l);
-    }
+    }*/
     
 }
