@@ -1,29 +1,20 @@
 package output;
 import model.Event;
 import java.util.*;
-
 import org.joda.time.*;
-
-import processing.StartTimeSorter;
-
 import com.hp.gagawa.java.elements.*;
+import filtering.ConflictFilter;
 
+/**
+ * Provides a view of all events in a list and all other
+ * events in that list that conflict in time
+ * @author herio
+ *
+ */
 public class ConflictOutputter extends AbstractHtmlOutputter{
 
-    /*
-     * takes a list of events and loops through to check
-     * which events have time overlaps with other events
-     * and lists them in a table
-     */
 	public void writeEvents(List<Event> events) {
-	    DateTime dt;
-        if(events.isEmpty())
-            dt = new DateTime();
-        else{
-        	StartTimeSorter sts = new StartTimeSorter();
-        	events = sts.sort(events);
-            dt = new DateTime(events.get(0).getStartTime());
-        }
+		DateTime dt = initDtEvents(events);
         
         String filepath = "Conflicts_starting_at_" + dt.toString("MMMdd");
         
@@ -31,6 +22,7 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
         Body body = new Body();
         html.appendChild(body);
         Table table = new Table();
+        table.setBorder("");
         body.appendChild(table);
         
         Tr row0 = new Tr();
@@ -53,72 +45,25 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
             row1.appendChild(td1, td2);
             table.appendChild(row1);
             
-            appendEventInfo(e, td1);
+            P p1 = new P();
+            td1.appendChild(p1);
+            appendTitleTimes(e, p1);
             
-            for(Event e2: filterForConflicts(events, e)){
-            	appendEventInfo(e2, td2);
+            ConflictFilter cf = new ConflictFilter();
+            for(Event e2: cf.filter(events, e)){
+            	P p2 = new P();
+            	td2.appendChild(p2);
+            	appendTitleTimes(e2, p2);
             }
         }
         
         writeHtmlFile(html, filepath+FILE_EXT);
 	}
 	
-	/*
-	 * helper function to write some basic event info to a Td element
-	 * can probably be pulled into super if other subclasses are
-	 * modified slightly
-	 */
-	private void appendEventInfo(Event e, Td td){
-		B b = new B();
-		b.appendChild(new Text(e.getTitle()+"<br/>"));
-		td.appendChild(b);
-        if(e.isAllDay()){
-            td.appendChild(new Text("All day "+e.getStartTime().toString("MM/dd")));
-        }else{
-            td.appendChild(new Text("Start: "+e.getStartTime().toString("HH:mm MM/dd")+"<br/>"));
-            td.appendChild(new Text("End: "+e.getEndTime().toString("HH:mm MM/dd")+"<br/>"));
-        }
-	}
-	
-	/*
-	 * take a list of events and an event; create a list of events that is a
-	 * subset of the original list that all conflict with the original event
-	 * modifications will be necessary if all day events only have a starttime
-	 * and the endtime is null
-	 * 
-	 * should probably be put in a filter subclass
-	 */
-	private List<Event> filterForConflicts(List<Event> events, Event e1){
-		ArrayList<Event> conflicting = new ArrayList<Event>();
-		DateTime e1s = e1.getStartTime();
-    	DateTime e1e = e1.getEndTime();
-	    for(Event e2: events){
-	        if(e1!=e2){
-	        	//there is probably a more efficient way to check for conflicts,
-	        	//but I do not know it
-	        	DateTime e2s = e2.getStartTime();
-	        	DateTime e2e = e2.getEndTime();
-	        	//e1 starts before e2 ends
-	        	if(e1s.isAfter(e2s) && e1s.isBefore(e2e))
-	        		conflicting.add(e2);
-	        	//e1 ends after e2 starts
-	        	else if(e1e.isAfter(e2s) && e1e.isBefore(e2e))
-	        		conflicting.add(e2);
-	        	//e1 starts before and ends after e2
-	        	else if(e1s.isBefore(e2s) && e1e.isAfter(e2e))
-	        		conflicting.add(e2);
-	        	//e1 starts and ends at same time as e2
-	        	else if(e1s.isEqual(e2s) && e1e.isEqual(e2e))
-	        		conflicting.add(e2);
-	        }
-	    }
-	    return conflicting;
-	}
-	
 	/*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new ConflictOutputter();
-    	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
-    	DateTime dt2 = new DateTime(2012, 2, 29, 12, 30);
+    	DateTime dt1 = new DateTime(2012, 1, 24, 11, 15);
+    	DateTime dt2 = new DateTime(2012, 1, 24, 12, 30);
     	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
     	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
     	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
@@ -127,7 +72,7 @@ public class ConflictOutputter extends AbstractHtmlOutputter{
     	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	List<String> actor = new ArrayList<String>();
     	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
+    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", false, null);
     	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false, null);
     	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
     	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);

@@ -12,44 +12,21 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-public class TVXMLParser extends AbstractXMLParser {
+public class TVXMLParser extends AbstractIntermediateXMLParser {
 
 	/**
 	 * Labels for specific nodes in the event tree
 	 */
-	private String EVENT_NODE = "programme";
-	private String NAME = 		"title"; 
-	private String DESCRIPTION ="desc";
 	private String START_TIME = "start";
 	private String END_TIME = 	"stop"; 
 	private String LOCATION = 	"channel";
 	private String CREDITS 	=	"credits";
 	private String RATING	=   "rating";
 	
-	/**
-	 * Gets the root node that contains all event nodes
-	 */
-	@Override
-	protected List<Element> parseGetEventsList(){
-		Element eventsRoot = doc.getRootElement();
-		System.err.println("HAHA");//+eventsRoot.getName());
-		return eventsRoot.getChildren(EVENT_NODE);
-	}
-
-	/**
-	 * Gets the title of the event, given an event node
-	 */
-	@Override
-	protected String parseTitle(Element event) {
-		return event.getChildText(NAME);
-	}
-
-	/**
-	 * Gets the description of the event, given an event node
-	 */
-	@Override
-	protected String parseDescription(Element event) {
-		return event.getChildText(DESCRIPTION);
+	public TVXMLParser(){
+		// Assigns names of tags for EVENT_NODE, TITLE, DESCRIPTION, but LOCATION is overridden
+		//TODO fix first arg
+		super("BLABA", "programme", "title", "desc", null);
 	}
 
 	/**
@@ -120,12 +97,6 @@ public class TVXMLParser extends AbstractXMLParser {
 		} catch (NullPointerException e){
 			return;
 		}
-	}
-
-	@Override
-	protected boolean isAllDay(Element event) {
-		// XMLTV does not support all day events
-		return false;
 	}
 	
 	public static void main (String[] args){

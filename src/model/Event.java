@@ -9,16 +9,14 @@ public class Event {
 	private DateTime myEndTime;
 	private String myDescription;
 	private String myLocation;
-	private boolean allDay;
 	private HashMap<String, ArrayList<String>> properties;
 
-	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, boolean allDay, HashMap<String, ArrayList<String>> properties) {
+	public Event(String title, DateTime startTime, DateTime endTime, String description, String location, HashMap<String, ArrayList<String>> properties) {
 		myTitle = title;
 		myStartTime = startTime;
 		myEndTime = endTime;
 		myDescription = description;
 		myLocation = location;
-		this.allDay = allDay;
 		this.properties = properties;
 	}
 	
@@ -43,7 +41,10 @@ public class Event {
 	}
 
 	public boolean isAllDay(){
-		return allDay;
+		if (myStartTime.getMinuteOfDay() == 0 && myEndTime.getMinuteOfDay() == 0)
+			return true;
+		else
+			return false;
 	}
 
 	public List<String> getProperty(String prop){
@@ -65,7 +66,7 @@ public class Event {
 				myDescription + " " +
 				myLocation + " " +
 				myDescription + " is " +
-				(allDay ? "all day" : "not all day");
+				(isAllDay() ? "all day" : "not all day");
 	}
 }
 

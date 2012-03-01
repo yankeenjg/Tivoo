@@ -12,50 +12,19 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class DukeBasketBallXMLParser extends AbstractXMLParser{
+public class DukeBasketBallXMLParser extends AbstractIntermediateXMLParser{
 
 	/**
 	 * Labels for specific nodes in the event tree
 	 */
-	private String EVENT_NODE = "Calendar";
-	private String NAME = 		"Subject"; 
-	private String DESCRIPTION ="Description";
 	private String START_DATE = "StartDate";
 	private String START_TIME = "StartTime";
 	private String END_DATE = 	"EndDate";
 	private String END_TIME = 	"EndTime";
-	private String LOCATION = 	"Location";
 	
-	/**
-	 * Gets the root node that contains all event nodes
-	 */
-	protected List<Element> parseGetEventsList(){
-		Element eventsRoot = doc.getRootElement();
-		return eventsRoot.getChildren(EVENT_NODE);
-	}
-	
-	/**
-	 * Gets the title of the event, given an event node
-	 */
-	@Override
-	protected String parseTitle(Element event) {
-		return event.getChildText(NAME);
-	}
-
-	/**
-	 * Gets the description of the event, given an event node
-	 */
-	@Override
-	protected String parseDescription(Element event) {
-		return event.getChildText(DESCRIPTION);
-	}
-
-	/**
-	 * Gets the location of the event, given an event node
-	 */
-	@Override
-	protected String parseLocation(Element event) {
-		return event.getChildText(LOCATION);
+	public DukeBasketBallXMLParser(){
+		// Assigns names of tags for EVENT_NODE, TITLE, DESCRIPTION, LOCATION
+		super("dataroot", "Calendar", "Subject", "Description", "Location");
 	}
 	
 	/**
@@ -104,12 +73,6 @@ public class DukeBasketBallXMLParser extends AbstractXMLParser{
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());
 		}
-	}
-
-	@Override
-	protected boolean isAllDay(Element event) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

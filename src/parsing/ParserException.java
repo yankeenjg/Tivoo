@@ -4,7 +4,7 @@ import java.io.*;
 
 public class ParserException extends RuntimeException {
 
-	public static enum Type {INVALID_FIELD};
+	public static enum Type {WRONG_TYPE, NONEXISTENT_FIELD, INVALID_FIELD};
 	private Type myType;
 
 	public ParserException (String message) {

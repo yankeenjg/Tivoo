@@ -1,7 +1,10 @@
 import model.Event;
+
+import java.util.ArrayList;
 import java.util.List;
 import output.*;
-import processing.*;
+import filtering.*;
+//import sorting.*;
 import parsing.*;
 
 public class Main {
@@ -9,13 +12,30 @@ public class Main {
 		//AbstractXMLParser parser = new DukeXMLParser();
 		//parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 		
-		AbstractXMLParser parser = new TVXMLParser();
-		parser.loadFile("http://duke.edu/~jjh38/tv.xml");
+		List<AbstractXMLParser> parsers = new ArrayList<AbstractXMLParser>();
 		
-		List<Event> listOfEvents = parser.processEvents();
-		ContainsKeywordsFilter filter = new ContainsKeywordsFilter();
-		List<Event> newList = filter.filterByKeywords(listOfEvents, "");               
-    	AbstractHtmlOutputter ho = new WeekListOutputter();
+		parsers.add(new DukeBasketBallXMLParser());
+		parsers.add(new DukeXMLParser());
+		parsers.add(new TVXMLParser());
+		parsers.add(new NFLXMLParser());
+
+		
+		List<Event> listOfEvents = null;
+		for(AbstractXMLParser parser : parsers){
+			try{
+				//parser.loadFile("http://duke.edu/~jjh38/tv.xml");
+				parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
+				listOfEvents = parser.processEvents();
+			} catch (ParserException e){
+				System.err.println(e.getMessage());
+				continue;
+			}
+			if(listOfEvents != null && listOfEvents.size() != 0)
+				break;
+		}
+		AbstractFilter filter = new KeywordFilter();
+		List<Event> newList = filter.filter(listOfEvents, "");               
+    	AbstractHtmlOutputter ho = new WeekDetailOutputter();
     	ho.writeEvents(newList);
     	
     	for (Event event : newList) {

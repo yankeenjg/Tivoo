@@ -2,28 +2,63 @@ package output;
 
 import model.Event;
 import com.hp.gagawa.java.Node;
+import com.hp.gagawa.java.elements.B;
+import com.hp.gagawa.java.elements.P;
+import com.hp.gagawa.java.elements.Text;
 import java.io.*;
 import java.util.*;
 import org.joda.time.DateTime;
+import sorting.StartTimeSorter;
 
-/*
- * still an abstract class because it makes more sense to have
- * common methods in here as opposed to having an interface and
- * a static method in two different files that serve the same
- * purpose
+/**
+ * Abstract class for outputting html files that provides a 
+ * few universal helper methods.  I guess not all subclasses
+ * use all the methods, but that depends largely in part on
+ * the individual class, and there are always some at each
+ * level that do
+ * @author herio
+ *
  */
 public abstract class AbstractHtmlOutputter {
 	
+	/**
+	 * The file extension we want to use for output files
+	 */
 	protected static final String FILE_EXT = ".html";
+	
+	/**
+	 * The time format we want to use when start and end times
+	 * are paired together
+	 */
+	private static final String SE_TIME_FORMAT = "HH:mm MM/dd";
     
-	/*
-	 * at some point this should also take a file path to output to
-	 * for the UI
+	/**
+	 * Primary method that directs the construction of html
+	 * element nodes to write the html pages
+	 * @param events List of events to be output
 	 */
     public abstract void writeEvents(List<Event> events);
+    
+    /**
+     * Initalizes the reference DateTime object and sorts
+     * the list of events for future use
+     * @param events Given list to the sorted by start time
+     */
+    protected DateTime initDtEvents(List<Event> events){
+    	if(!events.isEmpty()){
+        	StartTimeSorter sts = new StartTimeSorter();
+        	events = sts.sort(events);
+            return events.get(0).getStartTime();
+        }else
+        	return new DateTime();
+            
+    }
 
-    /*
-     * creates an html page based on the given head node
+    /**
+     * Handles all the actual file writing and related
+     * exception checking
+     * @param head Head of the html node tree
+     * @param dir File path and file name to write to
      */
     protected void writeHtmlFile(Node head, String dir){
         File f = new File(dir);
@@ -40,9 +75,37 @@ public abstract class AbstractHtmlOutputter {
         }
     }
     
-    /*
-     * checks if two datetimes are in the same year
-     * (same YYYY)
+    /**
+     * Appends an event's title and start/end times
+     * @param e Event in question
+     * @param p P element to which to append
+     */
+    protected void appendTitleTimes(Event e, P p){
+		B b = new B();
+		b.appendChild(new Text(e.getTitle()));
+		p.appendChild(b);
+        appendTimes(e, p);
+	}
+    
+    /**
+     * Appends an event's start/end times
+     * @param e Event in question
+     * @param p P element to which to append
+     */
+    protected void appendTimes(Event e, P p){
+    	if(e.isAllDay()){
+            p.appendChild(new Text("<br/> All day "+e.getStartTime().toString("MM/dd")));
+        }else{
+            p.appendChild(new Text("<br/> Start: "+e.getStartTime().toString(SE_TIME_FORMAT)+"<br/>"));
+            p.appendChild(new Text("End: "+e.getEndTime().toString(SE_TIME_FORMAT)+"<br/>"));
+        }
+    }
+    
+    /**
+     * Checks if two DateTimes are in the same year
+     * @param dt1 First DateTime
+     * @param dt2 Second DateTime
+     * @return If the two share the same year
      */
     protected boolean isSameYear(DateTime dt1, DateTime dt2){
     	if(dt1.getYear()==dt2.getYear())
@@ -50,9 +113,12 @@ public abstract class AbstractHtmlOutputter {
     	return false;
     }
     
-    /*
-     * checks of two datetimes are on the same date
+    /**
+     * Checks if two DateTimes are the same date
      * (same MM/dd/YYY)
+     * @param dt1 First DateTime
+     * @param dt2 Second DateTime
+     * @return If the two are the same date
      */
     protected boolean isSameDate(DateTime dt1, DateTime dt2){
     	if(dt1.getDayOfYear()==dt2.getDayOfYear() && isSameYear(dt1, dt2))
