@@ -22,7 +22,7 @@ public class NFLXMLParser extends AbstractIntermediateXMLParser {
 
 	/**
 	 * Parses a date and time in the format yyyy-mm-dd hh:mm:ss
-	 * and return a DateTime containing that information
+	 * @return a DateTime containing that information
 	 */
 	private DateTime parseTime(Element event, String startEnd) {
 		String startTime = event.getChildText(startEnd);
@@ -31,17 +31,11 @@ public class NFLXMLParser extends AbstractIntermediateXMLParser {
 		return formatter.parseDateTime(startTime);
 	}
 	
-	/**
-	 * Gets the start day and time of the event, given an event node
-	 */
 	@Override
 	protected DateTime parseStartTime(Element event) {
 		return parseTime(event, START_TIME);
 	}
 
-	/**
-	 * Gets the end day and time of the event, given an event node
-	 */
 	@Override
 	protected DateTime parseEndTime(Element event) {
 		return parseTime(event, END_TIME);

@@ -69,7 +69,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	 * @param event
 	 *            : the event being parsed finder: the information you are
 	 *            looking for (ie. "Where" for location)
-	 * @return the information of the "content" node pertaining to the finder
+	 * @return the information of the "content" node pertaining to the String finder
 	 *         (location, descriptions, etc)
 	 */
 	private String parseContent(Element event, String finder) {
