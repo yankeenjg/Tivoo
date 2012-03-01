@@ -10,7 +10,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class DukeBasketBallXMLParser extends AbstractIntermediateXMLParser{
+public class DukeBasketBallXMLParser extends AbstractSimpleTimeXMLParser{
 
 	/**
 	 * Labels for specific nodes in the event tree

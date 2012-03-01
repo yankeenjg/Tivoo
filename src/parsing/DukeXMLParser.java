@@ -8,7 +8,7 @@ import org.jdom.*;
 import org.joda.time.*;
 import org.joda.time.format.*;
 
-public class DukeXMLParser extends AbstractIntermediateXMLParser {
+public class DukeXMLParser extends AbstractSimpleTimeXMLParser {
 
 	/**
 	 * Labels for specific nodes in the event tree

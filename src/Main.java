@@ -1,11 +1,10 @@
-import model.Event;
-
-import java.util.ArrayList;
-import java.util.List;
+import model.*;
 import output.*;
-import filtering.*;
-//import sorting.*;
 import parsing.*;
+import filtering.*;
+
+import java.util.*;
+
 
 public class Main {
 	public static void main(String[] args){

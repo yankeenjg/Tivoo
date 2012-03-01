@@ -1,7 +1,6 @@
 package parsing;
 
-import model.Event;
-
+import model.*;
 import java.util.*;
 import org.jdom.*;
 import org.jdom.input.*;
@@ -94,6 +93,11 @@ public abstract class AbstractXMLParser {
 	 */
 	protected abstract DateTime parseEndTime(Element event);
 
+	/**
+	 * Parses extra properties relevant to the specific type
+	 * of events only and puts them in a HashMap
+	 * @return map
+	 */
 	protected HashMap<String, ArrayList<String>> getExtraProperties(
 	        Element event) {
 		return null;

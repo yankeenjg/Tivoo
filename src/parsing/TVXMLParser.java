@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import model.Event;
+import model.*;
 
 import org.jdom.Element;
 import org.joda.time.DateTime;
@@ -12,7 +12,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-public class TVXMLParser extends AbstractIntermediateXMLParser {
+public class TVXMLParser extends AbstractSimpleTimeXMLParser {
 
 	/**
 	 * Labels for specific nodes in the event tree
@@ -26,8 +26,7 @@ public class TVXMLParser extends AbstractIntermediateXMLParser {
 	public TVXMLParser() {
 		// Assigns names of tags for EVENT_NODE, TITLE, DESCRIPTION, but
 		// LOCATION is overridden
-		// TODO fix first arg
-		super("BLABA", "programme", "title", "desc", null);
+		super("tv", "programme", "title", "desc", null);
 	}
 
 	@Override
@@ -68,7 +67,13 @@ public class TVXMLParser extends AbstractIntermediateXMLParser {
 
 		return map;
 	}
-
+	
+	/**
+	 * Parses credit information (actors, directors...)
+	 * and adds to parameter map
+	 * @param event
+	 * @param map
+	 */
 	protected void addCreditsToMap(Element event,
 	        HashMap<String, ArrayList<String>> map) {
 		List<Element> creditsList;
@@ -87,6 +92,12 @@ public class TVXMLParser extends AbstractIntermediateXMLParser {
 		}
 	}
 
+	/**
+	 * Parses rating information and adds
+	 * to parameter map
+	 * @param event
+	 * @param map
+	 */
 	protected void addRatingToMap(Element event,
 	        HashMap<String, ArrayList<String>> map) {
 		if (!map.containsKey(RATING))

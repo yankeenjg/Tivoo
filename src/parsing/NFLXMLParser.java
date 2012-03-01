@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class NFLXMLParser extends AbstractIntermediateXMLParser {
+public class NFLXMLParser extends AbstractSimpleTimeXMLParser {
 
 	private String START_TIME = "Col8";
 	private String END_TIME = "Col9";
