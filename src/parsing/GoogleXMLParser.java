@@ -2,8 +2,6 @@ package parsing;
 
 import model.Event;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.jdom.Element;
@@ -19,6 +17,8 @@ import org.joda.time.format.DateTimeFormatter;
 public class GoogleXMLParser extends AbstractXMLParser {
 
 	private static final String split_one = "\\s+| |,|-|<";
+	private static final String ROOT_NODE = "feed";
+	private static final String EVENT_NODE = "entry";
 	private static final String TITLE = "title";
 	private static final String CONTENT = "content";
 	private static final String RECUR = "Recurring";
@@ -29,17 +29,61 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	private static final int MINUTES = 1;
 
 	private static DateTimeZone TIMEZONE = DateTimeZone.forID("UTC");
+
 	private String[] startTimeArray;
 	private String[] endTimeArray;
 
 	@SuppressWarnings("unchecked")
 	@Override
-	/**
-	 * @return  the list of child nodes of the root node
-	 */
 	protected List<Element> parseGetEventsList() {
 		eventsRoot = doc.getRootElement();
-		return (List<Element>) eventsRoot.getChildren("entry", null);
+		if (!eventsRoot.getName().equals(ROOT_NODE)) {
+			String errorMessage = "Expected root node: " + ROOT_NODE
+			        + "but found: " + eventsRoot.getName();
+			throw new ParserException(errorMessage,
+			        ParserException.Type.WRONG_TYPE);
+		}
+		return (List<Element>) eventsRoot.getChildren(EVENT_NODE, null);
+	}
+
+	@Override
+	protected String parseTitle(Element event) {
+		String title = event.getChildText(TITLE, null).toString();
+		if (title != null)
+			return title;
+		else
+			throw new NullPointerException("Couldn't find node: " + TITLE);
+	}
+
+	@Override
+	protected String parseDescription(Element event) {
+		return parseContent(event, "Event Description:");
+	}
+
+	@Override
+	protected String parseLocation(Element event) {
+		return parseContent(event, "Where:");
+	}
+
+	/**
+	 * @param event
+	 *            : the event being parsed finder: the information you are
+	 *            looking for (ie. "Where" for location)
+	 * @return the information of the "content" node pertaining to the finder
+	 *         (location, descriptions, etc)
+	 */
+	private String parseContent(Element event, String finder) {
+		String[] summary = event.getChildText(CONTENT, null).toString()
+		        .split("<br />");
+		if (summary != null) {
+			String information = null;
+			for (String line : summary) {
+				if (line.contains(finder))
+					information = line.substring(line.indexOf(": ") + 1);
+			}
+			return information;
+		} else
+			throw new NullPointerException("Couldn't find node: " + CONTENT);
 	}
 
 	/**
@@ -61,19 +105,23 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	/**
-	 * determines whether the event is recurring or one-time parses time
-	 * appropriately
+	 * Given an array of time, determines whether and event is all day
+	 * 
+	 * @return
 	 */
-	public DateTime parseTypeOfEvent(int startEnd, int sub, Element time) {
-		if (parseTimeSplitUp(time)[0].startsWith("Recurring")) {
-			return GoogleRecurringEventXMLParser
-			        .parseEventStart(parseTimeSplitUp(time)[1]
-			                .substring(14, 33));
-		}
-		String[] timeArray = parseTimeSplitUp(time)[0].split("to")[startEnd]
-		        .substring(sub).split(split_one);
+	private Boolean isAllDayEvent(String[] time) {
+		if (time.length == 5)
+			return true;
+		return false;
+	}
 
-		return parseTime(timeArray);
+	/**
+	 * Determines whether an event spans more that one day
+	 */
+	private Boolean isMultipleDayEvent(String[] time) {
+		if (time.length > 3)
+			return true;
+		return false;
 	}
 
 	/**
@@ -86,12 +134,12 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		int month = parseMonth(startTimeArray);
 		int day = parseDay(startTimeArray);
 
-		if (time.length > 3) {
+		if (isMultipleDayEvent(time)) {
 			year = parseYear(time);
 			month = parseMonth(time);
 			day = parseDay(time);
 		}
-		if (time.length == 5) {
+		if (isAllDayEvent(time)) {
 			int hour24 = 00;
 			int minute = 00;
 			return new DateTime(year, month, day, hour24, minute, TIMEZONE);
@@ -103,10 +151,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return new DateTime(year, month, day, hour24, minute, TIMEZONE);
 	}
 
-	/**
-	 * Returns the DateTime form of the start time, using an array of
-	 * information about the start time
-	 */
+
 	@Override
 	protected DateTime parseStartTime(Element time) {
 		if (isRecurring(time)) {
@@ -119,10 +164,6 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return parseTime(startTimeArray);
 	}
 
-	/**
-	 * Returns the DateTime form of the end time, using an array of information
-	 * about the end time
-	 */
 	@Override
 	protected DateTime parseEndTime(Element time) {
 		if (isRecurring(time)) {
@@ -131,7 +172,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			        parseTimeSplitUp(time)[2]);
 		}
 
-		if (startTimeArray.length <= 5) {
+		if (isAllDayEvent(startTimeArray)) {
 			return parseTime(startTimeArray);
 		}
 		endTimeArray = parseTimeSplitUp(time)[0].split("to")[1].substring(1)
@@ -163,13 +204,21 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	}
 
 	/**
+	 * Returns the time element, hour or minute, despending on the specified int
+	 * element, and the given string array of the time info in the form hh:mm
+	 */
+	private int getTimeElement(String[] time, int element) {
+		if (isMultipleDayEvent(time))
+			return parseHourMinute(time[TIME].split(":"))[element];
+		return parseHourMinute(time[0].split(":"))[element];
+	}
+
+	/**
 	 * Returns the hour of the time element, given the array of start or end
 	 * time information
 	 */
 	protected int parseHour24(String[] time) {
-		if (time.length > 3)
-			return parseHourMinute(time[TIME].split(":"))[HOUR];
-		return parseHourMinute(time[0].split(":"))[HOUR];
+		return getTimeElement(time, HOUR);
 	}
 
 	/**
@@ -177,9 +226,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	 * time information
 	 */
 	protected int parseMinute(String[] time) {
-		if (time.length > 3)
-			return parseHourMinute(time[TIME].split(":"))[MINUTES];
-		return parseHourMinute(time[0].split(":"))[MINUTES];
+		return getTimeElement(time, MINUTES);
 	}
 
 	/**
@@ -203,43 +250,8 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		return hourMinute;
 	}
 
-	@Override
-	protected String parseTitle(Element event) {
-		return event.getChildText(TITLE, null).toString();
-	}
-
-	/**
-	 * @param event
-	 *            : the event being parsed finder: the information you are
-	 *            looking for (ie. "Where" for location)
-	 * @return the information of the "content" node pertaining to the finder
-	 *         (location, descriptions, etc)
-	 */
-	private String parseContent(Element event, String finder) {
-		String[] summary = event.getChildText(CONTENT, null).toString()
-		        .split("<br />");
-		String information = null;
-		for (String line : summary) {
-			if (line.contains(finder))
-				information = line.substring(line.indexOf(": ") + 1);
-		}
-		return information;
-
-	}
-
-	@Override
-	protected String parseDescription(Element event) {
-		return parseContent(event, "Event Description:");
-	}
-
-	@Override
-	protected String parseLocation(Element event) {
-		return parseContent(event, "Where:");
-	}
-
 	public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();
-		// parser.loadFile("https://www.google.com/calendar/feeds/kathleen.oshima%40gmail.com/private-cf4e2a2cf06315dece847f9aaf867f3e/basic");
 		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/googlecal.xml");
 
 		List<Event> listOfEvents = parser.processEvents();
@@ -249,16 +261,4 @@ public class GoogleXMLParser extends AbstractXMLParser {
 		}
 	}
 
-	@Override
-	protected boolean isAllDay(Element event) {
-
-		return false;
-	}
-
-	@Override
-	protected HashMap<String, ArrayList<String>> getExtraProperties(
-	        Element event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -18,6 +18,7 @@ public class Main {
 		parsers.add(new DukeXMLParser());
 		parsers.add(new TVXMLParser());
 		parsers.add(new NFLXMLParser());
+		parsers.add(new GoogleXMLParser());
 
 		
 		List<Event> listOfEvents = null;

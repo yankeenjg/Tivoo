@@ -1,7 +1,5 @@
 package parsing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import model.Event;
@@ -27,9 +25,7 @@ public class DukeBasketBallXMLParser extends AbstractIntermediateXMLParser{
 		super("dataroot", "Calendar", "Subject", "Description", "Location");
 	}
 	
-	/**
-	 * Gets the start time of the even, given an event node
-	 */
+
 	@Override
 	protected DateTime parseStartTime(Element event) {
 		String startTime = event.getChildText(START_TIME);
@@ -39,9 +35,7 @@ public class DukeBasketBallXMLParser extends AbstractIntermediateXMLParser{
 		return formatter.parseDateTime(startDate + startTime.split(" ")[0]);	
 	}
 	
-	/**
-	 * Gets the end time of the even, given an event node
-	 */
+
 	@Override
 	protected DateTime parseEndTime(Element event) {
 		String endTime = event.getChildText(END_TIME);
@@ -75,10 +69,5 @@ public class DukeBasketBallXMLParser extends AbstractIntermediateXMLParser{
 		}
 	}
 
-	@Override
-	protected HashMap<String, ArrayList<String>> getExtraProperties(
-			Element event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

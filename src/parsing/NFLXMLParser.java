@@ -1,7 +1,5 @@
 package parsing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -61,10 +59,4 @@ public class NFLXMLParser extends AbstractIntermediateXMLParser {
 		}
 	}
 
-	@Override
-	protected HashMap<String, ArrayList<String>> getExtraProperties(
-			Element event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

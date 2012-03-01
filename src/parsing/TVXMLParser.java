@@ -61,6 +61,7 @@ public class TVXMLParser extends AbstractIntermediateXMLParser {
 		return dtparser.parseDateTime(utcdate);
 	}
 	
+	@Override
 	protected HashMap<String,ArrayList<String>> getExtraProperties(Element event){
 		HashMap<String,ArrayList<String>> map = new HashMap<String,ArrayList<String>>();
 		
