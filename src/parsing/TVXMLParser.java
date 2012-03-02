@@ -1,60 +1,35 @@
 package parsing;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 
 import model.*;
 
 import org.jdom.Element;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
-public class TVXMLParser extends AbstractSimpleTimeXMLParser {
+public class TVXMLParser extends
+        AbstractSimpleTimeWithConnectedDateAndTimeXMLParser {
 
 	/**
 	 * Labels for specific nodes in the event tree
 	 */
-	private String START_TIME = "start";
-	private String END_TIME = "stop";
-	private String LOCATION = "channel";
-	private String CREDITS = "credits";
-	private String RATING = "rating";
+	private String myLocation = "channel";
+	private String myCredits = "credits";
+	private String myRating = "rating";
 
 	public TVXMLParser() {
-		// Assigns names of tags for EVENT_NODE, TITLE, DESCRIPTION, but
-		// LOCATION is overridden
-		super("tv", "programme", "title", "desc", null);
+		// Assigns names of tags for myEventNode, myTitle, myDescription,
+		// myLocation, myDateTimePatter, myStart, myEnd
+		// myLocation is overridden
+		super("tv", "programme", "title", "desc", null, "yyyyMMddHHmmss Z",
+		        "start", "stop");
 	}
 
 	@Override
 	protected String parseLocation(Element event) {
-		return event.getAttributeValue(LOCATION);
-	}
-
-	@Override
-	protected DateTime parseStartTime(Element event) {
-		return parseTime(event, START_TIME);
-	}
-
-	@Override
-	protected DateTime parseEndTime(Element event) {
-		return parseTime(event, END_TIME);
-	}
-
-	/**
-	 * converts the given structure of date and time into the format of a
-	 * DateTime
-	 * 
-	 * @return a DateTime
-	 */
-	protected DateTime parseTime(Element event, String attrib) {
-		DateTimeFormatter dtparser = DateTimeFormat
-		        .forPattern("yyyyMMddHHmmss Z");
-		String utcdate = event.getAttributeValue(attrib);
-		return dtparser.parseDateTime(utcdate);
+		return event.getAttributeValue(myLocation);
 	}
 
 	@Override
@@ -67,18 +42,20 @@ public class TVXMLParser extends AbstractSimpleTimeXMLParser {
 
 		return map;
 	}
-	
+
 	/**
-	 * Parses credit information (actors, directors...)
-	 * and adds to parameter map
+	 * Parses credit information (actors, directors...) and adds to parameter
+	 * map
+	 * 
 	 * @param event
 	 * @param map
 	 */
+	@SuppressWarnings("unchecked")
 	protected void addCreditsToMap(Element event,
 	        HashMap<String, ArrayList<String>> map) {
 		List<Element> creditsList;
 		try {
-			creditsList = event.getChild(CREDITS).getChildren();
+			creditsList = event.getChild(myCredits).getChildren();
 		} catch (NullPointerException e) {
 			return;
 		}
@@ -93,19 +70,19 @@ public class TVXMLParser extends AbstractSimpleTimeXMLParser {
 	}
 
 	/**
-	 * Parses rating information and adds
-	 * to parameter map
+	 * Parses rating information and adds to parameter map
+	 * 
 	 * @param event
 	 * @param map
 	 */
 	protected void addRatingToMap(Element event,
 	        HashMap<String, ArrayList<String>> map) {
-		if (!map.containsKey(RATING))
-			map.put(RATING, new ArrayList<String>());
+		if (!map.containsKey(myRating))
+			map.put(myRating, new ArrayList<String>());
 		String ratingValue;
 		try {
-			ratingValue = event.getChild(RATING).getChildText("value");
-			map.get(RATING).add(ratingValue);
+			ratingValue = event.getChild(myRating).getChildText("value");
+			map.get(myRating).add(ratingValue);
 		} catch (NullPointerException e) {
 			return;
 		}
@@ -113,9 +90,9 @@ public class TVXMLParser extends AbstractSimpleTimeXMLParser {
 
 	public static void main(String[] args) {
 		TVXMLParser parser = new TVXMLParser();
-		parser.loadFile("http://dl.dropbox.com/u/5156866/tv.xml");
+		List<Event> listOfEvents = parser
+		        .processEvents("http://dl.dropbox.com/u/5156866/tv.xml");
 		System.err.println("done loading!");
-		List<Event> listOfEvents = parser.processEvents();
 
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());

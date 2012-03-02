@@ -6,9 +6,9 @@ import model.Event;
 
 import org.jdom.*;
 import org.joda.time.*;
-import org.joda.time.format.*;
 
-public class DukeXMLParser extends AbstractSimpleTimeXMLParser {
+public class DukeXMLParser extends
+        AbstractSimpleTimeWithConnectedDateAndTimeXMLParser {
 
 	/**
 	 * Labels for specific nodes in the event tree
@@ -16,11 +16,15 @@ public class DukeXMLParser extends AbstractSimpleTimeXMLParser {
 	private String LOCATION = "location";
 	private String START_TIME = "start";
 	private String END_TIME = "end";
+	private String pattern = "yyyyMMdd'T'HHmmss'Z'";
+	private String attrib = "utcdate";
 
 	public DukeXMLParser() {
-		// Assigns names of tags for ROOT_NODE, EVENT_NODE, TITLE, DESCRIPTION,
-		// but LOCATION is overridden
-		super("events", "event", "summary", "description", null);
+		// Assigns names of tags for myEventNode, myTitle, myDescription,
+		// myStartTime, myEndTime
+		// but myLocation, myDateTimePattern, myStartTime, myEndTime are overridden
+		super("events", "event", "summary", "description", null,
+		        null, null, null);
 	}
 
 	@Override
@@ -31,32 +35,18 @@ public class DukeXMLParser extends AbstractSimpleTimeXMLParser {
 
 	@Override
 	protected DateTime parseStartTime(Element event) {
-		return parseTime(event.getChild(START_TIME));
+		return super.parseTime(event.getChild(START_TIME), pattern, attrib);
 	}
 
 	@Override
 	protected DateTime parseEndTime(Element event) {
-		return parseTime(event.getChild(END_TIME));
+		return super.parseTime(event.getChild(END_TIME), pattern, attrib);
 	}
-
-	/**
-	 * parses a time by converting it from its original format to a DateTime
-	 * format
-	 * 
-	 * @return a DateTime
-	 */
-	protected DateTime parseTime(Element time) {
-		DateTimeFormatter dtparser = DateTimeFormat
-		        .forPattern("yyyyMMdd'T'HHmmss'Z'");
-		String utcdate = time.getChildText("utcdate");
-		return dtparser.parseDateTime(utcdate);
-	}
-
 
 	public static void main(String[] args) {
 		DukeXMLParser parser = new DukeXMLParser();
-		parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
-		List<Event> listOfEvents = parser.processEvents();
+		List<Event> listOfEvents = parser
+		        .processEvents("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());

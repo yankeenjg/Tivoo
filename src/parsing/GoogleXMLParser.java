@@ -17,10 +17,8 @@ import org.joda.time.format.DateTimeFormatter;
 public class GoogleXMLParser extends AbstractXMLParser {
 
 	private static final String split_one = "\\s+| |,|-|<";
-	private static final String ROOT_NODE = "feed";
-	private static final String EVENT_NODE = "entry";
-	private static final String TITLE = "title";
-	private static final String CONTENT = "content";
+	private static final String myTitle = "title";
+	private static final String myContent = "content";
 	private static final String RECUR = "Recurring";
 	private static final int YEAR = 4;
 	private static final int DAY = 2;
@@ -33,26 +31,17 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	private String[] startTimeArray;
 	private String[] endTimeArray;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected List<Element> parseGetEventsList() {
-		eventsRoot = doc.getRootElement();
-		if (!eventsRoot.getName().equals(ROOT_NODE)) {
-			String errorMessage = "Expected root node: " + ROOT_NODE
-			        + "but found: " + eventsRoot.getName();
-			throw new ParserException(errorMessage,
-			        ParserException.Type.WRONG_TYPE);
-		}
-		return (List<Element>) eventsRoot.getChildren(EVENT_NODE, null);
+	public GoogleXMLParser(){
+		super("feed", "entry");
 	}
 
 	@Override
 	protected String parseTitle(Element event) {
-		String title = event.getChildText(TITLE, null).toString();
+		String title = event.getChildText(myTitle, null).toString();
 		if (title != null)
 			return title;
 		else
-			throw new NullPointerException("Couldn't find node: " + TITLE);
+			throw new NullPointerException("Couldn't find node: " + myTitle);
 	}
 
 	@Override
@@ -73,7 +62,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	 *         (location, descriptions, etc)
 	 */
 	private String parseContent(Element event, String finder) {
-		String[] summary = event.getChildText(CONTENT, null).toString()
+		String[] summary = event.getChildText(myContent, null).toString()
 		        .split("<br />");
 		if (summary != null) {
 			String information = null;
@@ -83,7 +72,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 			}
 			return information;
 		} else
-			throw new NullPointerException("Couldn't find node: " + CONTENT);
+			throw new NullPointerException("Couldn't find node: " + myContent);
 	}
 
 	/**
@@ -91,7 +80,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 	 *         on whitespace
 	 */
 	protected String[] parseTimeSplitUp(Element element) {
-		String timeInfo = element.getChildText(CONTENT, null).toString();
+		String timeInfo = element.getChildText(myContent, null).toString();
 		return timeInfo.split("<br />");
 	}
 
@@ -252,9 +241,7 @@ public class GoogleXMLParser extends AbstractXMLParser {
 
 	public static void main(String[] args) {
 		GoogleXMLParser parser = new GoogleXMLParser();
-		parser.loadFile("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/googlecal.xml");
-
-		List<Event> listOfEvents = parser.processEvents();
+		List<Event> listOfEvents = parser.processEvents("http://www.cs.duke.edu/courses/cps108/current/assign/02_tivoo/data/googlecal.xml");
 
 		for (Event event : listOfEvents) {
 			System.out.println(event.toString());

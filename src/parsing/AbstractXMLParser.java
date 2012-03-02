@@ -1,34 +1,62 @@
 package parsing;
 
 import model.*;
+
 import java.util.*;
+
 import org.jdom.*;
 import org.jdom.input.*;
 import org.joda.time.DateTime;
 
 public abstract class AbstractXMLParser {
 
-	protected Document doc;
-	protected Element eventsRoot;
-
-	public final void loadFile(String filename) {
+	private String myRootNode;
+	private String myEventNode;
+	
+	public AbstractXMLParser(String rootNode, String eventNode){
+		myRootNode = rootNode;
+		myEventNode = eventNode;
+	}
+	
+	public List<Event> processEvents(String filename) {
 		try {
 			SAXBuilder builder = new SAXBuilder();
-			doc = builder.build(filename);
+			Document doc = builder.build(filename);
+			return processEvents(doc);
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
+	public List<Event> processEvents(Document doc) {
+		return processEvents(doc.getRootElement());
+	}
+	
+	/**
+	 * @return a list of the child elements of the root node
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Element> getEventsNodes(Element eventsRoot) {
+		if (!eventsRoot.getName().equals(myRootNode)) {
+			String errorMessage = "Expected root node: " + myRootNode
+			        + "but found: " + eventsRoot.getName();
+			throw new ParserException(errorMessage,
+			        ParserException.Type.WRONG_TYPE);
+		}
+		return eventsRoot.getChildren(myEventNode);
+	}
+	
 	/**
 	 * Creates a array of all the child nodes of the document
 	 * 
 	 * @return a new array of parsed Events containing information such as
 	 *         title, description, location, start time, and end time
 	 */
-	public List<Event> processEvents() {
+	public List<Event> processEvents(Element eventsRoot) {
 
-		List<Element> xmlEventsList = parseGetEventsList();
+		List<Element> xmlEventsList = getEventsNodes(eventsRoot);
 		List<Event> parsedEventsList = new ArrayList<Event>();
 		try {
 			for (Element event : xmlEventsList) {
@@ -45,18 +73,13 @@ public abstract class AbstractXMLParser {
 			}
 		} catch (NullPointerException e) {
 			String errorMessage = "Wrong parser: " + this.getClass().getName()
-			        + "for file: " + doc.getBaseURI();
+			        + "for file: " + eventsRoot.getDocument().getBaseURI();
 			throw new ParserException(e.getMessage(),
 			        ParserException.Type.WRONG_TYPE);
 		}
 
 		return parsedEventsList;
 	}
-
-	/**
-	 * @return a list of the child elements of the root node
-	 */
-	protected abstract List<Element> parseGetEventsList();
 
 	/**
 	 * @param an
@@ -94,8 +117,9 @@ public abstract class AbstractXMLParser {
 	protected abstract DateTime parseEndTime(Element event);
 
 	/**
-	 * Parses extra properties relevant to the specific type
-	 * of events only and puts them in a HashMap
+	 * Parses extra properties relevant to the specific type of events only and
+	 * puts them in a HashMap
+	 * 
 	 * @return map
 	 */
 	protected HashMap<String, ArrayList<String>> getExtraProperties(
