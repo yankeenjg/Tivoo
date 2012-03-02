@@ -2,7 +2,9 @@ package output;
 
 import model.Event;
 import java.util.*;
+
 import org.joda.time.*;
+
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -14,14 +16,9 @@ import com.hp.gagawa.java.elements.*;
  */
 public class WeekDetailOutputter extends DetailOutputter{
     
-    public void writeEvents(List<Event> events) {
-    	DateTime dt = initDtEvents(events);
-            
+	protected String appendFormatting(List<Event> events, DateTime dt, Body body){
         String filepath = "WeekDetail_of_" + dt.toString("MMMdd");
         
-        Html html = new Html();
-        Body body = new Body();
-        html.appendChild(body);
         Table table = new Table();
         table.setBorder("");
         body.appendChild(table);
@@ -46,7 +43,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         	Td evs = new Td();
         	P p = new P();
         	evs.appendChild(p);
-        	writeEventP(p, events, dt, filepath);
+        	writeOneDaysEvents(p, events, dt, filepath);
         	
         	row2.appendChild(evs);
         	
@@ -54,7 +51,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         }
         table.appendChild(row0, row1, row2);
         
-        writeHtmlFile(html, filepath + FILE_EXT);
+        return filepath;
     }
     
     /*public static void main (String[] args){
@@ -69,10 +66,10 @@ public class WeekDetailOutputter extends DetailOutputter{
     	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
     	List<String> actor = new ArrayList<String>();
     	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
-    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false, null);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);
+    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", null);
+    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", null);
+    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", null);
+    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", null);
     	List<Event> l = new ArrayList<Event>();
     	l.add(e2);
     	l.add(e1);

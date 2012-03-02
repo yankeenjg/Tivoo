@@ -61,7 +61,7 @@ public abstract class DetailOutputter extends AbstractHtmlOutputter{
      * @param dt DateTime to match
      * @param filepath Location of the files
      */
-    protected void writeEventP(P p, List<Event> events, DateTime dt, String filepath){
+    protected void writeOneDaysEvents(P p, List<Event> events, DateTime dt, String filepath){
     	for(int j=0; j<events.size(); j++){
             Event e = events.get(j);
             if(isSameDate(e.getStartTime(), dt)){

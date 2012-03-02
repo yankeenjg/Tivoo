@@ -1,5 +1,6 @@
 package output;
 import java.util.*;
+
 import model.Event;
 import org.joda.time.DateTime;
 import com.hp.gagawa.java.elements.*;
@@ -13,27 +14,19 @@ import com.hp.gagawa.java.elements.*;
  */
 public class DayDetailOutputter extends DetailOutputter{
 
-	public void writeEvents(List<Event> events) {
-        DateTime dt = new DateTime();
-        initDtEvents(dt, events);
-            
-        String filepath = "DayDetail_of_" + dt.toString("MMMdd");
-        
-        Html html = new Html();
-        Body body = new Body();
-        html.appendChild(body);
+	protected String appendFormatting(List<Event> events, DateTime dt, Body body){
+		String filepath = "DayDetail_of_" + dt.toString("MMMdd");
+		
         H4 h4 = new H4();
         h4.appendChild(new Text(dt.toString("MMM dd, YYYY")));
         body.appendChild(h4);
         
         P p = new P();
         body.appendChild(p);
-        writeEventP(p, events, dt, filepath);
+        writeOneDaysEvents(p, events, dt, filepath);
         
-        writeHtmlFile(html, filepath + FILE_EXT);
+        return filepath;
     }
-    
-    
     
     /*public static void main (String[] args){
     	AbstractHtmlOutputter ho = new DayDetailOutputter();

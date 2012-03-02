@@ -1,5 +1,6 @@
 package output;
 import java.util.*;
+
 import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -14,14 +15,9 @@ import com.hp.gagawa.java.elements.*;
  */
 public class MonthDetailOutputter extends DetailOutputter{
 	
-    public void writeEvents(List<Event> events) {
-    	DateTime dt = initDtEvents(events);
-        
+	protected String appendFormatting(List<Event> events, DateTime dt, Body body){
         String filepath = "MonthDetail_of_" + dt.toString("MMMYYYY");
         
-        Html html = new Html();
-        Body body = new Body();
-        html.appendChild(body);
         Table table = new Table();
         table.setBorder("");
         body.appendChild(table);
@@ -60,7 +56,7 @@ public class MonthDetailOutputter extends DetailOutputter{
         		B b = new B();
         		b.appendChild(new Text(dt.toString("MM/dd")+"<br/>"));
         		p.appendChild(b);
-        		writeEventP(p, events, dt, filepath);
+        		writeOneDaysEvents(p, events, dt, filepath);
         		td.appendChild(p);
         		rown.appendChild(td);
         		
@@ -69,7 +65,7 @@ public class MonthDetailOutputter extends DetailOutputter{
         	table.appendChild(rown);
         }while(dt.getMonthOfYear()==thisMonth);
         
-        writeHtmlFile(html, filepath+FILE_EXT);
+        return filepath;
     }
     
     /*public static void main (String[] args){

@@ -3,6 +3,8 @@ package output;
 import model.Event;
 import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.B;
+import com.hp.gagawa.java.elements.Body;
+import com.hp.gagawa.java.elements.Html;
 import com.hp.gagawa.java.elements.P;
 import com.hp.gagawa.java.elements.Text;
 import java.io.*;
@@ -37,14 +39,34 @@ public abstract class AbstractHtmlOutputter {
 	 * element nodes to write the html pages
 	 * @param events List of events to be output
 	 */
-    public abstract void writeEvents(List<Event> events);
+    public void writeEvents(List<Event> events){
+    	DateTime dt = initDtEvents(events);
+        
+        Html html = new Html();
+        Body body = new Body();
+        html.appendChild(body);
+        
+        String filepath = appendFormatting(events, dt, body);
+        
+        writeHtmlFile(html, filepath + FILE_EXT);
+    }
+    
+    /**
+     * Adds all the specific event formatting for the respective outputter
+     * to the provided Body object
+     * @param events Events to print
+     * @param dt Reference DateTime
+     * @param body Body object to which to append
+     * @return The name of the html file to write to
+     */
+    protected abstract String appendFormatting(List<Event> events, DateTime dt, Body body);
     
     /**
      * Initalizes the reference DateTime object and sorts
      * the list of events for future use
      * @param events Given list to the sorted by start time
      */
-    protected DateTime initDtEvents(List<Event> events){
+    private DateTime initDtEvents(List<Event> events){
     	if(!events.isEmpty()){
         	StartTimeSorter sts = new StartTimeSorter();
         	events = sts.sort(events);
@@ -102,18 +124,6 @@ public abstract class AbstractHtmlOutputter {
     }
     
     /**
-     * Checks if two DateTimes are in the same year
-     * @param dt1 First DateTime
-     * @param dt2 Second DateTime
-     * @return If the two share the same year
-     */
-    protected boolean isSameYear(DateTime dt1, DateTime dt2){
-    	if(dt1.getYear()==dt2.getYear())
-    		return true;
-    	return false;
-    }
-    
-    /**
      * Checks if two DateTimes are the same date
      * (same MM/dd/YYY)
      * @param dt1 First DateTime
@@ -121,7 +131,7 @@ public abstract class AbstractHtmlOutputter {
      * @return If the two are the same date
      */
     protected boolean isSameDate(DateTime dt1, DateTime dt2){
-    	if(dt1.getDayOfYear()==dt2.getDayOfYear() && isSameYear(dt1, dt2))
+    	if(dt1.getDayOfYear()==dt2.getDayOfYear() && dt1.getYear()==dt2.getYear())
     		return true;
     	return false;
     }
