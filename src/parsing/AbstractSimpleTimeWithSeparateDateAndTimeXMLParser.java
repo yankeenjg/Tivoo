@@ -15,7 +15,7 @@ public class AbstractSimpleTimeWithSeparateDateAndTimeXMLParser extends
 	        String rootNode, String eventNode, String title,
 	        String description, String location, String dateTimePattern,
 	        String startDate, String startTime, String endDate, String endTime) {
-		super(rootNode, eventNode, title, description, location, dateTimePattern);
+		super(rootNode, eventNode, title, description, location, dateTimePattern, "start", "end");
 		myStartDate = startDate;
 		myStartTime = startTime;
 		myEndDate = endDate;
@@ -33,17 +33,22 @@ public class AbstractSimpleTimeWithSeparateDateAndTimeXMLParser extends
 		String time = event.getChildText(timeTag);
 		return date + time.split(" ")[0];
 	}
+	
+	@Override
+	protected String getTimestamp(Element time, String attrib) {
+		if(attrib.equals("start"))
+			return mergeDateAndTime(time, myStartDate, myStartTime);
+		return mergeDateAndTime(time, myEndDate, myEndTime);
+	}
 
 	@Override
 	protected DateTime parseStartTime(Element event) {
-		String timestamp = mergeDateAndTime(event, myStartDate, myStartTime);
-		return super.parseTime(event, myDateTimePattern, timestamp);
+		return super.parseTime(event, "start");
 	}
 
 	@Override
 	protected DateTime parseEndTime(Element event) {
-		String timestamp = mergeDateAndTime(event, myEndDate, myEndTime);
-		return super.parseTime(event, myDateTimePattern, timestamp);
+		return super.parseTime(event, "end");
 
 	}
 }

@@ -2,6 +2,7 @@ package parsing;
 
 import model.*;
 
+
 import java.util.*;
 
 import org.jdom.*;
@@ -18,19 +19,19 @@ public abstract class AbstractXMLParser {
 		myEventNode = eventNode;
 	}
 	
-	public List<Event> processEvents(String filename) {
+	public List<Event> processEvents(String filename) throws ParserException{
+		Document doc;
 		try {
 			SAXBuilder builder = new SAXBuilder();
-			Document doc = builder.build(filename);
-			return processEvents(doc);
-
+			doc = builder.build(filename);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+		return processEvents(doc);
 	}
 
-	public List<Event> processEvents(Document doc) {
+	public List<Event> processEvents(Document doc) throws ParserException{
 		return processEvents(doc.getRootElement());
 	}
 	
@@ -41,11 +42,11 @@ public abstract class AbstractXMLParser {
 	public List<Element> getEventsNodes(Element eventsRoot) {
 		if (!eventsRoot.getName().equals(myRootNode)) {
 			String errorMessage = "Expected root node: " + myRootNode
-			        + "but found: " + eventsRoot.getName();
+			        + " but found: " + eventsRoot.getName();
 			throw new ParserException(errorMessage,
 			        ParserException.Type.WRONG_TYPE);
 		}
-		return eventsRoot.getChildren(myEventNode);
+		return eventsRoot.getChildren(myEventNode, null);
 	}
 	
 	/**
@@ -54,7 +55,7 @@ public abstract class AbstractXMLParser {
 	 * @return a new array of parsed Events containing information such as
 	 *         title, description, location, start time, and end time
 	 */
-	public List<Event> processEvents(Element eventsRoot) {
+	public List<Event> processEvents(Element eventsRoot) throws ParserException{
 
 		List<Element> xmlEventsList = getEventsNodes(eventsRoot);
 		List<Event> parsedEventsList = new ArrayList<Event>();

@@ -24,8 +24,11 @@ public class Main {
 		for(AbstractXMLParser parser : parsers){
 			try{
 				//parser.loadFile("http://duke.edu/~jjh38/tv.xml");
-				parser.loadFile("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
-				listOfEvents = parser.processEvents();
+//				listOfEvents = parser.processEvents("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/DukeBasketBall.xml");
+				//listOfEvents = parser.processEvents("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/googlecal.xml");
+				listOfEvents = parser.processEvents("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/NFL.xml");
+
+				//listOfEvents = parser.processEvents("http://www.cs.duke.edu/courses/spring12/cps108/assign/02_tivoo/data/dukecal.xml");
 			} catch (ParserException e){
 				System.err.println(e.getMessage());
 				continue;

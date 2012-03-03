@@ -14,15 +14,18 @@ public abstract class AbstractSimpleTimeXMLParser extends AbstractXMLParser {
 	private String myDescription;
 	private String myLocation;
 	private String myDateTimePattern;
-
+	private String myStart;
+	private String myEnd;
 	public AbstractSimpleTimeXMLParser(String rootNode, String eventNode,
 			String title, String description, String location,
-			String dateTimePattern){
+			String dateTimePattern, String start, String end){
 		super(rootNode,eventNode);
 		myTitle = title;
 		myDescription = description;
 		myLocation = location;
 		myDateTimePattern = dateTimePattern;
+		myStart = start;
+		myEnd = end;
 	}
 
 	@Override
@@ -39,14 +42,18 @@ public abstract class AbstractSimpleTimeXMLParser extends AbstractXMLParser {
 	protected String parseLocation(Element event) {
 		return parseInformation(event, myLocation);
 	}
+	
 	@Override
 	protected DateTime parseStartTime(Element event) {
-		return parseTime(event, myDateTimePattern, myStart);
+		return parseTime(event, myStart);
 	}
+
 	@Override
 	protected DateTime parseEndTime(Element event) {
-		return parseTime(event, myDateTimePattern, myEnd);
+		return parseTime(event, myEnd);
+
 	}
+	
 	/**
 	 * @param event
 	 *            , the event being parsed
@@ -71,9 +78,9 @@ public abstract class AbstractSimpleTimeXMLParser extends AbstractXMLParser {
 	 */
 	protected DateTime parseTime(Element time, String attrib) {
 		DateTimeFormatter dtparser = DateTimeFormat.forPattern(myDateTimePattern);
-		String timestamp = getTimestamp(time);time.getChildText(attrib);
-		return dtparser.parseDateTime(utcdate);
+		String timestamp = getTimestamp(time, attrib);
+		return dtparser.parseDateTime(timestamp);
 	}
 
-
+	protected abstract String getTimestamp(Element time, String attrib);
 }
