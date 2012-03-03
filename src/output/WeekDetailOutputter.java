@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.joda.time.*;
 
+import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -14,8 +15,9 @@ import com.hp.gagawa.java.elements.*;
  * @author herio
  *
  */
-public class WeekDetailOutputter extends DetailOutputter{
+public class WeekDetailOutputter extends DayDetailOutputter{
     
+	@Override
 	protected String appendFormatting(List<Event> events, DateTime dt, Body body){
         String filepath = "WeekDetail_of_" + dt.toString("MMMdd");
         
@@ -28,6 +30,7 @@ public class WeekDetailOutputter extends DetailOutputter{
         Tr row1 = new Tr();
         Tr row2 = new Tr();
         row2.setValign("top");
+        
         for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
         	Td dayHeader = new Td();
         	dayHeader.setWidth("1%");
@@ -38,44 +41,31 @@ public class WeekDetailOutputter extends DetailOutputter{
         	dayHeader.appendChild(div);
         	row1.appendChild(dayHeader);
         	
-        	b.appendChild(new Text(dt.toString("MM/dd")+" ("+dt.dayOfWeek().getAsText()+")"));
-
-        	Td evs = new Td();
-        	P p = new P();
-        	evs.appendChild(p);
-        	writeOneDaysEvents(p, events, dt, filepath);
-        	
-        	row2.appendChild(evs);
+        	b.appendChild(new Text(dt.dayOfWeek().getAsText()));
         	
         	dt = dt.plusDays(1);
         }
+        
+        dt = dt.minusDays(DateTimeConstants.DAYS_PER_WEEK);
+        
+        createCalendarCells(events, dt, row2, filepath);
+
         table.appendChild(row0, row1, row2);
         
         return filepath;
     }
-    
-    /*public static void main (String[] args){
-    	AbstractHtmlOutputter ho = new WeekDetailOutputter();
-    	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
-    	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
-    	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
-    	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
-    	DateTime dt5 = new DateTime(2012, 2, 27, 12, 15);
-    	DateTime dt6 = new DateTime(2012, 2, 27, 12, 30);
-    	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
-    	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
-    	List<String> actor = new ArrayList<String>();
-    	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", null);
-    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", null);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", null);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", null);
-    	List<Event> l = new ArrayList<Event>();
-    	l.add(e2);
-    	l.add(e1);
-    	l.add(e3);
-    	l.add(e4);
-    	ho.writeEvents(l);
-    }*/
-    
+
+	@Override
+	protected void createCalendarCells(List<Event> events, DateTime dt, Node row2, String filepath) {
+		for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
+        	Td evs = new Td();
+        	P p = new P();
+        	evs.appendChild(p);
+        	super.createCalendarCells(events, dt, p, filepath);
+        	
+        	((Tr) row2).appendChild(evs);
+        	
+        	dt = dt.plusDays(1);
+        }
+	}
 }

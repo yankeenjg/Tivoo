@@ -4,6 +4,8 @@ import java.util.*;
 import model.Event;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+
+import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -13,8 +15,9 @@ import com.hp.gagawa.java.elements.*;
  * @author herio
  *
  */
-public class MonthDetailOutputter extends DetailOutputter{
+public class MonthDetailOutputter extends WeekDetailOutputter{
 	
+	@Override
 	protected String appendFormatting(List<Event> events, DateTime dt, Body body){
         String filepath = "MonthDetail_of_" + dt.toString("MMMYYYY");
         
@@ -47,49 +50,21 @@ public class MonthDetailOutputter extends DetailOutputter{
         }
         table.appendChild(row1);
         
-        do{
-        	Tr rown = new Tr();
-        	rown.setValign("top");
-        	for(int i=0;i<DateTimeConstants.DAYS_PER_WEEK;i++){
-        		Td td = new Td();
-        		P p = new P();
-        		B b = new B();
-        		b.appendChild(new Text(dt.toString("MM/dd")+"<br/>"));
-        		p.appendChild(b);
-        		writeOneDaysEvents(p, events, dt, filepath);
-        		td.appendChild(p);
-        		rown.appendChild(td);
-        		
-        		dt = dt.plusDays(1);
-        	}
-        	table.appendChild(rown);
-        }while(dt.getMonthOfYear()==thisMonth);
+        createCalendarCells(events, dt, table, filepath);
         
         return filepath;
     }
-    
-    /*public static void main (String[] args){
-    	AbstractHtmlOutputter ho = new MonthDetailOutputter();
-    	DateTime dt1 = new DateTime(2012, 1, 2, 11, 15);
-    	DateTime dt2 = new DateTime(2012, 1, 2, 11, 30);
-    	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
-    	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
-    	DateTime dt5 = new DateTime(2012, 2, 24, 12, 15);
-    	DateTime dt6 = new DateTime(2012, 2, 24, 12, 30);
-    	DateTime dt7 = new DateTime(2012, 2, 28, 12, 45);
-    	DateTime dt8 = new DateTime(2012, 2, 28, 13, 00);
-    	List<String> actor = new ArrayList<String>();
-    	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
-    	Event e2 = new Event("TitleDUPE", dt3, dt4, "Description2", "Location", false, null);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);
-    	List<Event> l = new ArrayList<Event>();
-    	l.add(e3);
-    	l.add(e1);
-    	l.add(e2);
-    	l.add(e4);
-    	ho.writeEvents(l);
-    }*/
 
+	@Override
+	protected void createCalendarCells(List<Event> events, DateTime dt, Node table, String filepath) {
+		int thisMonth = dt.plusMonths(1).getMonthOfYear();
+		do{
+        	Tr rown = new Tr();
+        	rown.setValign("top");
+        	super.createCalendarCells(events, dt, rown, filepath);
+        	
+        	((Table)table).appendChild(rown);
+        	dt = dt.plusWeeks(1);
+        }while(dt.getMonthOfYear()==thisMonth);
+	}
 }

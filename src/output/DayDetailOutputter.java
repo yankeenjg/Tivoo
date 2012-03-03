@@ -3,6 +3,7 @@ import java.util.*;
 
 import model.Event;
 import org.joda.time.DateTime;
+import com.hp.gagawa.java.*;
 import com.hp.gagawa.java.elements.*;
 
 /**
@@ -23,33 +24,13 @@ public class DayDetailOutputter extends DetailOutputter{
         
         P p = new P();
         body.appendChild(p);
-        writeOneDaysEvents(p, events, dt, filepath);
+        createCalendarCells(events, dt, p, filepath);
         
         return filepath;
     }
-    
-    /*public static void main (String[] args){
-    	AbstractHtmlOutputter ho = new DayDetailOutputter();
-    	DateTime dt1 = new DateTime(2012, 2, 24, 11, 15);
-    	DateTime dt2 = new DateTime(2012, 2, 24, 11, 30);
-    	DateTime dt3 = new DateTime(2012, 2, 24, 11, 45);
-    	DateTime dt4 = new DateTime(2012, 2, 24, 12, 00);
-    	DateTime dt5 = new DateTime(2012, 2, 24, 12, 15);
-    	DateTime dt6 = new DateTime(2012, 2, 24, 12, 30);
-    	DateTime dt7 = new DateTime(2012, 2, 24, 12, 45);
-    	DateTime dt8 = new DateTime(2012, 2, 24, 13, 00);
-    	List<String> actor = new ArrayList<String>();
-    	actor.add("actor");
-    	Event e1 = new Event("Title", dt1, dt2, "Description", "Location", true, null);
-    	Event e2 = new Event("Title2", dt3, dt4, "Description2", "Location", false, null);
-    	Event e3 = new Event("Title3", dt5, dt6, "Description3", "Location2.333", false, null);
-    	Event e4 = new Event("Title4", dt7, dt8, "Description 4", "Location4", false, null);
-    	List<Event> l = new ArrayList<Event>();
-    	l.add(e2);
-    	l.add(e1);
-    	l.add(e3);
-    	l.add(e4);
-    	ho.writeEvents(l);
-    }*/
-
+	
+	@Override
+	protected void createCalendarCells(List<Event> events, DateTime dt, Node n, String filepath){
+		super.createCalendarCells(events, dt, n, filepath);
+	}
 }

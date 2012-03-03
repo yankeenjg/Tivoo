@@ -1,12 +1,8 @@
 package output;
 
 import model.Event;
-import com.hp.gagawa.java.Node;
-import com.hp.gagawa.java.elements.B;
-import com.hp.gagawa.java.elements.Body;
-import com.hp.gagawa.java.elements.Html;
-import com.hp.gagawa.java.elements.P;
-import com.hp.gagawa.java.elements.Text;
+import com.hp.gagawa.java.*;
+import com.hp.gagawa.java.elements.*;
 import java.io.*;
 import java.util.*;
 import org.joda.time.DateTime;
@@ -103,7 +99,7 @@ public abstract class AbstractHtmlOutputter {
      * @param p P element to which to append
      */
     protected void appendTitleTimes(Event e, P p){
-		B b = new B();
+    	B b = new B();
 		b.appendChild(new Text(e.getTitle()));
 		p.appendChild(b);
         appendTimes(e, p);
