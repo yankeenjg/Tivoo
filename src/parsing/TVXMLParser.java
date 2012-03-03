@@ -10,7 +10,7 @@ import model.*;
 import org.jdom.Element;
 
 public class TVXMLParser extends
-        AbstractTimeAsAttributeValueParser {
+        AbstractConnectedTimeAsAttributeValueParser {
 
 	/**
 	 * Labels for specific nodes in the event tree

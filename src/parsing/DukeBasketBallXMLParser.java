@@ -6,7 +6,7 @@ import model.Event;
 
 
 public class DukeBasketBallXMLParser extends
-        AbstractSimpleTimeWithSeparateDateAndTimeXMLParser {
+        AbstractSeparateTimeParser {
 
 	public DukeBasketBallXMLParser() {
 		// Assigns names of tags for myEventNode, myTitle, myDescription,

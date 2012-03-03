@@ -3,7 +3,7 @@ package parsing;
 import java.util.List;
 import model.Event;
 
-public class NFLXMLParser extends AbstractTimeAsChildTextParser {
+public class NFLXMLParser extends AbstractConnectedTimeAsChildTextParser {
 
 	public NFLXMLParser() {
 

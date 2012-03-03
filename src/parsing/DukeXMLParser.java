@@ -9,7 +9,7 @@ import org.jdom.*;
 import org.joda.time.*;
 
 public class DukeXMLParser extends
-        AbstractTimeAsChildTextParser {
+        AbstractConnectedTimeAsChildTextParser {
 
 	/**
 	 * Labels for specific nodes in the event tree
