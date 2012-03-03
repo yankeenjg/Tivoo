@@ -1,7 +1,6 @@
 package parsing;
 
 import org.jdom.Element;
-import org.joda.time.DateTime;
 
 public class AbstractSimpleTimeWithSeparateDateAndTimeXMLParser extends
         AbstractSimpleTimeXMLParser {
@@ -41,14 +40,4 @@ public class AbstractSimpleTimeWithSeparateDateAndTimeXMLParser extends
 		return mergeDateAndTime(time, myEndDate, myEndTime);
 	}
 
-	@Override
-	protected DateTime parseStartTime(Element event) {
-		return super.parseTime(event, "start");
-	}
-
-	@Override
-	protected DateTime parseEndTime(Element event) {
-		return super.parseTime(event, "end");
-
-	}
 }

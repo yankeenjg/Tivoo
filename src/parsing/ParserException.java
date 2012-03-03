@@ -14,16 +14,25 @@ public class ParserException extends RuntimeException {
 	public ParserException (String message, Type type) {
 		super(message);
 		myType = type;
+		makeLogEntry("ParserException: " + message);
 	}
 
+	/**
+	 * Returns type of exception
+	 * @return Type
+	 */
 	public Type getType() {
 		return myType;
 	}
-	
-	//ToDo: fix so that each call to makeLogEntry doesn't overwrite file
-	public void makeLogEntry() {
+
+	/**
+	 * Creates logfile and records error messages in it
+	 */
+	public void makeLogEntry(String logMessage) {
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("errorLog.txt"));
+			out.write(logMessage+'\n');
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

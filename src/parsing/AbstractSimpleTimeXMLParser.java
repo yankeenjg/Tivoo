@@ -1,7 +1,5 @@
 package parsing;
 
-import java.util.List;
-
 
 import org.jdom.Element;
 import org.joda.time.DateTime;
@@ -82,5 +80,12 @@ public abstract class AbstractSimpleTimeXMLParser extends AbstractXMLParser {
 		return dtparser.parseDateTime(timestamp);
 	}
 
+	/**
+	 * Returns a String with the timestamp of the event, given an event node
+	 * and the attribute in that node
+	 * @param time
+	 * @param attrib
+	 * @return String
+	 */
 	protected abstract String getTimestamp(Element time, String attrib);
 }

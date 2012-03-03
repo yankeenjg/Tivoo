@@ -18,7 +18,12 @@ public abstract class AbstractXMLParser {
 		myRootNode = rootNode;
 		myEventNode = eventNode;
 	}
-	
+	/**
+	 * 
+	 * @param filename
+	 * @return List<Event> by passing processEvents a document
+	 * @throws ParserException
+	 */
 	public List<Event> processEvents(String filename) throws ParserException{
 		Document doc;
 		try {
@@ -31,6 +36,12 @@ public abstract class AbstractXMLParser {
 		return processEvents(doc);
 	}
 
+	/**
+	 * 
+	 * @param doc
+	 * @return List<Event> by passing processEvents an Element
+	 * @throws ParserException
+	 */
 	public List<Event> processEvents(Document doc) throws ParserException{
 		return processEvents(doc.getRootElement());
 	}
@@ -75,7 +86,7 @@ public abstract class AbstractXMLParser {
 		} catch (NullPointerException e) {
 			String errorMessage = "Wrong parser: " + this.getClass().getName()
 			        + "for file: " + eventsRoot.getDocument().getBaseURI();
-			throw new ParserException(e.getMessage(),
+			throw new ParserException(errorMessage,
 			        ParserException.Type.WRONG_TYPE);
 		}
 
