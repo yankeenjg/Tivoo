@@ -51,7 +51,6 @@ public class MonthDetailOutputter extends WeekDetailOutputter{
         table.appendChild(row1);
         
         createCalendarCells(events, dt, table, filepath);
-        
         return filepath;
     }
 

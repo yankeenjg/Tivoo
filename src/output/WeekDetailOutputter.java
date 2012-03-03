@@ -31,6 +31,7 @@ public class WeekDetailOutputter extends DayDetailOutputter{
         Tr row2 = new Tr();
         row2.setValign("top");
         
+        //header row
         for(int i=0; i<DateTimeConstants.DAYS_PER_WEEK; i++){
         	Td dayHeader = new Td();
         	dayHeader.setWidth("1%");
@@ -40,18 +41,15 @@ public class WeekDetailOutputter extends DayDetailOutputter{
         	div.appendChild(b);
         	dayHeader.appendChild(div);
         	row1.appendChild(dayHeader);
-        	
         	b.appendChild(new Text(dt.dayOfWeek().getAsText()));
         	
         	dt = dt.plusDays(1);
         }
-        
         dt = dt.minusDays(DateTimeConstants.DAYS_PER_WEEK);
         
         createCalendarCells(events, dt, row2, filepath);
 
         table.appendChild(row0, row1, row2);
-        
         return filepath;
     }
 
