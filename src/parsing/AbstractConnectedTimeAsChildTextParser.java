@@ -1,7 +1,7 @@
 package parsing;
 import org.jdom.*;
 
-public class AbstractConnectedTimeAsChildTextParser extends AbstractSimpleTimeXMLParser {
+public abstract class AbstractConnectedTimeAsChildTextParser extends AbstractSimpleTimeXMLParser {
 
 	protected AbstractConnectedTimeAsChildTextParser(String rootNode, String eventNode,
             String title, String description, String location,

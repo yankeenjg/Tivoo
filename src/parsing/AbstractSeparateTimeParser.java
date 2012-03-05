@@ -2,7 +2,7 @@ package parsing;
 
 import org.jdom.Element;
 
-public class AbstractSeparateTimeParser extends
+public abstract class AbstractSeparateTimeParser extends
         AbstractSimpleTimeXMLParser {
 
 	private String myStartDate;

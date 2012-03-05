@@ -35,7 +35,7 @@ public abstract class AbstractHtmlOutputter {
 	 * element nodes to write the html pages
 	 * @param events List of events to be output
 	 */
-    public void writeEvents(List<Event> events){
+    public String writeEvents(List<Event> events){
     	DateTime dt = initDtEvents(events);
         
         Html html = new Html();
@@ -45,6 +45,8 @@ public abstract class AbstractHtmlOutputter {
         String filepath = appendFormatting(events, dt, body);
         
         writeHtmlFile(html, filepath + FILE_EXT);
+        System.err.println(filepath+FILE_EXT);
+        return filepath+FILE_EXT;
     }
     
     /**

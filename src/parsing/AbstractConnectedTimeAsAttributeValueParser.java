@@ -2,7 +2,7 @@ package parsing;
 
 import org.jdom.Element;
 
-public class AbstractConnectedTimeAsAttributeValueParser extends AbstractSimpleTimeXMLParser{
+public abstract class AbstractConnectedTimeAsAttributeValueParser extends AbstractSimpleTimeXMLParser{
 
 	protected AbstractConnectedTimeAsAttributeValueParser(String rootNode,
             String eventNode, String title, String description,
